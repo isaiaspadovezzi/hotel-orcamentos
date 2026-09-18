@@ -1,0 +1,304 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --verde: #63c132;
+    --verde-escuro: #4e9d28;
+    --verde-claro: #eaf8e2;
+    --cinza-fundo: #f5f7f8;
+    --cinza: #6c757d;
+    --branco: #ffffff;
+    --texto: #333333;
+    --borda: #dddddd;
+    --sombra: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--cinza-fundo);
+    color: var(--texto);
+    min-height: 100vh;
+}
+
+
+/* =========================
+   TOPO
+========================= */
+
+.topo {
+    background: var(--branco);
+    border-bottom: 5px solid var(--verde);
+    padding: 25px 20px;
+}
+
+.topo .container {
+    max-width: 1100px;
+    margin: auto;
+}
+
+.topo h1 {
+    color: var(--verde-escuro);
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.topo p {
+    color: var(--cinza);
+    font-size: 14px;
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container {
+    width: 100%;
+    max-width: 1100px;
+    margin: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+
+/* =========================
+   TÍTULO
+========================= */
+
+.titulo {
+    padding: 35px 0 20px;
+}
+
+.titulo h2 {
+    color: var(--verde-escuro);
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.titulo p {
+    color: var(--cinza);
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+    background: var(--branco);
+    border-radius: 18px;
+    box-shadow: var(--sombra);
+    padding: 25px;
+    margin-bottom: 20px;
+}
+
+.card h3 {
+    color: var(--verde-escuro);
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+
+/* =========================
+   GRID
+========================= */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.campo-grande {
+    grid-column: span 2;
+}
+
+
+/* =========================
+   CAMPOS
+========================= */
+
+.campo {
+    display: flex;
+    flex-direction: column;
+}
+
+.campo label {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 7px;
+    color: #444;
+}
+
+.campo input,
+.campo select,
+select {
+    width: 100%;
+    min-height: 48px;
+    border: 1px solid var(--borda);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    background: white;
+    color: var(--texto);
+    outline: none;
+}
+
+.campo input:focus,
+.campo select:focus,
+select:focus {
+    border-color: var(--verde);
+    box-shadow: 0 0 0 3px rgba(99, 193, 50, 0.18);
+}
+
+
+/* =========================
+   CHECKBOXES
+========================= */
+
+.linha-opcoes {
+    display: flex;
+    gap: 30px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.check input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--verde);
+}
+
+
+/* =========================
+   BOTÕES
+========================= */
+
+.acoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin: 30px 0;
+}
+
+.btn {
+    border: none;
+    border-radius: 12px;
+    padding: 13px 24px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-principal {
+    background: var(--verde);
+    color: white;
+}
+
+.btn-principal:hover {
+    background: var(--verde-escuro);
+    transform: translateY(-1px);
+}
+
+.btn-secundario {
+    background: white;
+    color: var(--verde-escuro);
+    border: 2px solid var(--verde);
+}
+
+.btn-secundario:hover {
+    background: var(--verde-claro);
+}
+
+
+/* =========================
+   PRÉ-VISUALIZAÇÃO
+========================= */
+
+.preview-area {
+    margin-top: 35px;
+    margin-bottom: 40px;
+}
+
+.preview-area > h2 {
+    color: var(--verde-escuro);
+    font-size: 25px;
+    margin-bottom: 20px;
+}
+
+
+/* =========================
+   RODAPÉ
+========================= */
+
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #999;
+    font-size: 13px;
+}
+
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width: 768px) {
+
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .topo h1 {
+        font-size: 25px;
+    }
+
+    .titulo h2 {
+        font-size: 26px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .campo-grande {
+        grid-column: span 1;
+    }
+
+    .linha-opcoes {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .acoes {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
