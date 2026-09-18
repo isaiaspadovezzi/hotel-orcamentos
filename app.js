@@ -1013,3 +1013,182 @@ function preencherCamposComOCR(texto) {
     console.log("Crianças:", criancas);
     console.log("Valores:", valoresBRL);
 }
+// ==========================================
+// COPIAR ORÇAMENTO
+// ==========================================
+
+function copiarOrcamento() {
+
+    const checkin =
+        document.getElementById("checkin").value;
+
+    const checkout =
+        document.getElementById("checkout").value;
+
+    const noites =
+        document.getElementById("noites").value;
+
+    const adultos =
+        document.getElementById("adultos").value;
+
+    const criancas =
+        document.getElementById("criancas").value;
+
+    const tipoQuarto =
+        document.getElementById("tipoQuarto").value;
+
+    const descricaoQuarto =
+        document.getElementById("descricaoQuarto").value;
+
+    const cafe =
+        document.getElementById("cafe").checked;
+
+    const tarifa =
+        document.getElementById("tarifa").value;
+
+    const valorTotal =
+        document.getElementById("valorTotal").value;
+
+    const pagamento =
+        document.getElementById("pagamento").value;
+
+
+    let hospedes =
+        `${adultos} ${adultos == 1 ? "adulto" : "adultos"}`;
+
+    if (criancas > 0) {
+
+        hospedes +=
+            ` + ${criancas} ${criancas == 1 ? "criança" : "crianças"}`;
+    }
+
+
+    let texto = `
+
+IBIS STYLES CURITIBA CENTRO CÍVICO
+
+ORÇAMENTO DE HOSPEDAGEM
+
+📅 Check-in: ${formatarData(checkin)}
+📅 Check-out: ${formatarData(checkout)}
+🌙 Estadia: ${noites} ${noites == 1 ? "noite" : "noites"}
+
+🏨 Quarto ${tipoQuarto}
+${descricaoQuarto}
+
+👥 Hóspedes: ${hospedes}
+
+☕ Café da manhã: ${cafe ? "Incluído" : "Não incluído"}
+
+💰 Valor total: ${valorTotal}
+
+${pagamento === "hotel"
+    ? "💳 Pagamento no hotel"
+    : "💳 Pagamento antecipado"}
+
+`;
+
+    texto = texto.trim();
+
+
+    navigator.clipboard.writeText(texto)
+        .then(() => {
+
+            alert("✅ Orçamento copiado! Agora é só colar no WhatsApp.");
+
+        })
+        .catch(() => {
+
+            alert("Não foi possível copiar automaticamente.");
+
+        });
+}
+
+
+// ==========================================
+// COMPARTILHAR ORÇAMENTO
+// ==========================================
+
+async function compartilharOrcamento() {
+
+    const checkin =
+        document.getElementById("checkin").value;
+
+    const checkout =
+        document.getElementById("checkout").value;
+
+    const noites =
+        document.getElementById("noites").value;
+
+    const adultos =
+        document.getElementById("adultos").value;
+
+    const criancas =
+        document.getElementById("criancas").value;
+
+    const tipoQuarto =
+        document.getElementById("tipoQuarto").value;
+
+    const descricaoQuarto =
+        document.getElementById("descricaoQuarto").value;
+
+    const cafe =
+        document.getElementById("cafe").checked;
+
+    const valorTotal =
+        document.getElementById("valorTotal").value;
+
+
+    let hospedes =
+        `${adultos} ${adultos == 1 ? "adulto" : "adultos"}`;
+
+    if (criancas > 0) {
+
+        hospedes +=
+            ` + ${criancas} ${criancas == 1 ? "criança" : "crianças"}`;
+    }
+
+
+    const texto = `IBIS STYLES CURITIBA CENTRO CÍVICO
+
+ORÇAMENTO DE HOSPEDAGEM
+
+📅 ${formatarData(checkin)} → ${formatarData(checkout)}
+🌙 ${noites} ${noites == 1 ? "noite" : "noites"}
+
+🏨 ${tipoQuarto} — ${descricaoQuarto}
+
+👥 ${hospedes}
+
+☕ Café da manhã: ${cafe ? "Incluído" : "Não incluído"}
+
+💰 TOTAL: ${valorTotal}
+
+Pagamento no hotel.`;
+
+
+    if (navigator.share) {
+
+        try {
+
+            await navigator.share({
+                title: "Orçamento de hospedagem",
+                text: texto
+            });
+
+        } catch (erro) {
+
+            console.log("Compartilhamento cancelado.");
+
+        }
+
+    } else {
+
+        await navigator.clipboard.writeText(texto);
+
+        alert(
+            "Seu navegador não possui compartilhamento direto. O orçamento foi copiado para a área de transferência."
+        );
+
+    }
+}
