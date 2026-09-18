@@ -26,6 +26,54 @@
             <h2>Novo Orçamento</h2>
             <p>Preencha as informações da hospedagem.</p>
         </section>
+        <!-- IMPORTAR PRINT -->
+<section class="card importador">
+
+    <h3>📸 Importar orçamento</h3>
+
+    <p class="importador-texto">
+        Envie um print do orçamento do sistema para preencher
+        automaticamente os campos abaixo.
+    </p>
+
+    <label for="arquivoOrcamento" class="upload-area">
+
+        <span class="upload-icone">📷</span>
+
+        <strong>
+            Selecionar print do orçamento
+        </strong>
+
+        <small>
+            PNG, JPG ou JPEG
+        </small>
+
+    </label>
+
+    <input
+        type="file"
+        id="arquivoOrcamento"
+        accept="image/png,image/jpeg,image/jpg"
+        hidden
+    >
+
+    <div id="imagemSelecionada" class="imagem-selecionada"></div>
+
+    <button
+        type="button"
+        id="btnLerOrcamento"
+        class="btn btn-principal btn-ocr"
+        disabled
+    >
+        🔍 Ler orçamento automaticamente
+    </button>
+
+    <div
+        id="statusOcr"
+        class="status-ocr"
+    ></div>
+
+</section>
 
 
         <!-- DADOS DA HOSPEDAGEM -->
