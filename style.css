@@ -729,3 +729,32 @@ footer {
     color: #c62828;
     font-weight: 600;
 }
+/* ==========================================
+   BOTÕES DE COMPARTILHAMENTO
+========================================== */
+
+.acoes-compartilhar {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.acoes-compartilhar .btn {
+    min-width: 190px;
+}
+
+
+/* CELULAR */
+
+@media (max-width: 768px) {
+
+    .acoes-compartilhar {
+        flex-direction: column;
+    }
+
+    .acoes-compartilhar .btn {
+        width: 100%;
+    }
+}
