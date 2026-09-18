@@ -300,5 +300,333 @@ footer {
 
     .btn {
         width: 100%;
+        /* ==========================================
+   ARTE DO ORÇAMENTO
+========================================== */
+
+.orcamento {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+}
+
+
+/* ------------------------------------------
+   CABEÇALHO DA ARTE
+------------------------------------------ */
+
+.orcamento-topo {
+    background: #ffffff;
+    border-top: 7px solid var(--verde);
+    border-bottom: 1px solid #eeeeee;
+    padding: 25px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 25px;
+}
+
+.marca {
+    color: var(--verde-escuro);
+    font-size: 25px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.hotel {
+    color: #777777;
+    font-size: 13px;
+    margin-top: 2px;
+}
+
+.titulo-arte {
+    color: #333333;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: right;
+}
+
+
+/* ------------------------------------------
+   CORPO
+------------------------------------------ */
+
+.orcamento-corpo {
+    padding: 30px;
+}
+
+
+/* ------------------------------------------
+   DATAS
+------------------------------------------ */
+
+.datas {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: var(--verde-claro);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.data-box {
+    flex: 1;
+}
+
+.data-box span,
+.noites span {
+    display: block;
+    color: #777777;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.data-box strong {
+    color: #333333;
+    font-size: 21px;
+}
+
+.seta {
+    color: var(--verde-escuro);
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.noites {
+    text-align: center;
+    border-left: 1px solid rgba(0, 0, 0, 0.10);
+    padding-left: 25px;
+}
+
+.noites strong {
+    color: var(--verde-escuro);
+    font-size: 16px;
+}
+
+
+/* ------------------------------------------
+   QUARTO + HÓSPEDES
+------------------------------------------ */
+
+.linha {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 25px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.rotulo {
+    display: block;
+    color: #888888;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.7px;
+    margin-bottom: 5px;
+}
+
+.quarto .tipo {
+    display: block;
+    color: var(--verde-escuro);
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.descricao {
+    color: #444444;
+    font-size: 14px;
+}
+
+.hospedes {
+    border-left: 1px solid #eeeeee;
+    padding-left: 25px;
+}
+
+.hospedes strong {
+    display: block;
+    color: #333333;
+    font-size: 16px;
+}
+
+
+/* ------------------------------------------
+   INFORMAÇÕES
+------------------------------------------ */
+
+.informacoes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 25px 0;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.info > span {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--verde-claro);
+    border-radius: 12px;
+    font-size: 19px;
+}
+
+.info small {
+    display: block;
+    color: #888888;
+    font-size: 10px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.info strong {
+    display: block;
+    color: #333333;
+    font-size: 13px;
+}
+
+
+/* ------------------------------------------
+   VALOR
+------------------------------------------ */
+
+.valor-area {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    padding: 28px 0 10px;
+}
+
+.valor-area small {
+    display: block;
+    color: #888888;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.valor-total {
+    color: var(--verde-escuro);
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.valor-original {
+    color: #999999;
+    font-size: 15px;
+    text-decoration: line-through;
+    margin-bottom: 2px;
+}
+
+.pagamento {
+    background: #f5f5f5;
+    border-radius: 10px;
+    padding: 10px 15px;
+    color: #555555;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+
+/* ------------------------------------------
+   RODAPÉ DA ARTE
+------------------------------------------ */
+
+.orcamento-rodape {
+    background: #fafafa;
+    border-top: 1px solid #eeeeee;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    color: #999999;
+    font-size: 10px;
+}
+
+
+/* ------------------------------------------
+   RESPONSIVO DA ARTE
+------------------------------------------ */
+
+@media (max-width: 768px) {
+
+    .orcamento-topo {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 22px;
+    }
+
+    .titulo-arte {
+        text-align: left;
+    }
+
+    .orcamento-corpo {
+        padding: 22px;
+    }
+
+    .datas {
+        flex-wrap: wrap;
+    }
+
+    .data-box {
+        min-width: 40%;
+    }
+
+    .seta {
+        display: none;
+    }
+
+    .noites {
+        width: 100%;
+        text-align: left;
+        border-left: none;
+        border-top: 1px solid rgba(0, 0, 0, 0.10);
+        padding-left: 0;
+        padding-top: 12px;
+    }
+
+    .linha {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .hospedes {
+        border-left: none;
+        border-top: 1px solid #eeeeee;
+        padding-left: 0;
+        padding-top: 20px;
+    }
+
+    .informacoes {
+        grid-template-columns: 1fr;
+    }
+
+    .valor-area {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .orcamento-rodape {
+        flex-direction: column;
+        gap: 5px;
+        padding: 15px 22px;
+    }
+}
     }
 }
