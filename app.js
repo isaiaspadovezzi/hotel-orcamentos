@@ -456,3 +456,158 @@ function limparFormulario() {
     document.getElementById("orcamentoPreview").innerHTML =
         "";
 }
+// ==========================================
+// LEITURA AUTOMÁTICA DO PRINT - OCR
+// ==========================================
+
+const arquivoOrcamento =
+    document.getElementById("arquivoOrcamento");
+
+const imagemSelecionada =
+    document.getElementById("imagemSelecionada");
+
+const btnLerOrcamento =
+    document.getElementById("btnLerOrcamento");
+
+const statusOcr =
+    document.getElementById("statusOcr");
+
+
+// ------------------------------------------
+// QUANDO O USUÁRIO ESCOLHE O PRINT
+// ------------------------------------------
+
+arquivoOrcamento.addEventListener("change", function () {
+
+    const arquivo = this.files[0];
+
+    if (!arquivo) {
+        return;
+    }
+
+    const url = URL.createObjectURL(arquivo);
+
+    imagemSelecionada.innerHTML = `
+        <img src="${url}" alt="Print do orçamento">
+    `;
+
+    imagemSelecionada.style.display = "block";
+
+    btnLerOrcamento.disabled = false;
+
+    statusOcr.innerHTML =
+        "Print carregado. Clique em <strong>Ler orçamento automaticamente</strong>.";
+
+    statusOcr.className = "status-ocr";
+});
+
+
+// ------------------------------------------
+// CARREGAR TESSERACT
+// ------------------------------------------
+
+function carregarTesseract() {
+
+    return new Promise((resolve, reject) => {
+
+        if (window.Tesseract) {
+            resolve();
+            return;
+        }
+
+        const script =
+            document.createElement("script");
+
+        script.src =
+            "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+
+        script.onload = resolve;
+
+        script.onerror = reject;
+
+        document.head.appendChild(script);
+    });
+}
+
+
+// ------------------------------------------
+// LER PRINT
+// ------------------------------------------
+
+btnLerOrcamento.addEventListener("click", async function () {
+
+    const arquivo = arquivoOrcamento.files[0];
+
+    if (!arquivo) {
+        return;
+    }
+
+    btnLerOrcamento.disabled = true;
+
+    statusOcr.className = "status-ocr";
+
+    statusOcr.innerHTML =
+        "🔍 Lendo o orçamento...";
+
+
+    try {
+
+        await carregarTesseract();
+
+
+        const resultado =
+            await Tesseract.recognize(
+                arquivo,
+                "por+eng",
+                {
+                    logger: function (info) {
+
+                        if (info.status === "recognizing text") {
+
+                            const porcentagem =
+                                Math.round(
+                                    info.progress * 100
+                                );
+
+                            statusOcr.innerHTML =
+                                `🔍 Lendo orçamento... ${porcentagem}%`;
+                        }
+                    }
+                }
+            );
+
+
+        const texto =
+            resultado.data.text;
+
+
+        console.log("TEXTO RECONHECIDO:");
+        console.log(texto);
+
+
+        statusOcr.className =
+            "status-ocr sucesso";
+
+        statusOcr.innerHTML =
+            "✅ Print lido. Agora vamos preencher os campos.";
+
+
+        preencherCamposComOCR(texto);
+
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        statusOcr.className =
+            "status-ocr erro";
+
+        statusOcr.innerHTML =
+            "❌ Não foi possível ler o print.";
+
+    }
+
+
+    btnLerOrcamento.disabled = false;
+
+});
