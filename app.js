@@ -611,3 +611,405 @@ btnLerOrcamento.addEventListener("click", async function () {
     btnLerOrcamento.disabled = false;
 
 });
+// ==========================================
+// INTERPRETAR TEXTO DO OCR
+// ==========================================
+
+function preencherCamposComOCR(texto) {
+
+    console.log("Iniciando interpretação do orçamento...");
+
+    // --------------------------------------
+    // LIMPAR TEXTO
+    // --------------------------------------
+
+    const textoOriginal = texto;
+
+    const linhas = texto
+        .split("\n")
+        .map(linha => linha.trim())
+        .filter(linha => linha.length > 0);
+
+
+    // --------------------------------------
+    // TIPO + DESCRIÇÃO DO QUARTO
+    // --------------------------------------
+
+    let tipoQuarto = "";
+    let descricaoQuarto = "";
+
+    for (let linha of linhas) {
+
+        const encontrado = linha.match(
+            /^\s*\d+\s*-\s*([A-Z0-9]+)\s*-\s*(.+)$/i
+        );
+
+        if (encontrado) {
+
+            tipoQuarto = encontrado[1].trim().toUpperCase();
+
+            descricaoQuarto = encontrado[2].trim();
+
+            break;
+        }
+    }
+
+
+    // --------------------------------------
+    // TARIFA
+    // --------------------------------------
+
+    let tarifa = "";
+
+    if (tipoQuarto) {
+
+        const indiceTipo = linhas.findIndex(linha =>
+            linha.toUpperCase().includes(tipoQuarto)
+        );
+
+        if (indiceTipo >= 0 && linhas[indiceTipo + 1]) {
+
+            const proximaLinha =
+                linhas[indiceTipo + 1];
+
+            if (
+                !proximaLinha.match(
+                    /\d{1,2}\s+[A-Za-z]{3}\s+\d{4}/
+                )
+            ) {
+
+                tarifa = proximaLinha;
+            }
+        }
+    }
+
+
+    // --------------------------------------
+    // DATAS
+    // --------------------------------------
+
+    const meses = {
+
+        jan: "01",
+        feb: "02",
+        mar: "03",
+        apr: "04",
+        may: "05",
+        jun: "06",
+        jul: "07",
+        aug: "08",
+        sep: "09",
+        oct: "10",
+        nov: "11",
+        dec: "12",
+
+        janeiro: "01",
+        fevereiro: "02",
+        março: "03",
+        marco: "03",
+        abril: "04",
+        maio: "05",
+        junho: "06",
+        julho: "07",
+        agosto: "08",
+        setembro: "09",
+        outubro: "10",
+        novembro: "11",
+        dezembro: "12"
+    };
+
+
+    const regexData =
+        /(\d{1,2})\s+([A-Za-zçÇãõÃÕ]+)\s+(\d{4})/gi;
+
+    const datasEncontradas = [];
+
+    let resultadoData;
+
+    while (
+        (resultadoData = regexData.exec(textoOriginal)) !== null
+    ) {
+
+        const dia =
+            resultadoData[1].padStart(2, "0");
+
+        const mesTexto =
+            resultadoData[2].toLowerCase();
+
+        const ano =
+            resultadoData[3];
+
+        const mes =
+            meses[mesTexto];
+
+        if (mes) {
+
+            datasEncontradas.push(
+                `${ano}-${mes}-${dia}`
+            );
+        }
+    }
+
+
+    if (datasEncontradas.length >= 2) {
+
+        document.getElementById("checkin").value =
+            datasEncontradas[0];
+
+        document.getElementById("checkout").value =
+            datasEncontradas[1];
+    }
+
+
+    // --------------------------------------
+    // NÚMERO DE NOITES
+    // --------------------------------------
+
+    let noites = 0;
+
+    const encontrouNoites =
+        textoOriginal.match(
+            /\((\d+)\s*(?:night|nights|noite|noites)/i
+        );
+
+    if (encontrouNoites) {
+
+        noites =
+            parseInt(encontrouNoites[1]);
+    }
+
+
+    if (noites > 0) {
+
+        document.getElementById("noites").value =
+            noites;
+    }
+
+
+    // --------------------------------------
+    // ADULTOS E CRIANÇAS
+    // --------------------------------------
+
+    let adultos = 0;
+    let criancas = 0;
+
+    const encontrouHospedes =
+        textoOriginal.match(
+            /(\d+)\s*Adult\s*\/\s*(\d+)\s*Child/i
+        );
+
+    if (encontrouHospedes) {
+
+        adultos =
+            parseInt(encontrouHospedes[1]);
+
+        criancas =
+            parseInt(encontrouHospedes[2]);
+    }
+
+
+    // Também aceita "Adults"
+    if (!encontrouHospedes) {
+
+        const alternativa =
+            textoOriginal.match(
+                /(\d+)\s*Adults?\s*\/\s*(\d+)\s*Child(?:ren)?/i
+            );
+
+        if (alternativa) {
+
+            adultos =
+                parseInt(alternativa[1]);
+
+            criancas =
+                parseInt(alternativa[2]);
+        }
+    }
+
+
+    document.getElementById("adultos").value =
+        adultos;
+
+    document.getElementById("criancas").value =
+        criancas;
+
+
+    // --------------------------------------
+    // CAFÉ DA MANHÃ
+    // --------------------------------------
+
+    const temCafe =
+        /breakfast/i.test(textoOriginal) &&
+        /included/i.test(textoOriginal);
+
+
+    document.getElementById("cafe").checked =
+        temCafe;
+
+
+    // --------------------------------------
+    // TARIFA PROMOCIONAL
+    // --------------------------------------
+
+    const temPromo =
+        /promo/i.test(textoOriginal) ||
+        /m[eê]s do cliente/i.test(textoOriginal);
+
+
+    document.getElementById("promo").checked =
+        temPromo;
+
+
+    // --------------------------------------
+    // VALORES EM BRL
+    // --------------------------------------
+
+    const valoresBRL = [];
+
+    const regexBRL =
+        /([\d.,]+)\s*BRL/gi;
+
+    let resultadoValor;
+
+    while (
+        (resultadoValor = regexBRL.exec(textoOriginal)) !== null
+    ) {
+
+        let valorTexto =
+            resultadoValor[1]
+                .replace(/\./g, "")
+                .replace(",", ".");
+
+        /*
+         * Se o OCR encontrou 1453.20,
+         * a conversão acima transformaria em 145320.
+         *
+         * Por isso verificamos o formato.
+         */
+
+        if (
+            resultadoValor[1].includes(".") &&
+            !resultadoValor[1].includes(",")
+        ) {
+
+            valorTexto =
+                resultadoValor[1];
+        }
+
+        const valor =
+            parseFloat(valorTexto);
+
+        if (!isNaN(valor)) {
+
+            valoresBRL.push(valor);
+        }
+    }
+
+
+    // --------------------------------------
+    // VALOR TOTAL
+    // --------------------------------------
+
+    if (valoresBRL.length > 0) {
+
+        const valorTotal =
+            valoresBRL[0];
+
+        document.getElementById("valorTotal").value =
+            formatarMoeda(valorTotal);
+    }
+
+
+    // --------------------------------------
+    // VALOR ORIGINAL
+    // --------------------------------------
+
+    if (valoresBRL.length > 1) {
+
+        const valorTotal =
+            valoresBRL[0];
+
+        const valoresMaiores =
+            valoresBRL.filter(valor =>
+                valor > valorTotal
+            );
+
+        if (valoresMaiores.length > 0) {
+
+            const valorOriginal =
+                Math.max(...valoresMaiores);
+
+            document.getElementById("valorOriginal").value =
+                formatarMoeda(valorOriginal);
+        }
+    }
+
+
+    // --------------------------------------
+    // PAGAMENTO
+    // --------------------------------------
+
+    if (
+        /to be paid at the hotel/i.test(textoOriginal) ||
+        /paid at the hotel/i.test(textoOriginal)
+    ) {
+
+        document.getElementById("pagamento").value =
+            "hotel";
+    }
+
+
+    // --------------------------------------
+    // PREENCHER CAMPOS
+    // --------------------------------------
+
+    document.getElementById("tipoQuarto").value =
+        tipoQuarto;
+
+    document.getElementById("descricaoQuarto").value =
+        descricaoQuarto;
+
+    document.getElementById("tarifa").value =
+        tarifa;
+
+
+    // --------------------------------------
+    // MOSTRAR RESULTADO
+    // --------------------------------------
+
+    statusOcr.className =
+        "status-ocr sucesso";
+
+    statusOcr.innerHTML =
+        "✅ Dados identificados! Confira os campos abaixo antes de gerar o orçamento.";
+
+
+    // --------------------------------------
+    // DESTACAR CAMPOS
+    // --------------------------------------
+
+    const campos =
+        document.querySelectorAll(
+            "#checkin, #checkout, #noites, #adultos, #criancas, #tipoQuarto, #descricaoQuarto, #tarifa, #valorTotal"
+        );
+
+    campos.forEach(campo => {
+
+        campo.style.borderColor =
+            "var(--verde)";
+
+        campo.style.boxShadow =
+            "0 0 0 3px rgba(99, 193, 50, 0.12)";
+
+    });
+
+
+    console.log("Tipo:", tipoQuarto);
+    console.log("Descrição:", descricaoQuarto);
+    console.log("Tarifa:", tarifa);
+    console.log("Datas:", datasEncontradas);
+    console.log("Noites:", noites);
+    console.log("Adultos:", adultos);
+    console.log("Crianças:", criancas);
+    console.log("Valores:", valoresBRL);
+}
