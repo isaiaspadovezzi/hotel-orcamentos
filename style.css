@@ -630,3 +630,100 @@ footer {
 }
     }
 }
+/* ==========================================
+   IMPORTADOR DE ORÇAMENTO
+========================================== */
+
+.importador-texto {
+    color: #777;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.upload-area {
+    width: 100%;
+    min-height: 150px;
+    border: 2px dashed #b9dca8;
+    border-radius: 15px;
+    background: #fafff7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+    padding: 25px;
+    text-align: center;
+}
+
+.upload-area:hover {
+    border-color: var(--verde);
+    background: var(--verde-claro);
+}
+
+.upload-icone {
+    font-size: 35px;
+    margin-bottom: 8px;
+}
+
+.upload-area strong {
+    color: var(--verde-escuro);
+    font-size: 15px;
+}
+
+.upload-area small {
+    color: #999;
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+
+/* IMAGEM SELECIONADA */
+
+.imagem-selecionada {
+    display: none;
+    margin-top: 18px;
+    text-align: center;
+}
+
+.imagem-selecionada img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+
+/* BOTÃO OCR */
+
+.btn-ocr {
+    margin-top: 18px;
+    width: 100%;
+}
+
+.btn-ocr:disabled {
+    background: #cfcfcf;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+/* STATUS DO OCR */
+
+.status-ocr {
+    margin-top: 15px;
+    font-size: 13px;
+    text-align: center;
+    color: var(--cinza);
+}
+
+.status-ocr.sucesso {
+    color: var(--verde-escuro);
+    font-weight: 600;
+}
+
+.status-ocr.erro {
+    color: #c62828;
+    font-weight: 600;
+}
