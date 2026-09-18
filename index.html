@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gerador de Orçamentos</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="topo">
+        <div class="container">
+            <h1>IBIS STYLES</h1>
+            <p>Gerador de Orçamentos</p>
+        </div>
+    </header>
+
+
+    <main class="container">
+
+        <!-- TÍTULO -->
+        <section class="titulo">
+            <h2>Novo Orçamento</h2>
+            <p>Preencha as informações da hospedagem.</p>
+        </section>
+
+
+        <!-- DADOS DA HOSPEDAGEM -->
+        <section class="card">
+
+            <h3>Dados da hospedagem</h3>
+
+            <div class="grid">
+
+                <div class="campo">
+                    <label for="checkin">Check-in</label>
+                    <input type="date" id="checkin">
+                </div>
+
+                <div class="campo">
+                    <label for="checkout">Check-out</label>
+                    <input type="date" id="checkout">
+                </div>
+
+                <div class="campo">
+                    <label for="noites">Noites</label>
+                    <input type="number" id="noites" min="1" value="1">
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- HÓSPEDES -->
+        <section class="card">
+
+            <h3>Hóspedes</h3>
+
+            <div class="grid">
+
+                <div class="campo">
+                    <label for="adultos">Adultos</label>
+                    <input type="number" id="adultos" min="0" value="1">
+                </div>
+
+                <div class="campo">
+                    <label for="criancas">Crianças</label>
+                    <input type="number" id="criancas" min="0" value="0">
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- QUARTO -->
+        <section class="card">
+
+            <h3>Quarto</h3>
+
+            <div class="grid">
+
+                <div class="campo">
+                    <label for="tipoQuarto">Código / Tipo</label>
+
+                    <input
+                        type="text"
+                        id="tipoQuarto"
+                        placeholder="Ex.: TWC"
+                    >
+                </div>
+
+
+                <div class="campo campo-grande">
+                    <label for="descricaoQuarto">Descrição do quarto</label>
+
+                    <input
+                        type="text"
+                        id="descricaoQuarto"
+                        placeholder="Ex.: Quarto Standard com 2 camas de solteiro"
+                    >
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- TARIFA -->
+        <section class="card">
+
+            <h3>Tarifa</h3>
+
+            <div class="campo">
+
+                <label for="tarifa">Tarifa utilizada</label>
+
+                <input
+                    type="text"
+                    id="tarifa"
+                    placeholder="Ex.: TARIFA FLEXÍVEL - ACOMODAÇÃO E CAFÉ DA MANHÃ"
+                >
+
+            </div>
+
+            <div class="linha-opcoes">
+
+                <label class="check">
+                    <input type="checkbox" id="cafe">
+                    Café da manhã incluído
+                </label>
+
+                <label class="check">
+                    <input type="checkbox" id="promo">
+                    Tarifa promocional
+                </label>
+
+            </div>
+
+        </section>
+
+
+        <!-- VALORES -->
+        <section class="card">
+
+            <h3>Valores</h3>
+
+            <div class="grid">
+
+                <div class="campo">
+                    <label for="valorOriginal">Valor original</label>
+
+                    <input
+                        type="text"
+                        id="valorOriginal"
+                        placeholder="R$ 0,00"
+                    >
+                </div>
+
+
+                <div class="campo">
+                    <label for="valorTotal">Valor total</label>
+
+                    <input
+                        type="text"
+                        id="valorTotal"
+                        placeholder="R$ 0,00"
+                    >
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PAGAMENTO -->
+        <section class="card">
+
+            <h3>Pagamento</h3>
+
+            <div class="campo">
+
+                <label for="pagamento">Forma / condição</label>
+
+                <select id="pagamento">
+
+                    <option value="hotel">
+                        A ser pago no hotel
+                    </option>
+
+                    <option value="antecipado">
+                        Pagamento antecipado
+                    </option>
+
+                </select>
+
+            </div>
+
+        </section>
+
+
+        <!-- BOTÕES -->
+        <section class="acoes">
+
+            <button
+                type="button"
+                class="btn btn-secundario"
+                onclick="limparFormulario()"
+            >
+                Limpar
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-principal"
+                onclick="gerarOrcamento()"
+            >
+                Gerar orçamento
+            </button>
+
+        </section>
+
+
+        <!-- PRÉ-VISUALIZAÇÃO -->
+        <section
+            id="previewArea"
+            class="preview-area"
+            style="display:none;"
+        >
+
+            <h2>Pré-visualização</h2>
+
+            <div id="orcamentoPreview"></div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p>IBIS STYLES — Gerador de Orçamentos</p>
+    </footer>
+
+
+    <script src="app.js"></script>
+
+</body>
+</html>
