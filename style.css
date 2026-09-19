@@ -739,6 +739,18 @@ footer {
     gap: 12px;
     margin-top: 20px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.acoes-compartilhar .btn {
+    min-width: 170px;
+}
+.acoes-compartilhar {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .acoes-compartilhar .btn {
