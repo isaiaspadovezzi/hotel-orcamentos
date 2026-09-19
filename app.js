@@ -3,9 +3,54 @@
 // ==========================================
 
 
-// ------------------------------------------
+// ==========================================
+// CONFIGURAÇÃO DOS QUARTOS
+// ==========================================
+
+const QUARTOS = {
+
+    TWC: {
+        nome: "Quarto com 02 camas de solteiro",
+        foto: "img/quartos/solteiro.jpg",
+        quantidadeQuartos: 1
+    },
+
+    TWB: {
+        nome: "Quarto Superior com 02 camas de solteiro",
+        foto: "img/quartos/solteiro.jpg",
+        quantidadeQuartos: 1
+    },
+
+    DBC: {
+        nome: "Quarto com 01 cama de casal",
+        foto: "img/quartos/casal.jpg",
+        quantidadeQuartos: 1
+    },
+
+    DBB: {
+        nome: "Quarto Superior com 01 cama de casal",
+        foto: "img/quartos/casal.jpg",
+        quantidadeQuartos: 1
+    },
+
+    DSC: {
+        nome: "Quarto com 01 cama de casal + 01 sofá-cama",
+        foto: "img/quartos/sofa-cama.jpg",
+        quantidadeQuartos: 1
+    },
+
+    S2C: {
+        nome: "Apartamento Standard Conjugado — 02 quartos, 01 cama de casal + 02 camas de solteiro",
+        foto: "img/quartos/conjugado.jpg",
+        quantidadeQuartos: 2
+    }
+
+};
+
+
+// ==========================================
 // CONVERTER VALOR PARA NÚMERO
-// ------------------------------------------
+// ==========================================
 
 function converterValor(valor) {
 
@@ -24,9 +69,9 @@ function converterValor(valor) {
 }
 
 
-// ------------------------------------------
+// ==========================================
 // FORMATAR VALOR EM REAIS
-// ------------------------------------------
+// ==========================================
 
 function formatarMoeda(valor) {
 
@@ -37,9 +82,9 @@ function formatarMoeda(valor) {
 }
 
 
-// ------------------------------------------
+// ==========================================
 // FORMATAR DATA
-// ------------------------------------------
+// ==========================================
 
 function formatarData(data) {
 
@@ -57,14 +102,137 @@ function formatarData(data) {
 }
 
 
-// ------------------------------------------
+// ==========================================
+// FORMATAR DATA + DIA DA SEMANA
+// ==========================================
+
+function formatarDataCompleta(data) {
+
+    if (!data) {
+        return "";
+    }
+
+    const partes = data.split("-");
+
+    if (partes.length !== 3) {
+        return data;
+    }
+
+    const dataObj = new Date(
+        `${partes[0]}-${partes[1]}-${partes[2]}T12:00:00`
+    );
+
+    const diasSemana = [
+        "domingo",
+        "segunda-feira",
+        "terça-feira",
+        "quarta-feira",
+        "quinta-feira",
+        "sexta-feira",
+        "sábado"
+    ];
+
+    const diaSemana = diasSemana[dataObj.getDay()];
+
+    return `${formatarData(data)} — ${diaSemana}`;
+}
+
+
+// ==========================================
+// ESCAPAR HTML
+// ==========================================
+
+function escaparHTML(texto) {
+
+    if (!texto) {
+        return "";
+    }
+
+    return texto
+        .toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+// ==========================================
+// OBTER DADOS DO QUARTO
+// ==========================================
+
+function obterDadosQuarto(tipoQuarto, descricaoOriginal) {
+
+    const codigo = (tipoQuarto || "")
+        .trim()
+        .toUpperCase();
+
+    if (QUARTOS[codigo]) {
+
+        return {
+            codigo: codigo,
+            nome: QUARTOS[codigo].nome,
+            foto: QUARTOS[codigo].foto,
+            quantidadeQuartos: QUARTOS[codigo].quantidadeQuartos
+        };
+
+    }
+
+    return {
+        codigo: codigo,
+        nome: descricaoOriginal || "Quarto",
+        foto: "",
+        quantidadeQuartos: 1
+    };
+}
+
+
+// ==========================================
+// GERAR TEXTO DOS HÓSPEDES
+// ==========================================
+
+function gerarTextoHospedes(adultos, criancas) {
+
+    let texto = "";
+
+    if (adultos > 0) {
+
+        texto +=
+            adultos +
+            (adultos === 1 ? " adulto" : " adultos");
+    }
+
+    if (criancas > 0) {
+
+        if (texto !== "") {
+            texto += " + ";
+        }
+
+        texto +=
+            criancas +
+            (criancas === 1 ? " criança" : " crianças");
+    }
+
+    if (texto === "") {
+        texto = "Não informado";
+    }
+
+    return texto;
+}
+
+
+// ==========================================
 // GERAR ORÇAMENTO
-// ------------------------------------------
+// ==========================================
 
 function gerarOrcamento() {
 
-    const checkin = document.getElementById("checkin").value;
-    const checkout = document.getElementById("checkout").value;
+    const checkin =
+        document.getElementById("checkin").value;
+
+    const checkout =
+        document.getElementById("checkout").value;
 
     const noites =
         parseInt(document.getElementById("noites").value) || 0;
@@ -76,13 +244,12 @@ function gerarOrcamento() {
         parseInt(document.getElementById("criancas").value) || 0;
 
     const tipoQuarto =
-        document.getElementById("tipoQuarto").value.trim();
+        document.getElementById("tipoQuarto").value
+            .trim()
+            .toUpperCase();
 
-    const descricaoQuarto =
+    const descricaoOriginal =
         document.getElementById("descricaoQuarto").value.trim();
-
-    const tarifa =
-        document.getElementById("tarifa").value.trim();
 
     const cafe =
         document.getElementById("cafe").checked;
@@ -105,67 +272,97 @@ function gerarOrcamento() {
 
 
     // --------------------------------------
+    // DADOS DO QUARTO
+    // --------------------------------------
+
+    const quarto =
+        obterDadosQuarto(
+            tipoQuarto,
+            descricaoOriginal
+        );
+
+
+    // --------------------------------------
     // VALIDAÇÃO
     // --------------------------------------
 
     if (!checkin || !checkout) {
 
-        alert("Informe as datas de check-in e check-out.");
+        alert(
+            "Informe as datas de check-in e check-out."
+        );
 
         return;
     }
 
-    if (!descricaoQuarto) {
+    if (!quarto.nome) {
 
-        alert("Informe a descrição do quarto.");
+        alert(
+            "Informe o tipo ou a descrição do quarto."
+        );
 
         return;
     }
 
     if (valorTotal <= 0) {
 
-        alert("Informe o valor total da hospedagem.");
+        alert(
+            "Informe o valor total da hospedagem."
+        );
 
         return;
     }
 
 
     // --------------------------------------
-    // TEXTO DOS HÓSPEDES
+    // HÓSPEDES
     // --------------------------------------
 
-    let textoHospedes = "";
-
-    if (adultos > 0) {
-
-        textoHospedes +=
-            adultos +
-            (adultos === 1 ? " adulto" : " adultos");
-    }
-
-    if (criancas > 0) {
-
-        if (textoHospedes !== "") {
-            textoHospedes += " + ";
-        }
-
-        textoHospedes +=
-            criancas +
-            (criancas === 1 ? " criança" : " crianças");
-    }
-
-    if (textoHospedes === "") {
-        textoHospedes = "Não informado";
-    }
+    const textoHospedes =
+        gerarTextoHospedes(
+            adultos,
+            criancas
+        );
 
 
     // --------------------------------------
     // CAFÉ DA MANHÃ
     // --------------------------------------
 
-    let textoCafe = cafe
-        ? "Café da manhã incluído"
-        : "Café da manhã não incluído";
+    let blocoCafe = "";
+
+    if (cafe) {
+
+        blocoCafe = `
+            <div class="info">
+                <span>☕</span>
+
+                <div>
+                    <small>CAFÉ DA MANHÃ</small>
+                    <strong>Incluído</strong>
+                </div>
+            </div>
+        `;
+
+    } else {
+
+        blocoCafe = `
+            <div class="info info-cafe-nao-incluido">
+                <span>☕</span>
+
+                <div>
+                    <small>CAFÉ DA MANHÃ</small>
+                    <strong>Não incluído</strong>
+                </div>
+            </div>
+
+            <div class="aviso-cafe">
+                Café da manhã não incluso na tarifa.
+                Disponível para contratação à parte por
+                <strong>R$ 53,00 por pessoa, por dia.</strong>
+            </div>
+        `;
+    }
 
 
     // --------------------------------------
@@ -176,11 +373,13 @@ function gerarOrcamento() {
 
     if (pagamento === "hotel") {
 
-        textoPagamento = "Pagamento no hotel";
+        textoPagamento =
+            "Pagamento no hotel";
 
     } else {
 
-        textoPagamento = "Pagamento antecipado";
+        textoPagamento =
+            "Pagamento antecipado";
     }
 
 
@@ -217,25 +416,72 @@ function gerarOrcamento() {
 
 
     // --------------------------------------
+    // QUANTIDADE DE QUARTOS
+    // --------------------------------------
+
+    let textoQuantidadeQuartos = "";
+
+    if (quarto.quantidadeQuartos > 1) {
+
+        textoQuantidadeQuartos = `
+            <div class="quantidade-quartos">
+                🛏️ ${quarto.quantidadeQuartos} quartos conjugados
+            </div>
+        `;
+
+    } else {
+
+        textoQuantidadeQuartos = `
+            <div class="quantidade-quartos">
+                🛏️ 1 quarto
+            </div>
+        `;
+    }
+
+
+    // --------------------------------------
+    // FOTO DO QUARTO
+    // --------------------------------------
+
+    let blocoFoto = "";
+
+    if (quarto.foto) {
+
+        blocoFoto = `
+            <div class="foto-quarto">
+                <img
+                    src="${quarto.foto}"
+                    alt="${escaparHTML(quarto.nome)}"
+                >
+            </div>
+        `;
+    }
+
+
+    // --------------------------------------
     // PREVIEW
     // --------------------------------------
 
-    const preview = document.getElementById(
-        "orcamentoPreview"
-    );
+    const preview =
+        document.getElementById(
+            "orcamentoPreview"
+        );
 
 
     preview.innerHTML = `
 
         <div class="orcamento">
 
+            <!-- CABEÇALHO -->
+
             <div class="orcamento-topo">
 
-                <div>
+                <div class="logo-hotel">
 
-                    <div class="marca">
-                        IBIS STYLES
-                    </div>
+                    <img
+                        src="img/logo.png"
+                        alt="ibis Styles"
+                    >
 
                     <div class="hotel">
                         Curitiba Centro Cívico
@@ -250,34 +496,46 @@ function gerarOrcamento() {
             </div>
 
 
+            <!-- CORPO -->
+
             <div class="orcamento-corpo">
 
 
-                <div class="datas">
+                <!-- ESTADIA -->
 
-                    <div class="data-box">
+                <div class="bloco-estadia">
 
-                        <span>CHECK-IN</span>
-
-                        <strong>
-                            ${formatarData(checkin)}
-                        </strong>
-
+                    <div class="titulo-secao">
+                        ESTADIA
                     </div>
 
+                    <div class="datas">
 
-                    <div class="seta">
-                        →
-                    </div>
+                        <div class="data-box">
+
+                            <span>CHECK-IN</span>
+
+                            <strong>
+                                ${formatarDataCompleta(checkin)}
+                            </strong>
+
+                        </div>
 
 
-                    <div class="data-box">
+                        <div class="seta">
+                            →
+                        </div>
 
-                        <span>CHECK-OUT</span>
 
-                        <strong>
-                            ${formatarData(checkout)}
-                        </strong>
+                        <div class="data-box">
+
+                            <span>CHECK-OUT</span>
+
+                            <strong>
+                                ${formatarDataCompleta(checkout)}
+                            </strong>
+
+                        </div>
 
                     </div>
 
@@ -296,70 +554,51 @@ function gerarOrcamento() {
                 </div>
 
 
-                <div class="linha">
+                <!-- QUARTO + HÓSPEDES -->
 
+                <div class="bloco-quarto">
 
-                    <div class="quarto">
+                    ${blocoFoto}
+
+                    <div class="dados-quarto">
 
                         <span class="rotulo">
-                            QUARTO
+                            ACOMODAÇÃO
                         </span>
 
                         <strong class="tipo">
-                            ${tipoQuarto || "—"}
+                            ${escaparHTML(quarto.nome)}
                         </strong>
 
-                        <div class="descricao">
-                            ${descricaoQuarto}
+                        ${textoQuantidadeQuartos}
+
+                        <div class="hospedes">
+
+                            <span class="rotulo">
+                                HÓSPEDES
+                            </span>
+
+                            <strong>
+                                ${escaparHTML(textoHospedes)}
+                            </strong>
+
                         </div>
-
-                    </div>
-
-
-                    <div class="hospedes">
-
-                        <span class="rotulo">
-                            HÓSPEDES
-                        </span>
-
-                        <strong>
-                            ${textoHospedes}
-                        </strong>
 
                     </div>
 
                 </div>
 
+
+                <!-- CAFÉ -->
 
                 <div class="informacoes">
 
-                    <div class="info">
-
-                        <span>☕</span>
-
-                        <div>
-                            <small>CAFÉ DA MANHÃ</small>
-                            <strong>${cafe ? "Incluído" : "Não incluído"}</strong>
-                        </div>
-
-                    </div>
-
-
-                    <div class="info">
-
-                        <span>▣</span>
-
-                        <div>
-                            <small>TARIFA</small>
-                            <strong>
-                                ${tarifa || "Não informado"}
-                            </strong>
-                        </div>
-
-                    </div>
+                    ${blocoCafe}
 
                 </div>
 
+
+                <!-- VALOR -->
 
                 <div class="valor-area">
 
@@ -386,6 +625,8 @@ function gerarOrcamento() {
             </div>
 
 
+            <!-- RODAPÉ -->
+
             <div class="orcamento-rodape">
 
                 <div>
@@ -398,6 +639,7 @@ function gerarOrcamento() {
 
             </div>
 
+
         </div>
 
     `;
@@ -407,55 +649,74 @@ function gerarOrcamento() {
     // MOSTRAR PREVIEW
     // --------------------------------------
 
-    document.getElementById("previewArea").style.display =
-        "block";
+    document.getElementById(
+        "previewArea"
+    ).style.display = "block";
 
 
     // --------------------------------------
     // ROLAR ATÉ A PRÉVIA
     // --------------------------------------
 
-    document.getElementById("previewArea")
-        .scrollIntoView({
-            behavior: "smooth"
-        });
+    document.getElementById(
+        "previewArea"
+    ).scrollIntoView({
+        behavior: "smooth"
+    });
+
 }
 
 
-// ------------------------------------------
+// ==========================================
 // LIMPAR FORMULÁRIO
-// ------------------------------------------
+// ==========================================
 
 function limparFormulario() {
 
     document.getElementById("checkin").value = "";
+
     document.getElementById("checkout").value = "";
 
     document.getElementById("noites").value = "1";
 
     document.getElementById("adultos").value = "1";
+
     document.getElementById("criancas").value = "0";
 
     document.getElementById("tipoQuarto").value = "";
+
     document.getElementById("descricaoQuarto").value = "";
 
-    document.getElementById("tarifa").value = "";
+    const tarifa =
+        document.getElementById("tarifa");
+
+    if (tarifa) {
+        tarifa.value = "";
+    }
 
     document.getElementById("cafe").checked = false;
+
     document.getElementById("promo").checked = false;
 
     document.getElementById("valorOriginal").value = "";
+
     document.getElementById("valorTotal").value = "";
 
     document.getElementById("pagamento").value = "hotel";
 
 
-    document.getElementById("previewArea").style.display =
-        "none";
+    document.getElementById(
+        "previewArea"
+    ).style.display = "none";
 
-    document.getElementById("orcamentoPreview").innerHTML =
-        "";
+
+    document.getElementById(
+        "orcamentoPreview"
+    ).innerHTML = "";
+
 }
+
+
 // ==========================================
 // LEITURA AUTOMÁTICA DO PRINT - OCR
 // ==========================================
@@ -477,158 +738,210 @@ const statusOcr =
 // QUANDO O USUÁRIO ESCOLHE O PRINT
 // ------------------------------------------
 
-arquivoOrcamento.addEventListener("change", function () {
+arquivoOrcamento.addEventListener(
+    "change",
+    function () {
 
-    const arquivo = this.files[0];
+        const arquivo =
+            this.files[0];
 
-    if (!arquivo) {
-        return;
-    }
-
-    const url = URL.createObjectURL(arquivo);
-
-    imagemSelecionada.innerHTML = `
-        <img src="${url}" alt="Print do orçamento">
-    `;
-
-    imagemSelecionada.style.display = "block";
-
-    btnLerOrcamento.disabled = false;
-
-    statusOcr.innerHTML =
-        "Print carregado. Clique em <strong>Ler orçamento automaticamente</strong>.";
-
-    statusOcr.className = "status-ocr";
-});
-
-
-// ------------------------------------------
-// CARREGAR TESSERACT
-// ------------------------------------------
-
-function carregarTesseract() {
-
-    return new Promise((resolve, reject) => {
-
-        if (window.Tesseract) {
-            resolve();
+        if (!arquivo) {
             return;
         }
 
-        const script =
-            document.createElement("script");
+        const url =
+            URL.createObjectURL(arquivo);
 
-        script.src =
-            "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+        imagemSelecionada.innerHTML = `
+            <img
+                src="${url}"
+                alt="Print do orçamento"
+            >
+        `;
 
-        script.onload = resolve;
+        imagemSelecionada.style.display =
+            "block";
 
-        script.onerror = reject;
+        btnLerOrcamento.disabled =
+            false;
 
-        document.head.appendChild(script);
-    });
+        statusOcr.innerHTML =
+            "Print carregado. Clique em <strong>Ler orçamento automaticamente</strong>.";
+
+        statusOcr.className =
+            "status-ocr";
+
+    }
+);
+
+
+// ==========================================
+// CARREGAR TESSERACT
+// ==========================================
+
+function carregarTesseract() {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            if (window.Tesseract) {
+
+                resolve();
+                return;
+            }
+
+            const script =
+                document.createElement("script");
+
+            script.src =
+                "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+
+            script.onload =
+                resolve;
+
+            script.onerror =
+                reject;
+
+            document.head.appendChild(
+                script
+            );
+
+        }
+    );
 }
 
 
-// ------------------------------------------
+// ==========================================
 // LER PRINT
-// ------------------------------------------
+// ==========================================
 
-btnLerOrcamento.addEventListener("click", async function () {
+btnLerOrcamento.addEventListener(
+    "click",
+    async function () {
 
-    const arquivo = arquivoOrcamento.files[0];
+        const arquivo =
+            arquivoOrcamento.files[0];
 
-    if (!arquivo) {
-        return;
-    }
+        if (!arquivo) {
+            return;
+        }
 
-    btnLerOrcamento.disabled = true;
+        btnLerOrcamento.disabled =
+            true;
 
-    statusOcr.className = "status-ocr";
+        statusOcr.className =
+            "status-ocr";
 
-    statusOcr.innerHTML =
-        "🔍 Lendo o orçamento...";
-
-
-    try {
-
-        await carregarTesseract();
+        statusOcr.innerHTML =
+            "🔍 Lendo o orçamento...";
 
 
-        const resultado =
-            await Tesseract.recognize(
-                arquivo,
-                "por+eng",
-                {
-                    logger: function (info) {
+        try {
 
-                        if (info.status === "recognizing text") {
+            await carregarTesseract();
 
-                            const porcentagem =
-                                Math.round(
-                                    info.progress * 100
-                                );
 
-                            statusOcr.innerHTML =
-                                `🔍 Lendo orçamento... ${porcentagem}%`;
-                        }
+            const resultado =
+                await Tesseract.recognize(
+                    arquivo,
+                    "por+eng",
+                    {
+
+                        logger:
+                            function (info) {
+
+                                if (
+                                    info.status ===
+                                    "recognizing text"
+                                ) {
+
+                                    const porcentagem =
+                                        Math.round(
+                                            info.progress *
+                                            100
+                                        );
+
+                                    statusOcr.innerHTML =
+                                        `🔍 Lendo orçamento... ${porcentagem}%`;
+
+                                }
+
+                            }
+
                     }
-                }
+                );
+
+
+            const texto =
+                resultado.data.text;
+
+
+            console.log(
+                "TEXTO RECONHECIDO:"
+            );
+
+            console.log(texto);
+
+
+            statusOcr.className =
+                "status-ocr sucesso";
+
+            statusOcr.innerHTML =
+                "✅ Print lido. Agora vamos preencher os campos.";
+
+
+            preencherCamposComOCR(
+                texto
             );
 
 
-        const texto =
-            resultado.data.text;
+        } catch (erro) {
+
+            console.error(erro);
+
+            statusOcr.className =
+                "status-ocr erro";
+
+            statusOcr.innerHTML =
+                "❌ Não foi possível ler o print.";
+
+        }
 
 
-        console.log("TEXTO RECONHECIDO:");
-        console.log(texto);
-
-
-        statusOcr.className =
-            "status-ocr sucesso";
-
-        statusOcr.innerHTML =
-            "✅ Print lido. Agora vamos preencher os campos.";
-
-
-        preencherCamposComOCR(texto);
-
-
-    } catch (erro) {
-
-        console.error(erro);
-
-        statusOcr.className =
-            "status-ocr erro";
-
-        statusOcr.innerHTML =
-            "❌ Não foi possível ler o print.";
+        btnLerOrcamento.disabled =
+            false;
 
     }
+);
 
 
-    btnLerOrcamento.disabled = false;
-
-});
 // ==========================================
 // INTERPRETAR TEXTO DO OCR
 // ==========================================
 
 function preencherCamposComOCR(texto) {
 
-    console.log("Iniciando interpretação do orçamento...");
+    console.log(
+        "Iniciando interpretação do orçamento..."
+    );
+
 
     // --------------------------------------
     // LIMPAR TEXTO
     // --------------------------------------
 
-    const textoOriginal = texto;
+    const textoOriginal =
+        texto;
 
-    const linhas = texto
-        .split("\n")
-        .map(linha => linha.trim())
-        .filter(linha => linha.length > 0);
+    const linhas =
+        texto
+            .split("\n")
+            .map(linha =>
+                linha.trim()
+            )
+            .filter(linha =>
+                linha.length > 0
+            );
 
 
     // --------------------------------------
@@ -636,22 +949,34 @@ function preencherCamposComOCR(texto) {
     // --------------------------------------
 
     let tipoQuarto = "";
+
     let descricaoQuarto = "";
 
-    for (let linha of linhas) {
 
-        const encontrado = linha.match(
-            /^\s*\d+\s*-\s*([A-Z0-9]+)\s*-\s*(.+)$/i
-        );
+    for (
+        let linha of linhas
+    ) {
+
+        const encontrado =
+            linha.match(
+                /^\s*\d+\s*-\s*([A-Z0-9]+)\s*-\s*(.+)$/i
+            );
+
 
         if (encontrado) {
 
-            tipoQuarto = encontrado[1].trim().toUpperCase();
+            tipoQuarto =
+                encontrado[1]
+                    .trim()
+                    .toUpperCase();
 
-            descricaoQuarto = encontrado[2].trim();
+            descricaoQuarto =
+                encontrado[2]
+                    .trim();
 
             break;
         }
+
     }
 
 
@@ -661,26 +986,58 @@ function preencherCamposComOCR(texto) {
 
     let tarifa = "";
 
+
     if (tipoQuarto) {
 
-        const indiceTipo = linhas.findIndex(linha =>
-            linha.toUpperCase().includes(tipoQuarto)
-        );
+        const indiceTipo =
+            linhas.findIndex(
+                linha =>
+                    linha
+                        .toUpperCase()
+                        .includes(
+                            tipoQuarto
+                        )
+            );
 
-        if (indiceTipo >= 0 && linhas[indiceTipo + 1]) {
 
-            const proximaLinha =
-                linhas[indiceTipo + 1];
+        if (
+            indiceTipo >= 0
+        ) {
 
-            if (
-                !proximaLinha.match(
-                    /\d{1,2}\s+[A-Za-z]{3}\s+\d{4}/
-                )
+            for (
+                let i = indiceTipo + 1;
+                i < Math.min(
+                    linhas.length,
+                    indiceTipo + 4
+                );
+                i++
             ) {
 
-                tarifa = proximaLinha;
+                const linha =
+                    linhas[i];
+
+
+                if (
+                    !linha ||
+                    /details per night/i.test(linha) ||
+                    /price breakdown/i.test(linha) ||
+                    /total/i.test(linha) ||
+                    /brl/i.test(linha) ||
+                    /\d{1,2}\s+[A-Za-z]{3}\s+\d{4}/.test(linha)
+                ) {
+
+                    continue;
+                }
+
+
+                tarifa =
+                    linha;
+
+                break;
             }
+
         }
+
     }
 
 
@@ -716,48 +1073,76 @@ function preencherCamposComOCR(texto) {
         outubro: "10",
         novembro: "11",
         dezembro: "12"
+
     };
 
 
     const regexData =
         /(\d{1,2})\s+([A-Za-zçÇãõÃÕ]+)\s+(\d{4})/gi;
 
+
     const datasEncontradas = [];
+
 
     let resultadoData;
 
+
     while (
-        (resultadoData = regexData.exec(textoOriginal)) !== null
+        (
+            resultadoData =
+                regexData.exec(
+                    textoOriginal
+                )
+        ) !== null
     ) {
 
         const dia =
-            resultadoData[1].padStart(2, "0");
+            resultadoData[1]
+                .padStart(
+                    2,
+                    "0"
+                );
+
 
         const mesTexto =
-            resultadoData[2].toLowerCase();
+            resultadoData[2]
+                .toLowerCase();
+
 
         const ano =
             resultadoData[3];
 
+
         const mes =
             meses[mesTexto];
+
 
         if (mes) {
 
             datasEncontradas.push(
                 `${ano}-${mes}-${dia}`
             );
+
         }
+
     }
 
 
-    if (datasEncontradas.length >= 2) {
+    if (
+        datasEncontradas.length >= 2
+    ) {
 
-        document.getElementById("checkin").value =
+        document.getElementById(
+            "checkin"
+        ).value =
             datasEncontradas[0];
 
-        document.getElementById("checkout").value =
+
+        document.getElementById(
+            "checkout"
+        ).value =
             datasEncontradas[1];
+
     }
 
 
@@ -767,22 +1152,30 @@ function preencherCamposComOCR(texto) {
 
     let noites = 0;
 
+
     const encontrouNoites =
         textoOriginal.match(
             /\((\d+)\s*(?:night|nights|noite|noites)/i
         );
 
+
     if (encontrouNoites) {
 
         noites =
-            parseInt(encontrouNoites[1]);
+            parseInt(
+                encontrouNoites[1]
+            );
+
     }
 
 
     if (noites > 0) {
 
-        document.getElementById("noites").value =
+        document.getElementById(
+            "noites"
+        ).value =
             noites;
+
     }
 
 
@@ -791,46 +1184,40 @@ function preencherCamposComOCR(texto) {
     // --------------------------------------
 
     let adultos = 0;
+
     let criancas = 0;
+
 
     const encontrouHospedes =
         textoOriginal.match(
-            /(\d+)\s*Adult\s*\/\s*(\d+)\s*Child/i
+            /(\d+)\s*Adults?\s*\/\s*(\d+)\s*Child(?:ren)?/i
         );
+
 
     if (encontrouHospedes) {
 
         adultos =
-            parseInt(encontrouHospedes[1]);
-
-        criancas =
-            parseInt(encontrouHospedes[2]);
-    }
-
-
-    // Também aceita "Adults"
-    if (!encontrouHospedes) {
-
-        const alternativa =
-            textoOriginal.match(
-                /(\d+)\s*Adults?\s*\/\s*(\d+)\s*Child(?:ren)?/i
+            parseInt(
+                encontrouHospedes[1]
             );
 
-        if (alternativa) {
+        criancas =
+            parseInt(
+                encontrouHospedes[2]
+            );
 
-            adultos =
-                parseInt(alternativa[1]);
-
-            criancas =
-                parseInt(alternativa[2]);
-        }
     }
 
 
-    document.getElementById("adultos").value =
+    document.getElementById(
+        "adultos"
+    ).value =
         adultos;
 
-    document.getElementById("criancas").value =
+
+    document.getElementById(
+        "criancas"
+    ).value =
         criancas;
 
 
@@ -839,11 +1226,17 @@ function preencherCamposComOCR(texto) {
     // --------------------------------------
 
     const temCafe =
-        /breakfast/i.test(textoOriginal) &&
-        /included/i.test(textoOriginal);
+        /breakfast/i.test(
+            textoOriginal
+        ) &&
+        /included/i.test(
+            textoOriginal
+        );
 
 
-    document.getElementById("cafe").checked =
+    document.getElementById(
+        "cafe"
+    ).checked =
         temCafe;
 
 
@@ -852,11 +1245,17 @@ function preencherCamposComOCR(texto) {
     // --------------------------------------
 
     const temPromo =
-        /promo/i.test(textoOriginal) ||
-        /m[eê]s do cliente/i.test(textoOriginal);
+        /promo/i.test(
+            textoOriginal
+        ) ||
+        /m[eê]s do cliente/i.test(
+            textoOriginal
+        );
 
 
-    document.getElementById("promo").checked =
+    document.getElementById(
+        "promo"
+    ).checked =
         temPromo;
 
 
@@ -866,43 +1265,61 @@ function preencherCamposComOCR(texto) {
 
     const valoresBRL = [];
 
+
     const regexBRL =
         /([\d.,]+)\s*BRL/gi;
 
+
     let resultadoValor;
 
+
     while (
-        (resultadoValor = regexBRL.exec(textoOriginal)) !== null
+        (
+            resultadoValor =
+                regexBRL.exec(
+                    textoOriginal
+                )
+        ) !== null
     ) {
 
         let valorTexto =
-            resultadoValor[1]
-                .replace(/\./g, "")
-                .replace(",", ".");
+            resultadoValor[1];
 
-        /*
-         * Se o OCR encontrou 1453.20,
-         * a conversão acima transformaria em 145320.
-         *
-         * Por isso verificamos o formato.
-         */
 
         if (
-            resultadoValor[1].includes(".") &&
-            !resultadoValor[1].includes(",")
+            valorTexto.includes(".") &&
+            !valorTexto.includes(",")
         ) {
 
             valorTexto =
-                resultadoValor[1];
+                valorTexto;
+
+        } else {
+
+            valorTexto =
+                valorTexto
+                    .replace(/\./g, "")
+                    .replace(",", ".");
+
         }
+
 
         const valor =
-            parseFloat(valorTexto);
+            parseFloat(
+                valorTexto
+            );
 
-        if (!isNaN(valor)) {
 
-            valoresBRL.push(valor);
+        if (
+            !isNaN(valor)
+        ) {
+
+            valoresBRL.push(
+                valor
+            );
+
         }
+
     }
 
 
@@ -910,13 +1327,21 @@ function preencherCamposComOCR(texto) {
     // VALOR TOTAL
     // --------------------------------------
 
-    if (valoresBRL.length > 0) {
+    if (
+        valoresBRL.length > 0
+    ) {
 
         const valorTotal =
             valoresBRL[0];
 
-        document.getElementById("valorTotal").value =
-            formatarMoeda(valorTotal);
+
+        document.getElementById(
+            "valorTotal"
+        ).value =
+            formatarMoeda(
+                valorTotal
+            );
+
     }
 
 
@@ -924,24 +1349,40 @@ function preencherCamposComOCR(texto) {
     // VALOR ORIGINAL
     // --------------------------------------
 
-    if (valoresBRL.length > 1) {
+    if (
+        valoresBRL.length > 1
+    ) {
 
         const valorTotal =
             valoresBRL[0];
 
+
         const valoresMaiores =
-            valoresBRL.filter(valor =>
-                valor > valorTotal
+            valoresBRL.filter(
+                valor =>
+                    valor > valorTotal
             );
 
-        if (valoresMaiores.length > 0) {
+
+        if (
+            valoresMaiores.length > 0
+        ) {
 
             const valorOriginal =
-                Math.max(...valoresMaiores);
+                Math.max(
+                    ...valoresMaiores
+                );
 
-            document.getElementById("valorOriginal").value =
-                formatarMoeda(valorOriginal);
+
+            document.getElementById(
+                "valorOriginal"
+            ).value =
+                formatarMoeda(
+                    valorOriginal
+                );
+
         }
+
     }
 
 
@@ -950,12 +1391,19 @@ function preencherCamposComOCR(texto) {
     // --------------------------------------
 
     if (
-        /to be paid at the hotel/i.test(textoOriginal) ||
-        /paid at the hotel/i.test(textoOriginal)
+        /to be paid at the hotel/i.test(
+            textoOriginal
+        ) ||
+        /paid at the hotel/i.test(
+            textoOriginal
+        )
     ) {
 
-        document.getElementById("pagamento").value =
+        document.getElementById(
+            "pagamento"
+        ).value =
             "hotel";
+
     }
 
 
@@ -963,14 +1411,29 @@ function preencherCamposComOCR(texto) {
     // PREENCHER CAMPOS
     // --------------------------------------
 
-    document.getElementById("tipoQuarto").value =
+    document.getElementById(
+        "tipoQuarto"
+    ).value =
         tipoQuarto;
 
-    document.getElementById("descricaoQuarto").value =
+
+    document.getElementById(
+        "descricaoQuarto"
+    ).value =
         descricaoQuarto;
 
-    document.getElementById("tarifa").value =
-        tarifa;
+
+    const campoTarifa =
+        document.getElementById(
+            "tarifa"
+        );
+
+    if (campoTarifa) {
+
+        campoTarifa.value =
+            tarifa;
+
+    }
 
 
     // --------------------------------------
@@ -979,6 +1442,7 @@ function preencherCamposComOCR(texto) {
 
     statusOcr.className =
         "status-ocr sucesso";
+
 
     statusOcr.innerHTML =
         "✅ Dados identificados! Confira os campos abaixo antes de gerar o orçamento.";
@@ -990,29 +1454,66 @@ function preencherCamposComOCR(texto) {
 
     const campos =
         document.querySelectorAll(
-            "#checkin, #checkout, #noites, #adultos, #criancas, #tipoQuarto, #descricaoQuarto, #tarifa, #valorTotal"
+            "#checkin, #checkout, #noites, #adultos, #criancas, #tipoQuarto, #descricaoQuarto, #valorTotal"
         );
 
-    campos.forEach(campo => {
 
-        campo.style.borderColor =
-            "var(--verde)";
+    campos.forEach(
+        campo => {
 
-        campo.style.boxShadow =
-            "0 0 0 3px rgba(99, 193, 50, 0.12)";
+            campo.style.borderColor =
+                "var(--verde)";
 
-    });
+            campo.style.boxShadow =
+                "0 0 0 3px rgba(99, 193, 50, 0.12)";
+
+        }
+    );
 
 
-    console.log("Tipo:", tipoQuarto);
-    console.log("Descrição:", descricaoQuarto);
-    console.log("Tarifa:", tarifa);
-    console.log("Datas:", datasEncontradas);
-    console.log("Noites:", noites);
-    console.log("Adultos:", adultos);
-    console.log("Crianças:", criancas);
-    console.log("Valores:", valoresBRL);
+    console.log(
+        "Tipo:",
+        tipoQuarto
+    );
+
+    console.log(
+        "Descrição:",
+        descricaoQuarto
+    );
+
+    console.log(
+        "Tarifa:",
+        tarifa
+    );
+
+    console.log(
+        "Datas:",
+        datasEncontradas
+    );
+
+    console.log(
+        "Noites:",
+        noites
+    );
+
+    console.log(
+        "Adultos:",
+        adultos
+    );
+
+    console.log(
+        "Crianças:",
+        criancas
+    );
+
+    console.log(
+        "Valores:",
+        valoresBRL
+    );
+
 }
+
+
 // ==========================================
 // COPIAR ORÇAMENTO
 // ==========================================
@@ -1020,88 +1521,123 @@ function preencherCamposComOCR(texto) {
 function copiarOrcamento() {
 
     const checkin =
-        document.getElementById("checkin").value;
+        document.getElementById(
+            "checkin"
+        ).value;
 
     const checkout =
-        document.getElementById("checkout").value;
+        document.getElementById(
+            "checkout"
+        ).value;
 
     const noites =
-        document.getElementById("noites").value;
+        document.getElementById(
+            "noites"
+        ).value;
 
     const adultos =
-        document.getElementById("adultos").value;
+        document.getElementById(
+            "adultos"
+        ).value;
 
     const criancas =
-        document.getElementById("criancas").value;
+        document.getElementById(
+            "criancas"
+        ).value;
 
     const tipoQuarto =
-        document.getElementById("tipoQuarto").value;
+        document.getElementById(
+            "tipoQuarto"
+        ).value
+            .trim()
+            .toUpperCase();
 
-    const descricaoQuarto =
-        document.getElementById("descricaoQuarto").value;
+    const descricaoOriginal =
+        document.getElementById(
+            "descricaoQuarto"
+        ).value;
 
     const cafe =
-        document.getElementById("cafe").checked;
-
-    const tarifa =
-        document.getElementById("tarifa").value;
+        document.getElementById(
+            "cafe"
+        ).checked;
 
     const valorTotal =
-        document.getElementById("valorTotal").value;
+        document.getElementById(
+            "valorTotal"
+        ).value;
 
     const pagamento =
-        document.getElementById("pagamento").value;
+        document.getElementById(
+            "pagamento"
+        ).value;
+
+
+    const quarto =
+        obterDadosQuarto(
+            tipoQuarto,
+            descricaoOriginal
+        );
 
 
     let hospedes =
         `${adultos} ${adultos == 1 ? "adulto" : "adultos"}`;
 
+
     if (criancas > 0) {
 
         hospedes +=
             ` + ${criancas} ${criancas == 1 ? "criança" : "crianças"}`;
+
     }
 
 
-    let texto = `
-
-IBIS STYLES CURITIBA CENTRO CÍVICO
+    let texto =
+        `IBIS STYLES CURITIBA CENTRO CÍVICO
 
 ORÇAMENTO DE HOSPEDAGEM
 
-📅 Check-in: ${formatarData(checkin)}
-📅 Check-out: ${formatarData(checkout)}
+📅 Check-in: ${formatarDataCompleta(checkin)}
+📅 Check-out: ${formatarDataCompleta(checkout)}
 🌙 Estadia: ${noites} ${noites == 1 ? "noite" : "noites"}
 
-🏨 Quarto ${tipoQuarto}
-${descricaoQuarto}
+🏨 ${quarto.nome}
+
+🛏️ ${quarto.quantidadeQuartos} ${quarto.quantidadeQuartos == 1 ? "quarto" : "quartos"}
 
 👥 Hóspedes: ${hospedes}
 
-☕ Café da manhã: ${cafe ? "Incluído" : "Não incluído"}
+☕ Café da manhã: ${cafe ? "Incluído" : "Não incluído — disponível à parte por R$ 53,00 por pessoa, por dia."}
 
 💰 Valor total: ${valorTotal}
 
 ${pagamento === "hotel"
     ? "💳 Pagamento no hotel"
-    : "💳 Pagamento antecipado"}
-
-`;
-
-    texto = texto.trim();
+    : "💳 Pagamento antecipado"}`;
 
 
-    navigator.clipboard.writeText(texto)
+    texto =
+        texto.trim();
+
+
+    navigator.clipboard.writeText(
+        texto
+    )
         .then(() => {
 
-            alert("✅ Orçamento copiado! Agora é só colar no WhatsApp.");
+            alert(
+                "✅ Orçamento copiado! Agora é só colar no WhatsApp."
+            );
 
         })
         .catch(() => {
 
-            alert("Não foi possível copiar automaticamente.");
+            alert(
+                "Não foi possível copiar automaticamente."
+            );
 
         });
+
 }
 
 
@@ -1112,86 +1648,146 @@ ${pagamento === "hotel"
 async function compartilharOrcamento() {
 
     const checkin =
-        document.getElementById("checkin").value;
+        document.getElementById(
+            "checkin"
+        ).value;
 
     const checkout =
-        document.getElementById("checkout").value;
+        document.getElementById(
+            "checkout"
+        ).value;
 
     const noites =
-        document.getElementById("noites").value;
+        document.getElementById(
+            "noites"
+        ).value;
 
     const adultos =
-        document.getElementById("adultos").value;
+        document.getElementById(
+            "adultos"
+        ).value;
 
     const criancas =
-        document.getElementById("criancas").value;
+        document.getElementById(
+            "criancas"
+        ).value;
 
     const tipoQuarto =
-        document.getElementById("tipoQuarto").value;
+        document.getElementById(
+            "tipoQuarto"
+        ).value
+            .trim()
+            .toUpperCase();
 
-    const descricaoQuarto =
-        document.getElementById("descricaoQuarto").value;
+    const descricaoOriginal =
+        document.getElementById(
+            "descricaoQuarto"
+        ).value;
 
     const cafe =
-        document.getElementById("cafe").checked;
+        document.getElementById(
+            "cafe"
+        ).checked;
 
     const valorTotal =
-        document.getElementById("valorTotal").value;
+        document.getElementById(
+            "valorTotal"
+        ).value;
+
+
+    const pagamento =
+        document.getElementById(
+            "pagamento"
+        ).value;
+
+
+    const quarto =
+        obterDadosQuarto(
+            tipoQuarto,
+            descricaoOriginal
+        );
 
 
     let hospedes =
         `${adultos} ${adultos == 1 ? "adulto" : "adultos"}`;
 
+
     if (criancas > 0) {
 
         hospedes +=
             ` + ${criancas} ${criancas == 1 ? "criança" : "crianças"}`;
+
     }
 
 
-    const texto = `IBIS STYLES CURITIBA CENTRO CÍVICO
+    const texto =
+        `IBIS STYLES CURITIBA CENTRO CÍVICO
 
 ORÇAMENTO DE HOSPEDAGEM
 
-📅 ${formatarData(checkin)} → ${formatarData(checkout)}
+📅 ${formatarDataCompleta(checkin)} → ${formatarDataCompleta(checkout)}
 🌙 ${noites} ${noites == 1 ? "noite" : "noites"}
 
-🏨 ${tipoQuarto} — ${descricaoQuarto}
+🏨 ${quarto.nome}
+
+🛏️ ${quarto.quantidadeQuartos} ${quarto.quantidadeQuartos == 1 ? "quarto" : "quartos"}
 
 👥 ${hospedes}
 
-☕ Café da manhã: ${cafe ? "Incluído" : "Não incluído"}
+☕ Café da manhã: ${
+        cafe
+            ? "Incluído"
+            : "Não incluído — disponível à parte por R$ 53,00 por pessoa, por dia."
+    }
 
 💰 TOTAL: ${valorTotal}
 
-Pagamento no hotel.`;
+${
+    pagamento === "hotel"
+        ? "💳 Pagamento no hotel."
+        : "💳 Pagamento antecipado."
+}`;
 
 
-    if (navigator.share) {
+    if (
+        navigator.share
+    ) {
 
         try {
 
             await navigator.share({
-                title: "Orçamento de hospedagem",
-                text: texto
+
+                title:
+                    "Orçamento de hospedagem",
+
+                text:
+                    texto
+
             });
 
         } catch (erro) {
 
-            console.log("Compartilhamento cancelado.");
+            console.log(
+                "Compartilhamento cancelado."
+            );
 
         }
 
     } else {
 
-        await navigator.clipboard.writeText(texto);
+        await navigator.clipboard.writeText(
+            texto
+        );
 
         alert(
             "Seu navegador não possui compartilhamento direto. O orçamento foi copiado para a área de transferência."
         );
 
     }
+
 }
+
+
 // ==========================================
 // COPIAR IMAGEM DO ORÇAMENTO
 // ==========================================
@@ -1199,11 +1795,16 @@ Pagamento no hotel.`;
 async function copiarImagemOrcamento() {
 
     const elemento =
-        document.querySelector("#orcamentoPreview .orcamento");
+        document.querySelector(
+            "#orcamentoPreview .orcamento"
+        );
+
 
     if (!elemento) {
 
-        alert("Primeiro gere o orçamento.");
+        alert(
+            "Primeiro gere o orçamento."
+        );
 
         return;
     }
@@ -1216,15 +1817,19 @@ async function copiarImagemOrcamento() {
 
 
     const textoOriginal =
-        botao ? botao.innerHTML : "";
+        botao
+            ? botao.innerHTML
+            : "";
 
 
     if (botao) {
 
-        botao.disabled = true;
+        botao.disabled =
+            true;
 
         botao.innerHTML =
             "⏳ Preparando imagem...";
+
     }
 
 
@@ -1242,17 +1847,23 @@ async function copiarImagemOrcamento() {
         // --------------------------------------
 
         const canvas =
-            await html2canvas(elemento, {
+            await html2canvas(
+                elemento,
+                {
 
-                scale: 2,
+                    scale: 2,
 
-                backgroundColor: "#ffffff",
+                    backgroundColor:
+                        "#ffffff",
 
-                useCORS: true,
+                    useCORS:
+                        true,
 
-                logging: false
+                    logging:
+                        false
 
-            });
+                }
+            );
 
 
         // --------------------------------------
@@ -1260,14 +1871,16 @@ async function copiarImagemOrcamento() {
         // --------------------------------------
 
         const blob =
-            await new Promise(resolve => {
+            await new Promise(
+                resolve => {
 
-                canvas.toBlob(
-                    resolve,
-                    "image/png"
-                );
+                    canvas.toBlob(
+                        resolve,
+                        "image/png"
+                    );
 
-            });
+                }
+            );
 
 
         if (!blob) {
@@ -1290,7 +1903,8 @@ async function copiarImagemOrcamento() {
 
             const item =
                 new ClipboardItem({
-                    "image/png": blob
+                    "image/png":
+                        blob
                 });
 
 
@@ -1307,14 +1921,19 @@ async function copiarImagemOrcamento() {
             }
 
 
-            setTimeout(() => {
+            setTimeout(
+                () => {
 
-                if (botao) {
-                    botao.innerHTML =
-                        textoOriginal;
-                }
+                    if (botao) {
 
-            }, 2500);
+                        botao.innerHTML =
+                            textoOriginal;
+
+                    }
+
+                },
+                2500
+            );
 
 
         } else {
@@ -1323,7 +1942,10 @@ async function copiarImagemOrcamento() {
             // NAVEGADOR SEM SUPORTE
             // ----------------------------------
 
-            baixarImagemOrcamento(blob);
+            baixarImagemOrcamento(
+                blob
+            );
+
 
             alert(
                 "Seu navegador não permite copiar imagens diretamente. A imagem foi salva no computador."
@@ -1331,8 +1953,10 @@ async function copiarImagemOrcamento() {
 
 
             if (botao) {
+
                 botao.innerHTML =
                     textoOriginal;
+
             }
 
         }
@@ -1362,7 +1986,10 @@ async function copiarImagemOrcamento() {
 
 
     if (botao) {
-        botao.disabled = false;
+
+        botao.disabled =
+            false;
+
     }
 
 }
@@ -1374,32 +2001,42 @@ async function copiarImagemOrcamento() {
 
 function carregarHtml2Canvas() {
 
-    return new Promise((resolve, reject) => {
+    return new Promise(
+        (resolve, reject) => {
 
-        if (window.html2canvas) {
+            if (
+                window.html2canvas
+            ) {
 
-            resolve();
+                resolve();
 
-            return;
+                return;
+            }
+
+
+            const script =
+                document.createElement(
+                    "script"
+                );
+
+
+            script.src =
+                "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
+
+
+            script.onload =
+                resolve;
+
+            script.onerror =
+                reject;
+
+
+            document.head.appendChild(
+                script
+            );
+
         }
-
-
-        const script =
-            document.createElement("script");
-
-
-        script.src =
-            "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
-
-
-        script.onload = resolve;
-
-        script.onerror = reject;
-
-
-        document.head.appendChild(script);
-
-    });
+    );
 
 }
 
@@ -1411,26 +2048,40 @@ function carregarHtml2Canvas() {
 function baixarImagemOrcamento(blob) {
 
     const url =
-        URL.createObjectURL(blob);
+        URL.createObjectURL(
+            blob
+        );
 
 
     const link =
-        document.createElement("a");
+        document.createElement(
+            "a"
+        );
 
 
-    link.href = url;
+    link.href =
+        url;
+
 
     link.download =
         "orcamento-ibis-styles.png";
 
 
-    document.body.appendChild(link);
+    document.body.appendChild(
+        link
+    );
+
 
     link.click();
 
-    document.body.removeChild(link);
+
+    document.body.removeChild(
+        link
+    );
 
 
-    URL.revokeObjectURL(url);
+    URL.revokeObjectURL(
+        url
+    );
 
 }
