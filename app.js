@@ -1045,37 +1045,52 @@ function preencherCamposComOCR(texto) {
     // DATAS
     // --------------------------------------
 
-    const meses = {
+const meses = {
 
-        jan: "01",
-        feb: "02",
-        mar: "03",
-        apr: "04",
-        may: "05",
-        jun: "06",
-        jul: "07",
-        aug: "08",
-        sep: "09",
-        oct: "10",
-        nov: "11",
-        dec: "12",
+    jan: "01",
+    janeiro: "01",
 
-        janeiro: "01",
-        fevereiro: "02",
-        março: "03",
-        marco: "03",
-        abril: "04",
-        maio: "05",
-        junho: "06",
-        julho: "07",
-        agosto: "08",
-        setembro: "09",
-        outubro: "10",
-        novembro: "11",
-        dezembro: "12"
+    fev: "02",
+    feb: "02",
+    fevereiro: "02",
 
-    };
+    mar: "03",
+    março: "03",
+    marco: "03",
 
+    abr: "04",
+    apr: "04",
+    abril: "04",
+
+    mai: "05",
+    may: "05",
+    maio: "05",
+
+    jun: "06",
+    junho: "06",
+
+    jul: "07",
+    julho: "07",
+
+    ago: "08",
+    aug: "08",
+    agosto: "08",
+
+    set: "09",
+    sep: "09",
+    setembro: "09",
+
+    out: "10",
+    oct: "10",
+    outubro: "10",
+
+    nov: "11",
+    novembro: "11",
+
+    dez: "12",
+    dec: "12",
+    dezembro: "12"
+};
 
     const regexData =
         /(\d{1,2})\s+([A-Za-zçÇãõÃÕ]+)\s+(\d{4})/gi;
