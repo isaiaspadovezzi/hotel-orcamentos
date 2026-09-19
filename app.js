@@ -1192,3 +1192,245 @@ Pagamento no hotel.`;
 
     }
 }
+// ==========================================
+// COPIAR IMAGEM DO ORÇAMENTO
+// ==========================================
+
+async function copiarImagemOrcamento() {
+
+    const elemento =
+        document.querySelector("#orcamentoPreview .orcamento");
+
+    if (!elemento) {
+
+        alert("Primeiro gere o orçamento.");
+
+        return;
+    }
+
+
+    const botao =
+        document.querySelector(
+            '.acoes-compartilhar button[onclick="copiarImagemOrcamento()"]'
+        );
+
+
+    const textoOriginal =
+        botao ? botao.innerHTML : "";
+
+
+    if (botao) {
+
+        botao.disabled = true;
+
+        botao.innerHTML =
+            "⏳ Preparando imagem...";
+    }
+
+
+    try {
+
+        // --------------------------------------
+        // CARREGAR HTML2CANVAS
+        // --------------------------------------
+
+        await carregarHtml2Canvas();
+
+
+        // --------------------------------------
+        // TRANSFORMAR A ARTE EM IMAGEM
+        // --------------------------------------
+
+        const canvas =
+            await html2canvas(elemento, {
+
+                scale: 2,
+
+                backgroundColor: "#ffffff",
+
+                useCORS: true,
+
+                logging: false
+
+            });
+
+
+        // --------------------------------------
+        // TRANSFORMAR CANVAS EM PNG
+        // --------------------------------------
+
+        const blob =
+            await new Promise(resolve => {
+
+                canvas.toBlob(
+                    resolve,
+                    "image/png"
+                );
+
+            });
+
+
+        if (!blob) {
+
+            throw new Error(
+                "Não foi possível criar a imagem."
+            );
+
+        }
+
+
+        // --------------------------------------
+        // COPIAR IMAGEM
+        // --------------------------------------
+
+        if (
+            navigator.clipboard &&
+            window.ClipboardItem
+        ) {
+
+            const item =
+                new ClipboardItem({
+                    "image/png": blob
+                });
+
+
+            await navigator.clipboard.write([
+                item
+            ]);
+
+
+            if (botao) {
+
+                botao.innerHTML =
+                    "✅ Imagem copiada!";
+
+            }
+
+
+            setTimeout(() => {
+
+                if (botao) {
+                    botao.innerHTML =
+                        textoOriginal;
+                }
+
+            }, 2500);
+
+
+        } else {
+
+            // ----------------------------------
+            // NAVEGADOR SEM SUPORTE
+            // ----------------------------------
+
+            baixarImagemOrcamento(blob);
+
+            alert(
+                "Seu navegador não permite copiar imagens diretamente. A imagem foi salva no computador."
+            );
+
+
+            if (botao) {
+                botao.innerHTML =
+                    textoOriginal;
+            }
+
+        }
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao copiar imagem:",
+            erro
+        );
+
+
+        alert(
+            "Não foi possível copiar a imagem do orçamento."
+        );
+
+
+        if (botao) {
+
+            botao.innerHTML =
+                textoOriginal;
+
+        }
+
+    }
+
+
+    if (botao) {
+        botao.disabled = false;
+    }
+
+}
+
+
+// ==========================================
+// CARREGAR HTML2CANVAS
+// ==========================================
+
+function carregarHtml2Canvas() {
+
+    return new Promise((resolve, reject) => {
+
+        if (window.html2canvas) {
+
+            resolve();
+
+            return;
+        }
+
+
+        const script =
+            document.createElement("script");
+
+
+        script.src =
+            "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
+
+
+        script.onload = resolve;
+
+        script.onerror = reject;
+
+
+        document.head.appendChild(script);
+
+    });
+
+}
+
+
+// ==========================================
+// SALVAR IMAGEM COMO ALTERNATIVA
+// ==========================================
+
+function baixarImagemOrcamento(blob) {
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+
+    link.href = url;
+
+    link.download =
+        "orcamento-ibis-styles.png";
+
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+
+    URL.revokeObjectURL(url);
+
+}
