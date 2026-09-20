@@ -1,1586 +1,2088 @@
-/* ==========================================
-   IBIS STYLES — GERADOR DE ORÇAMENTOS
-   ========================================== */
+// ==========================================
+// GERADOR DE ORÇAMENTOS
+// ==========================================
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
+// ------------------------------------------
+// CONVERTER VALOR PARA NÚMERO
+// ------------------------------------------
 
-/* ==========================================
-   VARIÁVEIS
-   ========================================== */
+function converterValor(valor) {
 
-:root {
-    --verde: #63c132;
-    --verde-escuro: #4e9d28;
-    --verde-claro: #eef8e9;
+    if (!valor) {
+        return 0;
+    }
 
-    --cinza-fundo: #f5f6f7;
-    --cinza-borda: #e1e4e6;
-    --cinza-texto: #555;
-    --cinza-escuro: #222;
+    valor = valor
+        .toString()
+        .replace("R$", "")
+        .replace(/\s/g, "")
+        .replace(/\./g, "")
+        .replace(",", ".");
 
-    --branco: #ffffff;
-
-    --sombra:
-        0 8px 25px rgba(0, 0, 0, 0.08);
-
-    --raio:
-        14px;
-}
-
-
-/* ==========================================
-   RESET
-   ========================================== */
-
-* {
-    box-sizing: border-box;
-}
-
-
-body {
-    margin: 0;
-
-    font-family: "Poppins", Arial, sans-serif;
-
-    background:
-        var(--cinza-fundo);
-
-    color:
-        var(--cinza-escuro);
-}
-
-
-/* ==========================================
-   CONTAINER
-   ========================================== */
-
-.container {
-    width: min(1100px, 92%);
-
-    margin:
-        0 auto;
-}
-
-
-/* ==========================================
-   TOPO DO SISTEMA
-   ========================================== */
-
-.topo {
-    background:
-        var(--branco);
-
-    border-bottom:
-        1px solid var(--cinza-borda);
-
-    padding:
-        22px 0;
-
-    margin-bottom:
-        30px;
-}
-
-
-.topo h1 {
-    margin:
-        0;
-
-    font-size:
-        26px;
-
-    font-weight:
-        700;
-
-    color:
-        var(--verde-escuro);
-}
-
-
-.topo p {
-    margin:
-        3px 0 0;
-
-    color:
-        var(--cinza-texto);
-
-    font-size:
-        14px;
-}
-
-
-/* ==========================================
-   TÍTULO
-   ========================================== */
-
-.titulo {
-    margin-bottom:
-        22px;
-}
-
-
-.titulo h2 {
-    margin:
-        0 0 5px;
-
-    font-size:
-        25px;
-}
-
-
-.titulo p {
-    margin:
-        0;
-
-    color:
-        var(--cinza-texto);
-
-    font-size:
-        14px;
-}
-
-
-/* ==========================================
-   CARDS
-   ========================================== */
-
-.card {
-    background:
-        var(--branco);
-
-    border:
-        1px solid var(--cinza-borda);
-
-    border-radius:
-        var(--raio);
-
-    padding:
-        22px;
-
-    margin-bottom:
-        18px;
-
-    box-shadow:
-        0 3px 12px rgba(0, 0, 0, 0.03);
-}
-
-
-.card h3 {
-    margin:
-        0 0 18px;
-
-    font-size:
-        18px;
-}
-
-
-/* ==========================================
-   GRID
-   ========================================== */
-
-.grid {
-    display:
-        grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap:
-        16px;
-}
-
-
-.campo-grande {
-    grid-column:
-        span 2;
-}
-
-
-/* ==========================================
-   CAMPOS
-   ========================================== */
-
-.campo {
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    gap:
-        7px;
-}
-
-
-.campo label {
-    font-size:
-        13px;
-
-    font-weight:
-        600;
-
-    color:
-        #444;
-}
-
-
-.campo input,
-.campo select {
-    width:
-        100%;
-
-    height:
-        44px;
-
-    border:
-        1px solid #d5d9dc;
-
-    border-radius:
-        9px;
-
-    padding:
-        0 12px;
-
-    font-family:
-        inherit;
-
-    font-size:
-        14px;
-
-    background:
-        #fff;
-
-    outline:
-        none;
-
-    transition:
-        0.2s;
-}
-
-
-.campo input:focus,
-.campo select:focus {
-    border-color:
-        var(--verde);
-
-    box-shadow:
-        0 0 0 3px rgba(99, 193, 50, 0.12);
-}
-
-
-/* ==========================================
-   OPÇÕES
-   ========================================== */
-
-.linha-opcoes {
-    display:
-        flex;
-
-    gap:
-        25px;
-
-    margin-top:
-        18px;
-
-    flex-wrap:
-        wrap;
-}
-
-
-.check {
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        8px;
-
-    font-size:
-        14px;
-
-    cursor:
-        pointer;
-}
-
-
-.check input {
-    width:
-        17px;
-
-    height:
-        17px;
-
-    accent-color:
-        var(--verde);
-}
-
-
-/* ==========================================
-   BOTÕES
-   ========================================== */
-
-.btn {
-    border:
-        0;
-
-    border-radius:
-        9px;
-
-    padding:
-        12px 20px;
-
-    font-family:
-        inherit;
-
-    font-size:
-        14px;
-
-    font-weight:
-        600;
-
-    cursor:
-        pointer;
-
-    transition:
-        0.2s;
-}
-
-
-.btn:hover {
-    transform:
-        translateY(-1px);
-}
-
-
-.btn:disabled {
-    opacity:
-        0.6;
-
-    cursor:
-        not-allowed;
-
-    transform:
-        none;
-}
-
-
-.btn-principal {
-    background:
-        var(--verde);
-
-    color:
-        white;
-}
-
-
-.btn-principal:hover {
-    background:
-        var(--verde-escuro);
-}
-
-
-.btn-secundario {
-    background:
-        #eceeef;
-
-    color:
-        #333;
-}
-
-
-.btn-secundario:hover {
-    background:
-        #dfe2e4;
-}
-
-
-/* ==========================================
-   AÇÕES
-   ========================================== */
-
-.acoes {
-    display:
-        flex;
-
-    justify-content:
-        flex-end;
-
-    gap:
-        10px;
-
-    margin:
-        25px 0 35px;
-}
-
-
-.acoes-compartilhar {
-    display:
-        flex;
-
-    justify-content:
-        center;
-
-    gap:
-        10px;
-
-    margin-top:
-        20px;
-
-    flex-wrap:
-        wrap;
-}
-
-
-/* ==========================================
-   IMPORTADOR OCR
-   ========================================== */
-
-.importador {
-    border:
-        2px dashed #dce5d8;
-}
-
-
-.importador-texto {
-    color:
-        var(--cinza-texto);
-
-    font-size:
-        13px;
-
-    line-height:
-        1.6;
-
-    margin-top:
-        -8px;
-
-    margin-bottom:
-        18px;
-}
-
-
-.upload-area {
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    min-height:
-        130px;
-
-    border:
-        2px dashed #cfd8ca;
-
-    border-radius:
-        12px;
-
-    cursor:
-        pointer;
-
-    background:
-        #fafcf9;
-
-    transition:
-        0.2s;
-
-    text-align:
-        center;
-}
-
-
-.upload-area:hover {
-    border-color:
-        var(--verde);
-
-    background:
-        var(--verde-claro);
-}
-
-
-.upload-icone {
-    font-size:
-        30px;
-
-    margin-bottom:
-        7px;
-}
-
-
-.upload-area strong {
-    font-size:
-        14px;
-}
-
-
-.upload-area small {
-    margin-top:
-        4px;
-
-    color:
-        #777;
-}
-
-
-.imagem-selecionada {
-    display:
-        none;
-
-    margin-top:
-        15px;
-
-    text-align:
-        center;
-}
-
-
-.imagem-selecionada img {
-    max-width:
-        100%;
-
-    max-height:
-        400px;
-
-    border-radius:
-        10px;
-
-    border:
-        1px solid var(--cinza-borda);
-}
-
-
-.btn-ocr {
-    width:
-        100%;
-
-    margin-top:
-        15px;
-}
-
-
-.status-ocr {
-    margin-top:
-        12px;
-
-    padding:
-        10px 12px;
-
-    border-radius:
-        8px;
-
-    font-size:
-        13px;
-
-    background:
-        #f2f3f4;
-}
-
-
-.status-ocr.sucesso {
-    background:
-        #eef8e9;
-
-    color:
-        #397521;
-}
-
-
-.status-ocr.erro {
-    background:
-        #fff0f0;
-
-    color:
-        #b42318;
-}
-
-
-/* ==========================================
-   PRÉ-VISUALIZAÇÃO
-   ========================================== */
-
-.preview-area {
-    margin-top:
-        40px;
-
-    margin-bottom:
-        50px;
+    return parseFloat(valor) || 0;
 }
 
 
-.preview-area > h2 {
-    margin-bottom:
-        18px;
+// ------------------------------------------
+// FORMATAR VALOR EM REAIS
+// ------------------------------------------
 
-    font-size:
-        22px;
-}
-
-
-/* ==========================================
-   ARTE DO ORÇAMENTO
-   ========================================== */
-
-.orcamento {
-    width:
-        100%;
-
-    max-width:
-        900px;
-
-    margin:
-        0 auto;
-
-    background:
-        #ffffff;
-
-    border-radius:
-        18px;
-
-    overflow:
-        hidden;
-
-    box-shadow:
-        0 12px 35px rgba(0, 0, 0, 0.12);
-
-    border:
-        1px solid #e1e4e6;
-}
-
-
-/* ==========================================
-   CABEÇALHO DA ARTE
-   ========================================== */
-
-.orcamento-topo {
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    gap:
-        25px;
-
-    padding:
-        25px 30px;
-
-    background:
-        #ffffff;
-
-    border-bottom:
-        5px solid var(--verde);
-}
-
-
-.logo-hotel {
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        16px;
-}
-
-
-.logo-hotel img {
-    display:
-        block;
-
-    width:
-        auto;
-
-    height:
-        55px;
-
-    max-width:
-        180px;
-
-    object-fit:
-        contain;
-}
-
-
-.logo-hotel .hotel {
-    font-size:
-        14px;
-
-    color:
-        #555;
-
-    font-weight:
-        500;
-
-    padding-left:
-        16px;
-
-    border-left:
-        1px solid #ddd;
-}
-
-
-.titulo-arte {
-    text-align:
-        right;
-
-    font-size:
-        17px;
-
-    font-weight:
-        700;
-
-    color:
-        var(--verde-escuro);
-
-    letter-spacing:
-        0.3px;
-}
-
-
-/* ==========================================
-   CORPO
-   ========================================== */
-
-.orcamento-corpo {
-    padding:
-        28px 30px 32px;
-}
-
-
-/* ==========================================
-   ESTADIA
-   ========================================== */
-
-.bloco-estadia {
-    background:
-        var(--verde-claro);
-
-    border:
-        1px solid #dcebd4;
-
-    border-radius:
-        14px;
-
-    padding:
-        20px;
-
-    margin-bottom:
-        24px;
-}
-
-
-.titulo-secao {
-    font-size:
-        12px;
-
-    font-weight:
-        700;
-
-    letter-spacing:
-        1px;
-
-    color:
-        var(--verde-escuro);
-
-    margin-bottom:
-        15px;
-}
-
-
-.datas {
-    display:
-        grid;
-
-    grid-template-columns:
-        1fr auto 1fr;
-
-    align-items:
-        center;
-
-    gap:
-        15px;
-}
-
-
-.data-box {
-    background:
-        #ffffff;
-
-    border-radius:
-        11px;
-
-    padding:
-        15px;
-
-    border:
-        1px solid #e0eadb;
-}
-
-
-.data-box span,
-.noites span {
-    display:
-        block;
-
-    font-size:
-        10px;
-
-    font-weight:
-        700;
-
-    color:
-        #777;
-
-    letter-spacing:
-        0.7px;
-
-    margin-bottom:
-        5px;
-}
-
-
-.data-box strong {
-    display:
-        block;
-
-    font-size:
-        15px;
-
-    color:
-        #222;
-
-    line-height:
-        1.5;
-}
-
-
-.seta {
-    font-size:
-        25px;
-
-    font-weight:
-        600;
-
-    color:
-        var(--verde-escuro);
-}
-
-
-.noites {
-    margin-top:
-        15px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    padding:
-        11px 14px;
-
-    background:
-        rgba(255,255,255,0.75);
-
-    border-radius:
-        9px;
-}
-
-
-.noites span {
-    margin:
-        0;
-}
-
-
-.noites strong {
-    font-size:
-        14px;
-
-    color:
-        var(--verde-escuro);
-}
-
-
-/* ==========================================
-   QUARTO
-   ========================================== */
-
-.bloco-quarto {
-    display:
-        grid;
-
-    grid-template-columns:
-        260px 1fr;
-
-    gap:
-        24px;
+function formatarMoeda(valor) {
 
-    align-items:
-        stretch;
-
-    margin-bottom:
-        24px;
-}
-
-
-.foto-quarto {
-    min-height:
-        210px;
-
-    border-radius:
-        14px;
-
-    overflow:
-        hidden;
-
-    background:
-        #eeeeee;
-}
-
-
-.foto-quarto img {
-    display:
-        block;
-
-    width:
-        100%;
-
-    height:
-        100%;
-
-    min-height:
-        210px;
-
-    object-fit:
-        cover;
-}
-
-
-.dados-quarto {
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    justify-content:
-        center;
-
-    padding:
-        5px 0;
-}
-
-
-.rotulo {
-    display:
-        block;
-
-    font-size:
-        10px;
-
-    font-weight:
-        700;
-
-    letter-spacing:
-        0.8px;
-
-    color:
-        #777;
-
-    margin-bottom:
-        7px;
-}
-
-
-.dados-quarto .tipo {
-    display:
-        block;
-
-    font-size:
-        20px;
-
-    line-height:
-        1.4;
-
-    color:
-        #222;
-
-    margin-bottom:
-        12px;
-}
-
-
-.quantidade-quartos {
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    width:
-        fit-content;
-
-    background:
-        var(--verde-claro);
-
-    color:
-        var(--verde-escuro);
-
-    padding:
-        7px 11px;
-
-    border-radius:
-        8px;
-
-    font-size:
-        12px;
-
-    font-weight:
-        600;
-
-    margin-bottom:
-        18px;
-}
-
-
-.hospedes {
-    padding-top:
-        14px;
-
-    border-top:
-        1px solid #eeeeee;
-}
-
-
-.hospedes .rotulo {
-    margin-bottom:
-        3px;
-}
-
-
-.hospedes strong {
-    font-size:
-        14px;
-
-    font-weight:
-        600;
-}
-
-
-/* ==========================================
-   INFORMAÇÕES
-   ========================================== */
-
-.informacoes {
-    border-top:
-        1px solid #eeeeee;
-
-    border-bottom:
-        1px solid #eeeeee;
-
-    padding:
-        18px 0;
-
-    margin-bottom:
-        24px;
-}
-
-
-.info {
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        12px;
-}
-
-
-.info > span {
-    width:
-        40px;
-
-    height:
-        40px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    background:
-        var(--verde-claro);
-
-    border-radius:
-        10px;
-
-    font-size:
-        20px;
-}
-
-
-.info small {
-    display:
-        block;
-
-    font-size:
-        10px;
-
-    font-weight:
-        700;
-
-    letter-spacing:
-        0.6px;
-
-    color:
-        #777;
-
-    margin-bottom:
-        2px;
-}
-
-
-.info strong {
-    font-size:
-        14px;
-
-    font-weight:
-        600;
-}
-
-
-.aviso-cafe {
-    margin-top:
-        12px;
-
-    padding:
-        11px 13px;
-
-    border-radius:
-        9px;
-
-    background:
-        #fff9e8;
-
-    border:
-        1px solid #f0e2b5;
-
-    font-size:
-        12px;
-
-    line-height:
-        1.5;
-
-    color:
-        #665b37;
-}
-
-
-/* ==========================================
-   VALOR
-   ========================================== */
-
-.valor-area {
-    display:
-        flex;
-
-    justify-content:
-        space-between;
-
-    align-items:
-        center;
-
-    gap:
-        20px;
-
-    padding:
-        20px;
-
-    background:
-        #f8f9f9;
-
-    border-radius:
-        14px;
-
-    border:
-        1px solid #e7e9ea;
+    return valor.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    });
 }
 
 
-.valor-area small {
-    display:
-        block;
+// ------------------------------------------
+// FORMATAR DATA
+// ------------------------------------------
 
-    font-size:
-        10px;
+function formatarData(data) {
 
-    font-weight:
-        700;
+    if (!data) {
+        return "";
+    }
 
-    letter-spacing:
-        0.7px;
+    const partes = data.split("-");
 
-    color:
-        #777;
+    if (partes.length !== 3) {
+        return data;
+    }
 
-    margin-bottom:
-        4px;
+    return `${partes[2]}/${partes[1]}/${partes[0]}`;
 }
 
 
-.valor-original {
-    font-size:
-        14px;
+// ------------------------------------------
+// FORMATAR DATA + DIA DA SEMANA
+// ------------------------------------------
 
-    color:
-        #999;
+function formatarDataCompleta(data) {
 
-    text-decoration:
-        line-through;
+    if (!data) {
+        return {
+            data: "",
+            semana: ""
+        };
+    }
 
-    margin-bottom:
-        1px;
-}
+    const partes = data.split("-");
 
+    if (partes.length !== 3) {
+        return {
+            data: data,
+            semana: ""
+        };
+    }
 
-.valor-total {
-    font-size:
-        30px;
+    const ano = parseInt(partes[0]);
+    const mes = parseInt(partes[1]) - 1;
+    const dia = parseInt(partes[2]);
 
-    font-weight:
-        700;
+    const dataObj = new Date(
+        ano,
+        mes,
+        dia
+    );
 
-    color:
-        var(--verde-escuro);
+    const diasSemana = [
+        "domingo",
+        "segunda-feira",
+        "terça-feira",
+        "quarta-feira",
+        "quinta-feira",
+        "sexta-feira",
+        "sábado"
+    ];
 
-    line-height:
-        1.2;
+    return {
+        data: `${partes[2]}/${partes[1]}/${partes[0]}`,
+        semana: diasSemana[dataObj.getDay()]
+    };
 }
-
 
-.pagamento {
-    padding:
-        10px 14px;
 
-    border-radius:
-        9px;
+// ------------------------------------------
+// GERAR ORÇAMENTO
+// ------------------------------------------
 
-    background:
-        #ffffff;
+function gerarOrcamento() {
 
-    border:
-        1px solid #e0e3e5;
+    const checkin =
+        document.getElementById("checkin").value;
 
-    font-size:
-        12px;
+    const checkout =
+        document.getElementById("checkout").value;
 
-    font-weight:
-        600;
+    const noites =
+        parseInt(
+            document.getElementById("noites").value
+        ) || 0;
 
-    color:
-        #555;
+    const adultos =
+        parseInt(
+            document.getElementById("adultos").value
+        ) || 0;
 
-    white-space:
-        nowrap;
-}
-
+    const criancas =
+        parseInt(
+            document.getElementById("criancas").value
+        ) || 0;
 
-/* ==========================================
-   RODAPÉ DA ARTE
-   ========================================== */
+    const tipoQuarto =
+        document.getElementById("tipoQuarto").value.trim();
 
-.orcamento-rodape {
-    display:
-        flex;
+    const descricaoQuarto =
+        document.getElementById("descricaoQuarto").value.trim();
 
-    justify-content:
-        space-between;
+    const tarifa =
+        document.getElementById("tarifa").value.trim();
 
-    gap:
-        15px;
+    const cafe =
+        document.getElementById("cafe").checked;
 
-    padding:
-        15px 30px;
+    const promo =
+        document.getElementById("promo").checked;
 
-    background:
-        #fafafa;
+    const valorOriginal =
+        converterValor(
+            document.getElementById("valorOriginal").value
+        );
 
-    border-top:
-        1px solid #eeeeee;
+    const valorTotal =
+        converterValor(
+            document.getElementById("valorTotal").value
+        );
 
-    color:
-        #777;
+    const pagamento =
+        document.getElementById("pagamento").value;
 
-    font-size:
-        10px;
-}
 
+    // --------------------------------------
+    // VALIDAÇÃO
+    // --------------------------------------
 
-/* ==========================================
-   RODAPÉ DO SITE
-   ========================================== */
+    if (!checkin || !checkout) {
 
-footer {
-    text-align:
-        center;
+        alert(
+            "Informe as datas de check-in e check-out."
+        );
 
-    padding:
-        25px 15px;
+        return;
+    }
 
-    color:
-        #888;
+    if (!descricaoQuarto) {
 
-    font-size:
-        12px;
-}
+        alert(
+            "Informe a descrição do quarto."
+        );
 
+        return;
+    }
 
-/* ==========================================
-   RESPONSIVO — TABLET
-   ========================================== */
+    if (valorTotal <= 0) {
 
-@media (max-width: 800px) {
+        alert(
+            "Informe o valor total da hospedagem."
+        );
 
-    .grid {
-        grid-template-columns:
-            repeat(2, 1fr);
+        return;
     }
 
 
-    .campo-grande {
-        grid-column:
-            span 2;
+    // --------------------------------------
+    // TEXTO DOS HÓSPEDES
+    // --------------------------------------
+
+    let textoHospedes = "";
+
+    if (adultos > 0) {
+
+        textoHospedes +=
+            adultos +
+            (
+                adultos === 1
+                    ? " adulto"
+                    : " adultos"
+            );
+    }
+
+    if (criancas > 0) {
+
+        if (textoHospedes !== "") {
+
+            textoHospedes += " + ";
+        }
+
+        textoHospedes +=
+            criancas +
+            (
+                criancas === 1
+                    ? " criança"
+                    : " crianças"
+            );
+    }
+
+    if (textoHospedes === "") {
+
+        textoHospedes =
+            "Não informado";
     }
 
 
-    .orcamento-topo {
-        flex-direction:
-            column;
+    // --------------------------------------
+    // PAGAMENTO
+    // --------------------------------------
 
-        align-items:
-            flex-start;
+    let textoPagamento = "";
+
+    if (pagamento === "hotel") {
+
+        textoPagamento =
+            "Pagamento no hotel";
+
+    } else {
+
+        textoPagamento =
+            "Pagamento antecipado";
     }
 
 
-    .titulo-arte {
-        text-align:
-            left;
+    // --------------------------------------
+    // DATA COMPLETA
+    // --------------------------------------
+
+    const dataCheckin =
+        formatarDataCompleta(checkin);
+
+    const dataCheckout =
+        formatarDataCompleta(checkout);
+
+
+    // --------------------------------------
+    // VALOR PROMOCIONAL
+    // --------------------------------------
+
+    let blocoValor = "";
+
+    if (
+        promo &&
+        valorOriginal > 0 &&
+        valorOriginal > valorTotal
+    ) {
+
+        blocoValor = `
+
+            <div class="valor-original">
+                ${formatarMoeda(valorOriginal)}
+            </div>
+
+            <div class="valor-total">
+                ${formatarMoeda(valorTotal)}
+            </div>
+
+        `;
+
+    } else {
+
+        blocoValor = `
+
+            <div class="valor-total">
+                ${formatarMoeda(valorTotal)}
+            </div>
+
+        `;
     }
 
 
-    .bloco-quarto {
-        grid-template-columns:
-            220px 1fr;
+    // --------------------------------------
+    // PREVIEW
+    // --------------------------------------
+
+    const preview =
+        document.getElementById(
+            "orcamentoPreview"
+        );
+
+
+    preview.innerHTML = `
+
+        <div class="orcamento">
+
+
+            <!-- CABEÇALHO -->
+
+            <div class="orcamento-topo">
+
+                <div>
+
+                    <div class="marca">
+                        IBIS STYLES
+                    </div>
+
+                    <div class="hotel">
+                        Curitiba Centro Cívico
+                    </div>
+
+                </div>
+
+
+                <div class="titulo-arte">
+                    ORÇAMENTO DE HOSPEDAGEM
+                </div>
+
+            </div>
+
+
+            <!-- CORPO -->
+
+            <div class="orcamento-corpo">
+
+
+                <!-- ESTADIA -->
+
+                <div class="datas">
+
+
+                    <!-- CHECK-IN -->
+
+                    <div class="data-box">
+
+                        <span>
+                            CHECK-IN
+                        </span>
+
+                        <strong>
+                            ${dataCheckin.data}
+                        </strong>
+
+                        <small>
+                            ${dataCheckin.semana}
+                        </small>
+
+                    </div>
+
+
+                    <!-- SETA -->
+
+                    <div class="seta">
+                        →
+                    </div>
+
+
+                    <!-- CHECK-OUT -->
+
+                    <div class="data-box">
+
+                        <span>
+                            CHECK-OUT
+                        </span>
+
+                        <strong>
+                            ${dataCheckout.data}
+                        </strong>
+
+                        <small>
+                            ${dataCheckout.semana}
+                        </small>
+
+                    </div>
+
+
+                    <!-- NOITES -->
+
+                    <div class="noites">
+
+                        <span>
+                            ESTADIA
+                        </span>
+
+                        <strong>
+                            ${noites}
+                            ${noites === 1 ? "NOITE" : "NOITES"}
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- QUARTO + HÓSPEDES -->
+
+                <div class="linha">
+
+
+                    <div class="quarto">
+
+                        <span class="rotulo">
+                            QUARTO
+                        </span>
+
+                        <strong class="tipo">
+                            ${tipoQuarto || "—"}
+                        </strong>
+
+                        <div class="descricao">
+                            ${descricaoQuarto}
+                        </div>
+
+                    </div>
+
+
+                    <div class="hospedes">
+
+                        <span class="rotulo">
+                            HÓSPEDES
+                        </span>
+
+                        <strong>
+                            ${textoHospedes}
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- INFORMAÇÕES -->
+
+                <div class="informacoes">
+
+
+                    <div class="info">
+
+                        <span>
+                            ☕
+                        </span>
+
+                        <div>
+
+                            <small>
+                                CAFÉ DA MANHÃ
+                            </small>
+
+                            <strong>
+                                ${cafe
+                                    ? "Incluído"
+                                    : "Não incluído"}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="info">
+
+                        <span>
+                            ▣
+                        </span>
+
+                        <div>
+
+                            <small>
+                                TARIFA
+                            </small>
+
+                            <strong>
+                                ${tarifa || "Não informado"}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- VALOR -->
+
+                <div class="valor-area">
+
+
+                    <div>
+
+                        <small>
+                            TOTAL DA HOSPEDAGEM
+                        </small>
+
+                        ${blocoValor}
+
+                    </div>
+
+
+                    <div class="pagamento">
+
+                        ${textoPagamento}
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- RODAPÉ -->
+
+            <div class="orcamento-rodape">
+
+                <div>
+                    ibis Styles Curitiba Centro Cívico
+                </div>
+
+                <div>
+                    Orçamento sujeito à disponibilidade
+                </div>
+
+            </div>
+
+
+        </div>
+
+    `;
+
+
+    // --------------------------------------
+    // MOSTRAR PREVIEW
+    // --------------------------------------
+
+    document.getElementById(
+        "previewArea"
+    ).style.display = "block";
+
+
+    // --------------------------------------
+    // ROLAR ATÉ A PRÉVIA
+    // --------------------------------------
+
+    document.getElementById(
+        "previewArea"
+    ).scrollIntoView({
+        behavior: "smooth"
+    });
+
+}
+
+
+// ------------------------------------------
+// LIMPAR FORMULÁRIO
+// ------------------------------------------
+
+function limparFormulario() {
+
+    document.getElementById(
+        "checkin"
+    ).value = "";
+
+    document.getElementById(
+        "checkout"
+    ).value = "";
+
+    document.getElementById(
+        "noites"
+    ).value = "1";
+
+    document.getElementById(
+        "adultos"
+    ).value = "1";
+
+    document.getElementById(
+        "criancas"
+    ).value = "0";
+
+    document.getElementById(
+        "tipoQuarto"
+    ).value = "";
+
+    document.getElementById(
+        "descricaoQuarto"
+    ).value = "";
+
+    document.getElementById(
+        "tarifa"
+    ).value = "";
+
+    document.getElementById(
+        "cafe"
+    ).checked = false;
+
+    document.getElementById(
+        "promo"
+    ).checked = false;
+
+    document.getElementById(
+        "valorOriginal"
+    ).value = "";
+
+    document.getElementById(
+        "valorTotal"
+    ).value = "";
+
+    document.getElementById(
+        "pagamento"
+    ).value = "hotel";
+
+
+    document.getElementById(
+        "previewArea"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "orcamentoPreview"
+    ).innerHTML = "";
+}
+
+
+// ==========================================
+// LEITURA AUTOMÁTICA DO PRINT - OCR
+// ==========================================
+
+const arquivoOrcamento =
+    document.getElementById(
+        "arquivoOrcamento"
+    );
+
+const imagemSelecionada =
+    document.getElementById(
+        "imagemSelecionada"
+    );
+
+const btnLerOrcamento =
+    document.getElementById(
+        "btnLerOrcamento"
+    );
+
+const statusOcr =
+    document.getElementById(
+        "statusOcr"
+    );
+
+
+// ------------------------------------------
+// QUANDO O USUÁRIO ESCOLHE O PRINT
+// ------------------------------------------
+
+arquivoOrcamento.addEventListener(
+    "change",
+    function () {
+
+        const arquivo =
+            this.files[0];
+
+        if (!arquivo) {
+            return;
+        }
+
+
+        const url =
+            URL.createObjectURL(
+                arquivo
+            );
+
+
+        imagemSelecionada.innerHTML = `
+
+            <img
+                src="${url}"
+                alt="Print do orçamento"
+            >
+
+        `;
+
+
+        imagemSelecionada.style.display =
+            "block";
+
+
+        btnLerOrcamento.disabled =
+            false;
+
+
+        statusOcr.innerHTML =
+            "Print carregado. Clique em <strong>Ler orçamento automaticamente</strong>.";
+
+
+        statusOcr.className =
+            "status-ocr";
+
+    }
+);
+
+
+// ------------------------------------------
+// CARREGAR TESSERACT
+// ------------------------------------------
+
+function carregarTesseract() {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            if (window.Tesseract) {
+
+                resolve();
+
+                return;
+            }
+
+
+            const script =
+                document.createElement(
+                    "script"
+                );
+
+
+            script.src =
+                "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+
+
+            script.onload =
+                resolve;
+
+            script.onerror =
+                reject;
+
+
+            document.head.appendChild(
+                script
+            );
+
+        }
+    );
+}
+
+
+// ------------------------------------------
+// LER PRINT
+// ------------------------------------------
+
+btnLerOrcamento.addEventListener(
+    "click",
+    async function () {
+
+        const arquivo =
+            arquivoOrcamento.files[0];
+
+
+        if (!arquivo) {
+            return;
+        }
+
+
+        btnLerOrcamento.disabled =
+            true;
+
+
+        statusOcr.className =
+            "status-ocr";
+
+
+        statusOcr.innerHTML =
+            "🔍 Lendo o orçamento...";
+
+
+        try {
+
+            await carregarTesseract();
+
+
+            const resultado =
+                await Tesseract.recognize(
+                    arquivo,
+                    "por+eng",
+                    {
+
+                        logger:
+                            function (info) {
+
+                                if (
+                                    info.status ===
+                                    "recognizing text"
+                                ) {
+
+                                    const porcentagem =
+                                        Math.round(
+                                            info.progress *
+                                            100
+                                        );
+
+
+                                    statusOcr.innerHTML =
+                                        `🔍 Lendo orçamento... ${porcentagem}%`;
+
+                                }
+
+                            }
+
+                    }
+                );
+
+
+            const texto =
+                resultado.data.text;
+
+
+            console.log(
+                "TEXTO RECONHECIDO:"
+            );
+
+            console.log(
+                texto
+            );
+
+
+            statusOcr.className =
+                "status-ocr sucesso";
+
+
+            statusOcr.innerHTML =
+                "✅ Print lido. Agora vamos preencher os campos.";
+
+
+            preencherCamposComOCR(
+                texto
+            );
+
+
+        } catch (erro) {
+
+            console.error(
+                erro
+            );
+
+
+            statusOcr.className =
+                "status-ocr erro";
+
+
+            statusOcr.innerHTML =
+                "❌ Não foi possível ler o print.";
+
+        }
+
+
+        btnLerOrcamento.disabled =
+            false;
+
+    }
+);
+
+
+// ==========================================
+// INTERPRETAR TEXTO DO OCR
+// ==========================================
+
+function preencherCamposComOCR(texto) {
+
+    console.log(
+        "Iniciando interpretação do orçamento..."
+    );
+
+
+    // --------------------------------------
+    // LIMPAR TEXTO
+    // --------------------------------------
+
+    const textoOriginal =
+        texto;
+
+
+    const linhas =
+        texto
+            .split("\n")
+            .map(
+                linha =>
+                    linha.trim()
+            )
+            .filter(
+                linha =>
+                    linha.length > 0
+            );
+
+
+    // --------------------------------------
+    // TIPO + DESCRIÇÃO DO QUARTO
+    // --------------------------------------
+
+    let tipoQuarto = "";
+    let descricaoQuarto = "";
+
+
+    for (
+        let linha of linhas
+    ) {
+
+        const encontrado =
+            linha.match(
+                /^\s*\d+\s*-\s*([A-Z0-9]+)\s*-\s*(.+)$/i
+            );
+
+
+        if (encontrado) {
+
+            tipoQuarto =
+                encontrado[1]
+                    .trim()
+                    .toUpperCase();
+
+
+            descricaoQuarto =
+                encontrado[2]
+                    .trim();
+
+
+            break;
+        }
+
+    }
+
+
+    // --------------------------------------
+    // TARIFA
+    // --------------------------------------
+
+    let tarifa = "";
+
+
+    if (tipoQuarto) {
+
+        const indiceTipo =
+            linhas.findIndex(
+                linha =>
+                    linha
+                        .toUpperCase()
+                        .includes(
+                            tipoQuarto
+                        )
+            );
+
+
+        if (
+            indiceTipo >= 0 &&
+            linhas[indiceTipo + 1]
+        ) {
+
+            const proximaLinha =
+                linhas[
+                    indiceTipo + 1
+                ];
+
+
+            if (
+                !proximaLinha.match(
+                    /\d{1,2}\s+[A-Za-z]{3}\s+\d{4}/
+                )
+            ) {
+
+                tarifa =
+                    proximaLinha;
+
+            }
+
+        }
+
+    }
+
+
+    // --------------------------------------
+    // REMOVER "DETAILS PER NIGHT"
+    // --------------------------------------
+
+    tarifa =
+        tarifa
+            .replace(
+                /\s*details\s+per\s+night.*$/i,
+                ""
+            )
+            .trim();
+
+
+    // --------------------------------------
+    // DATAS
+    // --------------------------------------
+
+    const meses = {
+
+        jan: "01",
+        janeiro: "01",
+
+        fev: "02",
+        feb: "02",
+        fevereiro: "02",
+
+        mar: "03",
+        março: "03",
+        marco: "03",
+
+        abr: "04",
+        apr: "04",
+        abril: "04",
+
+        mai: "05",
+        may: "05",
+        maio: "05",
+
+        jun: "06",
+        junho: "06",
+
+        jul: "07",
+        julho: "07",
+
+        ago: "08",
+        aug: "08",
+        agosto: "08",
+
+        set: "09",
+        sep: "09",
+        setembro: "09",
+
+        out: "10",
+        oct: "10",
+        outubro: "10",
+
+        nov: "11",
+        novembro: "11",
+
+        dez: "12",
+        dec: "12",
+        dezembro: "12"
+
+    };
+
+
+    const regexData =
+        /(\d{1,2})\s+([A-Za-zçÇãõÃÕ]+)\s+(\d{4})/gi;
+
+
+    const datasEncontradas = [];
+
+
+    let resultadoData;
+
+
+    while (
+        (
+            resultadoData =
+                regexData.exec(
+                    textoOriginal
+                )
+        ) !== null
+    ) {
+
+        const dia =
+            resultadoData[1]
+                .padStart(
+                    2,
+                    "0"
+                );
+
+
+        const mesTexto =
+            resultadoData[2]
+                .toLowerCase();
+
+
+        const ano =
+            resultadoData[3];
+
+
+        const mes =
+            meses[
+                mesTexto
+            ];
+
+
+        if (mes) {
+
+            datasEncontradas.push(
+                `${ano}-${mes}-${dia}`
+            );
+
+        }
+
+    }
+
+
+    if (
+        datasEncontradas.length >= 2
+    ) {
+
+        document.getElementById(
+            "checkin"
+        ).value =
+            datasEncontradas[0];
+
+
+        document.getElementById(
+            "checkout"
+        ).value =
+            datasEncontradas[1];
+
+    }
+
+
+    // --------------------------------------
+    // NÚMERO DE NOITES
+    // --------------------------------------
+
+    let noites = 0;
+
+
+    const encontrouNoites =
+        textoOriginal.match(
+            /\((\d+)\s*(?:night|nights|noite|noites)/i
+        );
+
+
+    if (encontrouNoites) {
+
+        noites =
+            parseInt(
+                encontrouNoites[1]
+            );
+
+    }
+
+
+    if (noites > 0) {
+
+        document.getElementById(
+            "noites"
+        ).value =
+            noites;
+
+    }
+
+
+    // --------------------------------------
+    // ADULTOS E CRIANÇAS
+    // --------------------------------------
+
+    let adultos = 0;
+    let criancas = 0;
+
+
+    const encontrouHospedes =
+        textoOriginal.match(
+            /(\d+)\s*Adult\s*\/\s*(\d+)\s*Child/i
+        );
+
+
+    if (encontrouHospedes) {
+
+        adultos =
+            parseInt(
+                encontrouHospedes[1]
+            );
+
+
+        criancas =
+            parseInt(
+                encontrouHospedes[2]
+            );
+
+    }
+
+
+    if (!encontrouHospedes) {
+
+        const alternativa =
+            textoOriginal.match(
+                /(\d+)\s*Adults?\s*\/\s*(\d+)\s*Child(?:ren)?/i
+            );
+
+
+        if (alternativa) {
+
+            adultos =
+                parseInt(
+                    alternativa[1]
+                );
+
+
+            criancas =
+                parseInt(
+                    alternativa[2]
+                );
+
+        }
+
+    }
+
+
+    document.getElementById(
+        "adultos"
+    ).value =
+        adultos;
+
+
+    document.getElementById(
+        "criancas"
+    ).value =
+        criancas;
+
+
+    // --------------------------------------
+    // CAFÉ DA MANHÃ
+    // --------------------------------------
+
+    const temCafe =
+        /breakfast/i.test(
+            textoOriginal
+        ) &&
+        /included/i.test(
+            textoOriginal
+        );
+
+
+    document.getElementById(
+        "cafe"
+    ).checked =
+        temCafe;
+
+
+    // --------------------------------------
+    // TARIFA PROMOCIONAL
+    // --------------------------------------
+
+    const temPromo =
+        /promo/i.test(
+            textoOriginal
+        ) ||
+        /m[eê]s do cliente/i.test(
+            textoOriginal
+        );
+
+
+    document.getElementById(
+        "promo"
+    ).checked =
+        temPromo;
+
+
+    // --------------------------------------
+    // VALORES EM BRL
+    // --------------------------------------
+
+    const valoresBRL = [];
+
+
+    const regexBRL =
+        /([\d.,]+)\s*BRL/gi;
+
+
+    let resultadoValor;
+
+
+    while (
+        (
+            resultadoValor =
+                regexBRL.exec(
+                    textoOriginal
+                )
+        ) !== null
+    ) {
+
+        let valorTexto =
+            resultadoValor[1]
+                .replace(
+                    /\./g,
+                    ""
+                )
+                .replace(
+                    ",",
+                    "."
+                );
+
+
+        if (
+            resultadoValor[1]
+                .includes(".") &&
+            !resultadoValor[1]
+                .includes(",")
+        ) {
+
+            valorTexto =
+                resultadoValor[1];
+
+        }
+
+
+        const valor =
+            parseFloat(
+                valorTexto
+            );
+
+
+        if (
+            !isNaN(valor)
+        ) {
+
+            valoresBRL.push(
+                valor
+            );
+
+        }
+
+    }
+
+
+    // --------------------------------------
+    // VALOR TOTAL
+    // --------------------------------------
+
+    if (
+        valoresBRL.length > 0
+    ) {
+
+        const valorTotal =
+            valoresBRL[0];
+
+
+        document.getElementById(
+            "valorTotal"
+        ).value =
+            formatarMoeda(
+                valorTotal
+            );
+
+    }
+
+
+    // --------------------------------------
+    // VALOR ORIGINAL
+    // --------------------------------------
+
+    if (
+        valoresBRL.length > 1
+    ) {
+
+        const valorTotal =
+            valoresBRL[0];
+
+
+        const valoresMaiores =
+            valoresBRL.filter(
+                valor =>
+                    valor > valorTotal
+            );
+
+
+        if (
+            valoresMaiores.length > 0
+        ) {
+
+            const valorOriginal =
+                Math.max(
+                    ...valoresMaiores
+                );
+
+
+            document.getElementById(
+                "valorOriginal"
+            ).value =
+                formatarMoeda(
+                    valorOriginal
+                );
+
+        }
+
+    }
+
+
+    // --------------------------------------
+    // PAGAMENTO
+    // --------------------------------------
+
+    if (
+        /to be paid at the hotel/i.test(
+            textoOriginal
+        ) ||
+        /paid at the hotel/i.test(
+            textoOriginal
+        )
+    ) {
+
+        document.getElementById(
+            "pagamento"
+        ).value =
+            "hotel";
+
+    }
+
+
+    // --------------------------------------
+    // PREENCHER CAMPOS
+    // --------------------------------------
+
+    document.getElementById(
+        "tipoQuarto"
+    ).value =
+        tipoQuarto;
+
+
+    document.getElementById(
+        "descricaoQuarto"
+    ).value =
+        descricaoQuarto;
+
+
+    document.getElementById(
+        "tarifa"
+    ).value =
+        tarifa;
+
+
+    // --------------------------------------
+    // MOSTRAR RESULTADO
+    // --------------------------------------
+
+    statusOcr.className =
+        "status-ocr sucesso";
+
+
+    statusOcr.innerHTML =
+        "✅ Dados identificados! Confira os campos abaixo antes de gerar o orçamento.";
+
+
+    // --------------------------------------
+    // DESTACAR CAMPOS
+    // --------------------------------------
+
+    const campos =
+        document.querySelectorAll(
+            "#checkin, #checkout, #noites, #adultos, #criancas, #tipoQuarto, #descricaoQuarto, #tarifa, #valorTotal"
+        );
+
+
+    campos.forEach(
+        campo => {
+
+            campo.style.borderColor =
+                "var(--verde)";
+
+
+            campo.style.boxShadow =
+                "0 0 0 3px rgba(99, 193, 50, 0.12)";
+
+        }
+    );
+
+
+    console.log(
+        "Tipo:",
+        tipoQuarto
+    );
+
+    console.log(
+        "Descrição:",
+        descricaoQuarto
+    );
+
+    console.log(
+        "Tarifa:",
+        tarifa
+    );
+
+    console.log(
+        "Datas:",
+        datasEncontradas
+    );
+
+    console.log(
+        "Noites:",
+        noites
+    );
+
+    console.log(
+        "Adultos:",
+        adultos
+    );
+
+    console.log(
+        "Crianças:",
+        criancas
+    );
+
+    console.log(
+        "Valores:",
+        valoresBRL
+    );
+
+}
+
+
+// ==========================================
+// COPIAR ORÇAMENTO — TEXTO
+// ==========================================
+
+function copiarOrcamento() {
+
+    const checkin =
+        document.getElementById(
+            "checkin"
+        ).value;
+
+    const checkout =
+        document.getElementById(
+            "checkout"
+        ).value;
+
+    const noites =
+        document.getElementById(
+            "noites"
+        ).value;
+
+    const adultos =
+        document.getElementById(
+            "adultos"
+        ).value;
+
+    const criancas =
+        document.getElementById(
+            "criancas"
+        ).value;
+
+    const tipoQuarto =
+        document.getElementById(
+            "tipoQuarto"
+        ).value;
+
+    const descricaoQuarto =
+        document.getElementById(
+            "descricaoQuarto"
+        ).value;
+
+    const cafe =
+        document.getElementById(
+            "cafe"
+        ).checked;
+
+    const tarifa =
+        document.getElementById(
+            "tarifa"
+        ).value;
+
+    const valorTotal =
+        document.getElementById(
+            "valorTotal"
+        ).value;
+
+    const pagamento =
+        document.getElementById(
+            "pagamento"
+        ).value;
+
+
+    let hospedes =
+        `${adultos} ${
+            adultos == 1
+                ? "adulto"
+                : "adultos"
+        }`;
+
+
+    if (criancas > 0) {
+
+        hospedes +=
+            ` + ${criancas} ${
+                criancas == 1
+                    ? "criança"
+                    : "crianças"
+            }`;
+
+    }
+
+
+    let texto = `
+
+IBIS STYLES CURITIBA CENTRO CÍVICO
+
+ORÇAMENTO DE HOSPEDAGEM
+
+📅 Check-in: ${formatarData(checkin)}
+📅 Check-out: ${formatarData(checkout)}
+🌙 Estadia: ${noites} ${
+        noites == 1
+            ? "noite"
+            : "noites"
+    }
+
+🏨 Quarto ${tipoQuarto}
+${descricaoQuarto}
+
+👥 Hóspedes: ${hospedes}
+
+☕ Café da manhã: ${
+        cafe
+            ? "Incluído"
+            : "Não incluído"
+    }
+
+💰 Valor total: ${valorTotal}
+
+${
+        pagamento === "hotel"
+            ? "💳 Pagamento no hotel"
+            : "💳 Pagamento antecipado"
+    }
+
+`;
+
+
+    texto =
+        texto.trim();
+
+
+    navigator.clipboard
+        .writeText(texto)
+        .then(
+            () => {
+
+                alert(
+                    "✅ Orçamento copiado! Agora é só colar no WhatsApp."
+                );
+
+            }
+        )
+        .catch(
+            () => {
+
+                alert(
+                    "Não foi possível copiar automaticamente."
+                );
+
+            }
+        );
+
+}
+
+
+// ==========================================
+// COMPARTILHAR ORÇAMENTO
+// ==========================================
+
+async function compartilharOrcamento() {
+
+    const checkin =
+        document.getElementById(
+            "checkin"
+        ).value;
+
+    const checkout =
+        document.getElementById(
+            "checkout"
+        ).value;
+
+    const noites =
+        document.getElementById(
+            "noites"
+        ).value;
+
+    const adultos =
+        document.getElementById(
+            "adultos"
+        ).value;
+
+    const criancas =
+        document.getElementById(
+            "criancas"
+        ).value;
+
+    const tipoQuarto =
+        document.getElementById(
+            "tipoQuarto"
+        ).value;
+
+    const descricaoQuarto =
+        document.getElementById(
+            "descricaoQuarto"
+        ).value;
+
+    const cafe =
+        document.getElementById(
+            "cafe"
+        ).checked;
+
+    const valorTotal =
+        document.getElementById(
+            "valorTotal"
+        ).value;
+
+
+    let hospedes =
+        `${adultos} ${
+            adultos == 1
+                ? "adulto"
+                : "adultos"
+        }`;
+
+
+    if (criancas > 0) {
+
+        hospedes +=
+            ` + ${criancas} ${
+                criancas == 1
+                    ? "criança"
+                    : "crianças"
+            }`;
+
+    }
+
+
+    const texto = `IBIS STYLES CURITIBA CENTRO CÍVICO
+
+ORÇAMENTO DE HOSPEDAGEM
+
+📅 ${formatarData(checkin)} → ${formatarData(checkout)}
+🌙 ${noites} ${
+        noites == 1
+            ? "noite"
+            : "noites"
+    }
+
+🏨 ${tipoQuarto} — ${descricaoQuarto}
+
+👥 ${hospedes}
+
+☕ Café da manhã: ${
+        cafe
+            ? "Incluído"
+            : "Não incluído"
+    }
+
+💰 TOTAL: ${valorTotal}
+
+Pagamento no hotel.`;
+
+
+    if (
+        navigator.share
+    ) {
+
+        try {
+
+            await navigator.share({
+
+                title:
+                    "Orçamento de hospedagem",
+
+                text:
+                    texto
+
+            });
+
+        } catch (erro) {
+
+            console.log(
+                "Compartilhamento cancelado."
+            );
+
+        }
+
+    } else {
+
+        await navigator.clipboard
+            .writeText(
+                texto
+            );
+
+
+        alert(
+            "Seu navegador não possui compartilhamento direto. O orçamento foi copiado para a área de transferência."
+        );
+
     }
 
 }
 
 
-/* ==========================================
-   RESPONSIVO — CELULAR
-   ========================================== */
+// ==========================================
+// COPIAR IMAGEM DO ORÇAMENTO
+// ==========================================
 
-@media (max-width: 600px) {
+async function copiarImagemOrcamento() {
 
-    .container {
-        width:
-            94%;
+    const elemento =
+        document.querySelector(
+            "#orcamentoPreview .orcamento"
+        );
+
+
+    if (!elemento) {
+
+        alert(
+            "Primeiro gere o orçamento."
+        );
+
+        return;
     }
 
 
-    .card {
-        padding:
-            17px;
+    const botao =
+        document.querySelector(
+            '.acoes-compartilhar button[onclick="copiarImagemOrcamento()"]'
+        );
+
+
+    const textoOriginal =
+        botao
+            ? botao.innerHTML
+            : "";
+
+
+    if (botao) {
+
+        botao.disabled =
+            true;
+
+        botao.innerHTML =
+            "⏳ Preparando imagem...";
+
     }
 
 
-    .grid {
-        grid-template-columns:
-            1fr;
+    try {
+
+        await carregarHtml2Canvas();
+
+
+        const canvas =
+            await html2canvas(
+                elemento,
+                {
+
+                    scale: 2,
+
+                    backgroundColor:
+                        "#ffffff",
+
+                    useCORS:
+                        true,
+
+                    logging:
+                        false
+
+                }
+            );
+
+
+        const blob =
+            await new Promise(
+                resolve => {
+
+                    canvas.toBlob(
+                        resolve,
+                        "image/png"
+                    );
+
+                }
+            );
+
+
+        if (!blob) {
+
+            throw new Error(
+                "Não foi possível criar a imagem."
+            );
+
+        }
+
+
+        if (
+            navigator.clipboard &&
+            window.ClipboardItem
+        ) {
+
+            const item =
+                new ClipboardItem({
+
+                    "image/png":
+                        blob
+
+                });
+
+
+            await navigator.clipboard.write([
+                item
+            ]);
+
+
+            if (botao) {
+
+                botao.innerHTML =
+                    "✅ Imagem copiada!";
+
+            }
+
+
+            setTimeout(
+                () => {
+
+                    if (botao) {
+
+                        botao.innerHTML =
+                            textoOriginal;
+
+                    }
+
+                },
+                2500
+            );
+
+
+        } else {
+
+            baixarImagemOrcamento(
+                blob
+            );
+
+
+            alert(
+                "Seu navegador não permite copiar imagens diretamente. A imagem foi salva no computador."
+            );
+
+
+            if (botao) {
+
+                botao.innerHTML =
+                    textoOriginal;
+
+            }
+
+        }
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao copiar imagem:",
+            erro
+        );
+
+
+        alert(
+            "Não foi possível copiar a imagem do orçamento."
+        );
+
+
+        if (botao) {
+
+            botao.innerHTML =
+                textoOriginal;
+
+        }
+
     }
 
 
-    .campo-grande {
-        grid-column:
-            auto;
+    if (botao) {
+
+        botao.disabled =
+            false;
+
     }
 
-
-    .acoes {
-        flex-direction:
-            column;
-    }
+}
 
 
-    .acoes .btn {
-        width:
-            100%;
-    }
+// ==========================================
+// CARREGAR HTML2CANVAS
+// ==========================================
+
+function carregarHtml2Canvas() {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            if (
+                window.html2canvas
+            ) {
+
+                resolve();
+
+                return;
+            }
 
 
-    .orcamento-topo {
-        padding:
-            20px;
-    }
+            const script =
+                document.createElement(
+                    "script"
+                );
 
 
-    .logo-hotel {
-        width:
-            100%;
-
-        align-items:
-            flex-start;
-    }
+            script.src =
+                "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
 
 
-    .logo-hotel img {
-        max-width:
-            135px;
+            script.onload =
+                resolve;
 
-        height:
-            45px;
-    }
+            script.onerror =
+                reject;
 
 
-    .logo-hotel .hotel {
-        font-size:
-            11px;
+            document.head.appendChild(
+                script
+            );
 
-        padding-left:
-            10px;
-    }
+        }
+    );
 
-
-    .titulo-arte {
-        font-size:
-            14px;
-    }
+}
 
 
-    .orcamento-corpo {
-        padding:
-            18px;
-    }
+// ==========================================
+// SALVAR IMAGEM COMO ALTERNATIVA
+// ==========================================
+
+function baixarImagemOrcamento(blob) {
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
 
 
-    .datas {
-        grid-template-columns:
-            1fr;
-
-        gap:
-            8px;
-    }
+    const link =
+        document.createElement(
+            "a"
+        );
 
 
-    .seta {
-        text-align:
-            center;
-
-        transform:
-            rotate(90deg);
-
-        font-size:
-            20px;
-    }
+    link.href =
+        url;
 
 
-    .bloco-quarto {
-        grid-template-columns:
-            1fr;
-
-        gap:
-            15px;
-    }
+    link.download =
+        "orcamento-ibis-styles.png";
 
 
-    .foto-quarto {
-        min-height:
-            200px;
-    }
+    document.body.appendChild(
+        link
+    );
 
 
-    .foto-quarto img {
-        min-height:
-            200px;
-    }
+    link.click();
 
 
-    .dados-quarto .tipo {
-        font-size:
-            17px;
-    }
+    document.body.removeChild(
+        link
+    );
 
 
-    .valor-area {
-        flex-direction:
-            column;
-
-        align-items:
-            flex-start;
-    }
-
-
-    .pagamento {
-        white-space:
-            normal;
-
-        width:
-            100%;
-
-        text-align:
-            center;
-    }
-
-
-    .valor-total {
-        font-size:
-            27px;
-    }
-
-
-    .orcamento-rodape {
-        flex-direction:
-            column;
-
-        padding:
-            14px 18px;
-
-        text-align:
-            center;
-    }
-
-
-    .acoes-compartilhar {
-        flex-direction:
-            column;
-    }
-
-
-    .acoes-compartilhar .btn {
-        width:
-            100%;
-    }
+    URL.revokeObjectURL(
+        url
+    );
 
 }
