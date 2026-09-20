@@ -100,7 +100,46 @@ function formatarData(data) {
 
     return `${partes[2]}/${partes[1]}/${partes[0]}`;
 }
+// ------------------------------------------
+// DATA COM DIA DA SEMANA
+// ------------------------------------------
 
+function formatarDataCompleta(data) {
+
+    if (!data) {
+        return "";
+    }
+
+    const partes = data.split("-");
+
+    if (partes.length !== 3) {
+        return data;
+    }
+
+    const ano = parseInt(partes[0]);
+    const mes = parseInt(partes[1]) - 1;
+    const dia = parseInt(partes[2]);
+
+    const dataObj = new Date(ano, mes, dia);
+
+    const diasSemana = [
+        "domingo",
+        "segunda-feira",
+        "terça-feira",
+        "quarta-feira",
+        "quinta-feira",
+        "sexta-feira",
+        "sábado"
+    ];
+
+    const diaSemana =
+        diasSemana[dataObj.getDay()];
+
+    return {
+        data: `${partes[2]}/${partes[1]}/${partes[0]}`,
+        semana: diaSemana
+    };
+}
 
 // ==========================================
 // FORMATAR DATA + DIA DA SEMANA
@@ -511,31 +550,38 @@ function gerarOrcamento() {
 
                     <div class="datas">
 
-                        <div class="data-box">
+                       <div class="data-box">
 
-                            <span>CHECK-IN</span>
+    <span>CHECK-IN</span>
 
-                            <strong>
-                                ${formatarDataCompleta(checkin)}
-                            </strong>
+    <strong>
+        ${formatarDataCompleta(checkin).data}
+    </strong>
 
-                        </div>
+    <small>
+        ${formatarDataCompleta(checkin).semana}
+    </small>
 
+</div>
 
                         <div class="seta">
                             →
                         </div>
 
 
-                        <div class="data-box">
+                       <div class="data-box">
 
-                            <span>CHECK-OUT</span>
+    <span>CHECK-OUT</span>
 
-                            <strong>
-                                ${formatarDataCompleta(checkout)}
-                            </strong>
+    <strong>
+        ${formatarDataCompleta(checkout).data}
+    </strong>
 
-                        </div>
+    <small>
+        ${formatarDataCompleta(checkout).semana}
+    </small>
+
+</div>
 
                     </div>
 
