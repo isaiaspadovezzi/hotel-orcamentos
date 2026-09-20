@@ -24,3 +24,708 @@ body {
     color: var(--texto);
     min-height: 100vh;
 }
+
+
+/* =========================
+   TOPO
+========================= */
+
+.topo {
+    background: var(--branco);
+    border-bottom: 5px solid var(--verde);
+    padding: 25px 20px;
+}
+
+.topo .container {
+    max-width: 1100px;
+    margin: auto;
+}
+
+.topo h1 {
+    color: var(--verde-escuro);
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.topo p {
+    color: var(--cinza);
+    font-size: 14px;
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container {
+    width: 100%;
+    max-width: 1100px;
+    margin: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+
+/* =========================
+   TÍTULO
+========================= */
+
+.titulo {
+    padding: 35px 0 20px;
+}
+
+.titulo h2 {
+    color: var(--verde-escuro);
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.titulo p {
+    color: var(--cinza);
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+    background: var(--branco);
+    border-radius: 18px;
+    box-shadow: var(--sombra);
+    padding: 25px;
+    margin-bottom: 20px;
+}
+
+.card h3 {
+    color: var(--verde-escuro);
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+
+/* =========================
+   GRID
+========================= */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.campo-grande {
+    grid-column: span 2;
+}
+
+
+/* =========================
+   CAMPOS
+========================= */
+
+.campo {
+    display: flex;
+    flex-direction: column;
+}
+
+.campo label {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 7px;
+    color: #444;
+}
+
+.campo input,
+.campo select,
+select {
+    width: 100%;
+    min-height: 48px;
+    border: 1px solid var(--borda);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    background: white;
+    color: var(--texto);
+    outline: none;
+}
+
+.campo input:focus,
+.campo select:focus,
+select:focus {
+    border-color: var(--verde);
+    box-shadow: 0 0 0 3px rgba(99, 193, 50, 0.18);
+}
+
+
+/* =========================
+   CHECKBOXES
+========================= */
+
+.linha-opcoes {
+    display: flex;
+    gap: 30px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.check input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--verde);
+}
+
+
+/* =========================
+   BOTÕES
+========================= */
+
+.acoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin: 30px 0;
+}
+
+.btn {
+    border: none;
+    border-radius: 12px;
+    padding: 13px 24px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-principal {
+    background: var(--verde);
+    color: white;
+}
+
+.btn-principal:hover {
+    background: var(--verde-escuro);
+    transform: translateY(-1px);
+}
+
+.btn-secundario {
+    background: white;
+    color: var(--verde-escuro);
+    border: 2px solid var(--verde);
+}
+
+.btn-secundario:hover {
+    background: var(--verde-claro);
+}
+
+
+/* =========================
+   PRÉ-VISUALIZAÇÃO
+========================= */
+
+.preview-area {
+    margin-top: 35px;
+    margin-bottom: 40px;
+}
+
+.preview-area > h2 {
+    color: var(--verde-escuro);
+    font-size: 25px;
+    margin-bottom: 20px;
+}
+
+
+/* =========================
+   RODAPÉ
+========================= */
+
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #999;
+    font-size: 13px;
+}
+
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width: 768px) {
+
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .topo h1 {
+        font-size: 25px;
+    }
+
+    .titulo h2 {
+        font-size: 26px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .campo-grande {
+        grid-column: span 1;
+    }
+
+    .linha-opcoes {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .acoes {
+        flex-direction: column;
+    }
+
+       .btn {
+        width: 100%;
+    }
+}
+
+
+/* ==========================================
+   ARTE DO ORÇAMENTO
+========================================== */
+
+.orcamento {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+}
+
+
+/* ------------------------------------------
+   CABEÇALHO DA ARTE
+------------------------------------------ */
+
+.orcamento-topo {
+    background: #ffffff;
+    border-top: 7px solid var(--verde);
+    border-bottom: 1px solid #eeeeee;
+    padding: 25px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 25px;
+}
+
+.marca {
+    color: var(--verde-escuro);
+    font-size: 25px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.hotel {
+    color: #777777;
+    font-size: 13px;
+    margin-top: 2px;
+}
+
+.titulo-arte {
+    color: #333333;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: right;
+}
+
+
+/* ------------------------------------------
+   CORPO
+------------------------------------------ */
+
+.orcamento-corpo {
+    padding: 30px;
+}
+
+
+/* ------------------------------------------
+   DATAS
+------------------------------------------ */
+
+.datas {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: var(--verde-claro);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.data-box {
+    flex: 1;
+}
+
+.data-box span,
+.noites span {
+    display: block;
+    color: #777777;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.data-box strong {
+    color: #333333;
+    font-size: 21px;
+}
+
+.seta {
+    color: var(--verde-escuro);
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.noites {
+    text-align: center;
+    border-left: 1px solid rgba(0, 0, 0, 0.10);
+    padding-left: 25px;
+}
+
+.noites strong {
+    color: var(--verde-escuro);
+    font-size: 16px;
+}
+
+
+/* ------------------------------------------
+   QUARTO + HÓSPEDES
+------------------------------------------ */
+
+.linha {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 25px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.rotulo {
+    display: block;
+    color: #888888;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.7px;
+    margin-bottom: 5px;
+}
+
+.quarto .tipo {
+    display: block;
+    color: var(--verde-escuro);
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.descricao {
+    color: #444444;
+    font-size: 14px;
+}
+
+.hospedes {
+    border-left: 1px solid #eeeeee;
+    padding-left: 25px;
+}
+
+.hospedes strong {
+    display: block;
+    color: #333333;
+    font-size: 16px;
+}
+
+
+/* ------------------------------------------
+   INFORMAÇÕES
+------------------------------------------ */
+
+.informacoes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 25px 0;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.info > span {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--verde-claro);
+    border-radius: 12px;
+    font-size: 19px;
+}
+
+.info small {
+    display: block;
+    color: #888888;
+    font-size: 10px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.info strong {
+    display: block;
+    color: #333333;
+    font-size: 13px;
+}
+
+
+/* ------------------------------------------
+   VALOR
+------------------------------------------ */
+
+.valor-area {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    padding: 28px 0 10px;
+}
+
+.valor-area small {
+    display: block;
+    color: #888888;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.valor-total {
+    color: var(--verde-escuro);
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.valor-original {
+    color: #999999;
+    font-size: 15px;
+    text-decoration: line-through;
+    margin-bottom: 2px;
+}
+
+.pagamento {
+    background: #f5f5f5;
+    border-radius: 10px;
+    padding: 10px 15px;
+    color: #555555;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+
+/* ------------------------------------------
+   RODAPÉ DA ARTE
+------------------------------------------ */
+
+.orcamento-rodape {
+    background: #fafafa;
+    border-top: 1px solid #eeeeee;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    color: #999999;
+    font-size: 10px;
+}
+
+
+/* ------------------------------------------
+   RESPONSIVO DA ARTE
+------------------------------------------ */
+
+@media (max-width: 768px) {
+
+    .orcamento-topo {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 22px;
+    }
+
+    .titulo-arte {
+        text-align: left;
+    }
+
+    .orcamento-corpo {
+        padding: 22px;
+    }
+
+    .datas {
+        flex-wrap: wrap;
+    }
+
+    .data-box {
+        min-width: 40%;
+    }
+
+    .seta {
+        display: none;
+    }
+
+    .noites {
+        width: 100%;
+        text-align: left;
+        border-left: none;
+        border-top: 1px solid rgba(0, 0, 0, 0.10);
+        padding-left: 0;
+        padding-top: 12px;
+    }
+
+    .linha {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .hospedes {
+        border-left: none;
+        border-top: 1px solid #eeeeee;
+        padding-left: 0;
+        padding-top: 20px;
+    }
+
+    .informacoes {
+        grid-template-columns: 1fr;
+    }
+
+    .valor-area {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .orcamento-rodape {
+        flex-direction: column;
+        gap: 5px;
+        padding: 15px 22px;
+    }
+}
+/* ==========================================
+   IMPORTADOR DE ORÇAMENTO
+========================================== */
+
+.importador-texto {
+    color: #777;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.upload-area {
+    width: 100%;
+    min-height: 150px;
+    border: 2px dashed #b9dca8;
+    border-radius: 15px;
+    background: #fafff7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
+    padding: 25px;
+    text-align: center;
+}
+
+.upload-area:hover {
+    border-color: var(--verde);
+    background: var(--verde-claro);
+}
+
+.upload-icone {
+    font-size: 35px;
+    margin-bottom: 8px;
+}
+
+.upload-area strong {
+    color: var(--verde-escuro);
+    font-size: 15px;
+}
+
+.upload-area small {
+    color: #999;
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+
+/* IMAGEM SELECIONADA */
+
+.imagem-selecionada {
+    display: none;
+    margin-top: 18px;
+    text-align: center;
+}
+
+.imagem-selecionada img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+
+/* BOTÃO OCR */
+
+.btn-ocr {
+    margin-top: 18px;
+    width: 100%;
+}
+
+.btn-ocr:disabled {
+    background: #cfcfcf;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+/* STATUS DO OCR */
+
+.status-ocr {
+    margin-top: 15px;
+    font-size: 13px;
+    text-align: center;
+    color: var(--cinza);
+}
+
+.status-ocr.sucesso {
+    color: var(--verde-escuro);
+    font-weight: 600;
+}
+
+.status-ocr.erro {
+    color: #c62828;
+    font-weight: 600;
+}
