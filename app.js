@@ -773,243 +773,21 @@ R. Comendador Araújo, 730 — Batel — Curitiba/PR
 
 
 // ==========================================
-// OCR — ELEMENTOS
+// ==========================================
+// OCR — LEITURA DO PRINT
 // ==========================================
 
 const arquivoOrcamento =
-    document.getElementById(
-        "arquivoOrcamento"
-    );
+    document.getElementById("arquivoOrcamento");
 
 const imagemSelecionada =
-    document.getElementById(
-        "imagemSelecionada"
-    );
+    document.getElementById("imagemSelecionada");
 
 const btnLerOrcamento =
-    document.getElementById(
-        "btnLerOrcamento"
-    );
+    document.getElementById("btnLerOrcamento");
 
 const statusOcr =
-    document.getElementById(
-        "statusOcr"
-    );
-
-
-// ==========================================
-// OCR — SELECIONAR IMAGEM
-// ==========================================
-
-if (arquivoOrcamento) {
-
-    arquivoOrcamento.addEventListener(
-        "change",
-        function () {
-
-            const arquivo =
-                this.files &&
-                this.files[0];
-
-            if (!arquivo) {
-                return;
-            }
-
-
-            const leitor =
-                new FileReader();
-
-
-            leitor.onload =
-                function (evento) {
-
-                    if (imagemSelecionada) {
-
-                        imagemSelecionada.src =
-                            evento.target.result;
-
-                        imagemSelecionada.style.display =
-                            "block";
-
-                    }
-
-                    if (btnLerOrcamento) {
-
-                        btnLerOrcamento.disabled =
-                            false;
-
-                    }
-
-                    if (statusOcr) {
-
-                        statusOcr.textContent =
-                            "Imagem carregada. Clique em “Ler orçamento”.";
-
-                    }
-
-                };
-
-
-            leitor.readAsDataURL(
-                arquivo
-            );
-
-        }
-    );
-
-}
-
-
-// ==========================================
-// OCR — LER ORÇAMENTO
-// ==========================================
-
-if (btnLerOrcamento) {
-
-    btnLerOrcamento.addEventListener(
-        "click",
-        async function () {
-
-            if (
-                !arquivoOrcamento ||
-                !arquivoOrcamento.files ||
-                !arquivoOrcamento.files[0]
-            ) {
-
-                alert(
-                    "Selecione uma imagem primeiro."
-                );
-
-                return;
-
-            }
-
-
-            const arquivo =
-                arquivoOrcamento.files[0];
-
-
-            try {
-
-                btnLerOrcamento.disabled =
-                    true;
-
-
-                if (statusOcr) {
-
-                    statusOcr.textContent =
-                        "⏳ Lendo o orçamento...";
-
-                }
-
-
-                if (
-                    typeof Tesseract ===
-                    "undefined"
-                ) {
-
-                    await carregarTesseract();
-
-                }
-
-
-                const resultado =
-                    await Tesseract.recognize(
-                        arquivo,
-                        "por",
-                        {
-                            logger:
-                                function (info) {
-
-                                    if (
-                                        statusOcr &&
-                                        info.status
-                                    ) {
-
-                                        let progresso =
-                                            "";
-
-                                        if (
-                                            typeof info.progress ===
-                                            "number"
-                                        ) {
-
-                                            progresso =
-                                                ` ${Math.round(info.progress * 100)}%`;
-
-                                        }
-
-                                        statusOcr.textContent =
-                                            `⏳ ${info.status}${progresso}`;
-
-                                    }
-
-                                }
-                        }
-                    );
-
-
-                const texto =
-                    resultado &&
-                    resultado.data
-                        ? resultado.data.text
-                        : "";
-
-
-                if (!texto.trim()) {
-
-                    throw new Error(
-                        "Nenhum texto foi encontrado na imagem."
-                    );
-
-                }
-
-
-                preencherCamposComOCR(
-                    texto
-                );
-
-
-                if (statusOcr) {
-
-                    statusOcr.textContent =
-                        "✅ Orçamento lido. Confira os dados antes de gerar.";
-
-                }
-
-
-            } catch (erro) {
-
-                console.error(
-                    "Erro no OCR:",
-                    erro
-                );
-
-
-                if (statusOcr) {
-
-                    statusOcr.textContent =
-                        "❌ Não foi possível ler o orçamento.";
-
-                }
-
-
-                alert(
-                    "Não foi possível ler o orçamento automaticamente. Confira a imagem e tente novamente."
-                );
-
-
-            } finally {
-
-                btnLerOrcamento.disabled =
-                    false;
-
-            }
-
-        }
-    );
-
-}
+    document.getElementById("statusOcr");
 
 
 // ==========================================
@@ -1074,10 +852,14 @@ function carregarTesseract() {
 
 
 // ==========================================
-// NORMALIZAR TEXTO OCR
+// NORMALIZAR TEXTO
 // ==========================================
 
 function normalizarTextoOCR(texto) {
+
+    if (!texto) {
+        return "";
+    }
 
     return texto
         .replace(/\r/g, "")
@@ -1089,12 +871,16 @@ function normalizarTextoOCR(texto) {
 
 
 // ==========================================
-// ENCONTRAR DATA NO TEXTO
+// ENCONTRAR DATAS
 // ==========================================
 
 function encontrarDatas(texto) {
 
     const datas = [];
+
+    if (!texto) {
+        return datas;
+    }
 
 
     const padrao =
@@ -1113,9 +899,11 @@ function encontrarDatas(texto) {
             resultado[1]
                 .padStart(2, "0");
 
+
         let mes =
             resultado[2]
                 .padStart(2, "0");
+
 
         let ano =
             resultado[3];
@@ -1142,1185 +930,10 @@ function encontrarDatas(texto) {
 
 
 // ==========================================
-// ENCONTRAR VALOR EM REAIS
-// ==========================================
-
-function encontrarValores(texto) {
-
-    const valores = [];
-
-
-    const padrao =
-        /R\$\s*([\d.]+(?:,\d{1,2})?)/gi;
-
-
-    let resultado;
-
-
-    while (
-        (resultado =
-            padrao.exec(texto)) !== null
-    ) {
-
-        const valor =
-            converterValor(
-                resultado[1]
-            );
-
-
-        if (valor > 0) {
-
-            valores.push(
-                valor
-            );
-
-        }
-
-    }
-
-
-    return valores;
-
-}
-
-
-// ==========================================
-// IDENTIFICAR QUARTO
-// ==========================================
-
-function identificarQuarto(texto) {
-
-    const textoNormalizado =
-        texto
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(
-                /[\u0300-\u036f]/g,
-                ""
-            );
-
-
-    if (
-        textoNormalizado.includes(
-            "conjugado"
-        )
-    ) {
-
-        return "S2C";
-
-    }
-
-
-    if (
-        textoNormalizado.includes(
-            "sofa"
-        ) &&
-        textoNormalizado.includes(
-            "cama"
-        )
-    ) {
-
-        return "DSC";
-
-    }
-
-
-    if (
-        textoNormalizado.includes(
-            "superior"
-        ) &&
-        (
-            textoNormalizado.includes(
-                "casal"
-            ) ||
-            textoNormalizado.includes(
-                "double"
-            )
-        )
-    ) {
-
-        return "DBB";
-
-    }
-
-
-    if (
-        textoNormalizado.includes(
-            "superior"
-        ) &&
-        (
-            textoNormalizado.includes(
-                "solteiro"
-            ) ||
-            textoNormalizado.includes(
-                "twin"
-            )
-        )
-    ) {
-
-        return "TWB";
-
-    }
-
-
-    if (
-        textoNormalizado.includes(
-            "casal"
-        ) ||
-        textoNormalizado.includes(
-            "double"
-        )
-    ) {
-
-        return "DBC";
-
-    }
-
-
-    if (
-        textoNormalizado.includes(
-            "solteiro"
-        ) ||
-        textoNormalizado.includes(
-            "twin"
-        )
-    ) {
-
-        return "TWC";
-
-    }
-
-
-    return "";
-
-}
-
-
-// ==========================================
-// PREENCHER CAMPOS COM OCR
-// ==========================================
-
-function preencherCamposComOCR(
-    textoOriginal
-) {
-
-    const texto =
-        normalizarTextoOCR(
-            textoOriginal
-        );
-
-
-    console.log(
-        "Texto OCR:",
-        texto
-    );
-
-
-    const datas =
-        encontrarDatas(
-            texto
-        );
-
-
-    if (datas.length >= 1) {
-
-        const campoCheckin =
-            document.getElementById(
-                "checkin"
-            );
-
-
-        if (
-            campoCheckin &&
-            !campoCheckin.value
-        ) {
-
-            campoCheckin.value =
-                datas[0];
-
-        }
-
-    }
-
-
-    if (datas.length >= 2) {
-
-        const campoCheckout =
-            document.getElementById(
-                "checkout"
-            );
-
-
-        if (
-            campoCheckout &&
-            !campoCheckout.value
-        ) {
-
-            campoCheckout.value =
-                datas[1];
-
-        }
-
-    }
-
-
-    const valores =
-        encontrarValores(
-            texto
-        );
-
-
-    if (valores.length) {
-
-        const campoValor =
-            document.getElementById(
-                "valorDiaria"
-            );
-
-
-        if (
-            campoValor &&
-            !campoValor.value
-        ) {
-
-            campoValor.value =
-                valores[0]
-                    .toLocaleString(
-                        "pt-BR",
-                        {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        }
-                    );
-
-        }
-
-    }
-
-
-    const quarto =
-        identificarQuarto(
-            texto
-        );
-
-
-    if (quarto) {
-
-        const campoQuarto =
-            document.getElementById(
-                "tipoQuarto"
-            );
-
-
-        if (
-            campoQuarto
-        ) {
-
-            campoQuarto.value =
-                quarto;
-
-        }
-
-    }
-
-
-    const textoNormalizado =
-        texto
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(
-                /[\u0300-\u036f]/g,
-                ""
-            );
-
-
-    const campoCafe =
-        document.getElementById(
-            "cafe"
-        );
-
-
-    if (campoCafe) {
-
-        if (
-            textoNormalizado.includes(
-                "cafe da manha incluso"
-            ) ||
-            textoNormalizado.includes(
-                "cafe da manha"
-            )
-        ) {
-
-            campoCafe.value =
-                "sim";
-
-        }
-
-    }
-
-
-    const campoAdultos =
-        document.getElementById(
-            "adultos"
-        );
-
-
-    if (campoAdultos) {
-
-        const adultoMatch =
-            texto.match(
-                /(\d+)\s*adultos?/i
-            );
-
-
-        if (
-            adultoMatch &&
-            !campoAdultos.value
-        ) {
-
-            campoAdultos.value =
-                adultoMatch[1];
-
-        }
-
-    }
-
-
-    const campoCriancas =
-        document.getElementById(
-            "criancas"
-        );
-
-
-    if (campoCriancas) {
-
-        const criancaMatch =
-            texto.match(
-                /(\d+)\s*crian[cç]as?/i
-            );
-
-
-        if (
-            criancaMatch &&
-            !campoCriancas.value
-        ) {
-
-            campoCriancas.value =
-                criancaMatch[1];
-
-        }
-
-    }
-
-}
-
-
-// ==========================================
-// COPIAR IMAGEM DO ORÇAMENTO
-// ==========================================
-
-async function copiarImagemOrcamento() {
-
-    const elemento =
-        document.querySelector(
-            "#orcamentoPreview .orcamento"
-        );
-
-
-    if (!elemento) {
-
-        alert(
-            "Primeiro gere o orçamento."
-        );
-
-        return;
-
-    }
-
-
-    const botao =
-        document.querySelector(
-            '.acoes-compartilhar button[onclick="copiarImagemOrcamento()"]'
-        );
-
-
-    const textoOriginal =
-        botao
-            ? botao.innerHTML
-            : "";
-
-
-    if (botao) {
-
-        botao.disabled =
-            true;
-
-        botao.innerHTML =
-            "⏳ Preparando imagem...";
-
-    }
-
-
-    let areaCaptura =
-        null;
-
-
-    try {
-
-        await carregarHtml2Canvas();
-
-
-        const copia =
-            elemento.cloneNode(true);
-
-
-        copia.style.width =
-            "600px";
-
-        copia.style.maxWidth =
-            "600px";
-
-        copia.style.minWidth =
-            "600px";
-
-        copia.style.height =
-            "auto";
-
-        copia.style.margin =
-            "0";
-
-        copia.style.boxSizing =
-            "border-box";
-
-        copia.style.overflow =
-            "hidden";
-
-        copia.style.background =
-            "#ffffff";
-
-
-        const logo =
-            copia.querySelector(
-                ".logo-hotel img"
-            );
-
-
-        if (logo) {
-
-            logo.style.width =
-                "180px";
-
-            logo.style.maxWidth =
-                "180px";
-
-            logo.style.height =
-                "auto";
-
-            logo.style.maxHeight =
-                "120px";
-
-            logo.style.objectFit =
-                "contain";
-
-            logo.style.display =
-                "block";
-
-        }
-
-
-        const topo =
-            copia.querySelector(
-                ".orcamento-topo"
-            );
-
-
-        if (topo) {
-
-            topo.style.width =
-                "100%";
-
-            topo.style.boxSizing =
-                "border-box";
-
-            topo.style.overflow =
-                "hidden";
-
-            topo.style.display =
-                "flex";
-
-            topo.style.alignItems =
-                "center";
-
-            topo.style.justifyContent =
-                "space-between";
-
-        }
-
-
-        areaCaptura =
-            document.createElement(
-                "div"
-            );
-
-
-        areaCaptura.style.position =
-            "fixed";
-
-        areaCaptura.style.left =
-            "-10000px";
-
-        areaCaptura.style.top =
-            "0";
-
-        areaCaptura.style.width =
-            "600px";
-
-        areaCaptura.style.background =
-            "#ffffff";
-
-        areaCaptura.style.zIndex =
-            "-1";
-
-
-        areaCaptura.appendChild(
-            copia
-        );
-
-
-        document.body.appendChild(
-            areaCaptura
-        );
-
-
-        const imagens =
-            copia.querySelectorAll(
-                "img"
-            );
-
-
-        await Promise.all(
-            Array.from(imagens).map(
-                img => {
-
-                    if (
-                        img.complete
-                    ) {
-
-                        return Promise.resolve();
-
-                    }
-
-
-                    return new Promise(
-                        resolve => {
-
-                            img.onload =
-                                resolve;
-
-                            img.onerror =
-                                resolve;
-
-                        }
-                    );
-
-                }
-            )
-        );
-
-
-        const canvas =
-            await html2canvas(
-                copia,
-                {
-                    scale: 2,
-                    backgroundColor:
-                        "#ffffff",
-                    useCORS: true,
-                    allowTaint: false,
-                    imageTimeout:
-                        15000,
-                    logging: false,
-                    width: 600,
-                    windowWidth: 600
-                }
-            );
-
-
-        if (areaCaptura) {
-
-            areaCaptura.remove();
-
-            areaCaptura =
-                null;
-
-        }
-
-
-        const blob =
-            await new Promise(
-                resolve => {
-
-                    canvas.toBlob(
-                        resolve,
-                        "image/png"
-                    );
-
-                }
-            );
-
-
-        if (!blob) {
-
-            throw new Error(
-                "Não foi possível criar a imagem."
-            );
-
-        }
-
-
-        if (
-            navigator.clipboard &&
-            window.ClipboardItem
-        ) {
-
-            const item =
-                new ClipboardItem({
-                    "image/png": blob
-                });
-
-
-            await navigator.clipboard.write(
-                [item]
-            );
-
-
-            if (botao) {
-
-                botao.innerHTML =
-                    "✅ Imagem copiada!";
-
-            }
-
-
-            setTimeout(
-                () => {
-
-                    if (botao) {
-
-                        botao.innerHTML =
-                            textoOriginal;
-
-                    }
-
-                },
-                2500
-            );
-
-
-        } else {
-
-            baixarImagemOrcamento(
-                blob
-            );
-
-
-            alert(
-                "Seu navegador não permite copiar imagens diretamente. A imagem foi salva no computador."
-            );
-
-
-            if (botao) {
-
-                botao.innerHTML =
-                    textoOriginal;
-
-            }
-
-        }
-
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao copiar imagem:",
-            erro
-        );
-
-
-        if (areaCaptura) {
-
-            areaCaptura.remove();
-
-        }
-
-
-        alert(
-            "Não foi possível copiar a imagem do orçamento."
-        );
-
-
-        if (botao) {
-
-            botao.innerHTML =
-                textoOriginal;
-
-        }
-
-    }
-
-
-    if (botao) {
-
-        botao.disabled =
-            false;
-
-    }
-
-}
-
-
-// ==========================================
-// CARREGAR HTML2CANVAS
-// ==========================================
-
-function carregarHtml2Canvas() {
-
-    return new Promise(
-        (resolve, reject) => {
-
-            if (
-                window.html2canvas
-            ) {
-
-                resolve();
-
-                return;
-
-            }
-
-
-            const script =
-                document.createElement(
-                    "script"
-                );
-
-
-            script.src =
-                "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
-
-
-            script.onload =
-                resolve;
-
-
-            script.onerror =
-                reject;
-
-
-            document.head.appendChild(
-                script
-            );
-
-        }
-    );
-
-}
-
-
-// ==========================================
-// BAIXAR IMAGEM DO ORÇAMENTO
-// ==========================================
-
-function baixarImagemOrcamento(
-    blob
-) {
-
-    const url =
-        URL.createObjectURL(
-            blob
-        );
-
-
-    const link =
-        document.createElement(
-            "a"
-        );
-
-
-    link.href =
-        url;
-
-
-    link.download =
-        "orcamento-ibis-styles.png";
-
-
-    document.body.appendChild(
-        link
-    );
-
-
-    link.click();
-
-
-    document.body.removeChild(
-        link
-    );
-
-
-    URL.revokeObjectURL(
-        url
-    );
-
-}
-// ==========================================
-// FUNÇÕES AUXILIARES PARA OCR
-// ==========================================
-
-function extrairNumero(texto) {
-
-    if (!texto) {
-        return "";
-    }
-
-    const match =
-        texto.match(/\d+/);
-
-    return match
-        ? match[0]
-        : "";
-}
-
-
-// ==========================================
-// IDENTIFICAR NÚMERO DE HÓSPEDES
-// ==========================================
-
-function identificarHospedes(texto) {
-
-    const resultado = {
-        adultos: "",
-        criancas: ""
-    };
-
-
-    if (!texto) {
-        return resultado;
-    }
-
-
-    const textoNormalizado =
-        texto
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(
-                /[\u0300-\u036f]/g,
-                ""
-            );
-
-
-    const adultos =
-        textoNormalizado.match(
-            /(\d+)\s*adultos?/
-        );
-
-
-    if (adultos) {
-
-        resultado.adultos =
-            adultos[1];
-
-    }
-
-
-    const criancas =
-        textoNormalizado.match(
-            /(\d+)\s*criancas?/
-        );
-
-
-    if (criancas) {
-
-        resultado.criancas =
-            criancas[1];
-
-    }
-
-
-    return resultado;
-
-}
-
-
-// ==========================================
-// IDENTIFICAR CAFÉ DA MANHÃ
-// ==========================================
-
-function identificarCafe(texto) {
-
-    if (!texto) {
-        return "";
-    }
-
-
-    const textoNormalizado =
-        texto
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(
-                /[\u0300-\u036f]/g,
-                ""
-            );
-
-
-    if (
-        textoNormalizado.includes(
-            "cafe da manha incluso"
-        )
-    ) {
-
-        return "sim";
-
-    }
-
-
-    if (
-        textoNormalizado.includes(
-            "cafe da manha"
-        )
-    ) {
-
-        return "sim";
-
-    }
-
-
-    if (
-        textoNormalizado.includes(
-            "sem cafe"
-        )
-    ) {
-
-        return "nao";
-
-    }
-
-
-    return "";
-
-}
-
-
-// ==========================================
-// IDENTIFICAR NOME DO HÓSPEDE
-// ==========================================
-
-function identificarNomeHospede(texto) {
-
-    if (!texto) {
-        return "";
-    }
-
-
-    const linhas =
-        texto
-            .split("\n")
-            .map(
-                linha =>
-                    linha.trim()
-            )
-            .filter(Boolean);
-
-
-    const palavrasIgnoradas = [
-
-        "ibis",
-        "styles",
-        "curitiba",
-        "centro",
-        "civico",
-        "hotel",
-        "orcamento",
-        "reserva",
-        "check-in",
-        "check-out",
-        "hospede",
-        "adultos",
-        "criancas",
-        "acomodacao",
-        "quarto",
-        "cafe",
-        "manha",
-        "total",
-        "diaria"
-
-    ];
-
-
-    for (
-        const linha
-        of linhas
-    ) {
-
-        const linhaNormalizada =
-            linha
-                .toLowerCase()
-                .normalize("NFD")
-                .replace(
-                    /[\u0300-\u036f]/g,
-                    ""
-                );
-
-
-        if (
-            linha.length < 3 ||
-            linha.length > 80
-        ) {
-
-            continue;
-
-        }
-
-
-        if (
-            palavrasIgnoradas.some(
-                palavra =>
-                    linhaNormalizada.includes(
-                        palavra
-                    )
-            )
-        ) {
-
-            continue;
-
-        }
-
-
-        if (
-            /\d/.test(linha)
-        ) {
-
-            continue;
-
-        }
-
-
-        const palavras =
-            linha.split(/\s+/);
-
-
-        if (
-            palavras.length >= 2 &&
-            palavras.length <= 6
-        ) {
-
-            return linha;
-
-        }
-
-    }
-
-
-    return "";
-
-}
-
-
-// ==========================================
-// IDENTIFICAR VALOR DA DIÁRIA
-// ==========================================
-
-function identificarValorDiaria(
-    texto
-) {
-
-    if (!texto) {
-        return "";
-    }
-
-
-    const linhas =
-        texto.split("\n");
-
-
-    for (
-        const linha
-        of linhas
-    ) {
-
-        if (
-            !linha.includes("R$") &&
-            !linha.includes("R$")
-        ) {
-
-            continue;
-
-        }
-
-
-        const valores =
-            linha.match(
-                /R\$\s*[\d.,]+/g
-            );
-
-
-        if (
-            valores &&
-            valores.length
-        ) {
-
-            const ultimo =
-                valores[
-                    valores.length - 1
-                ];
-
-
-            return ultimo
-                .replace(
-                    /R\$\s*/i,
-                    ""
-                )
-                .trim();
-
-        }
-
-    }
-
-
-    const valores =
-        encontrarValores(
-            texto
-        );
-
-
-    if (
-        valores.length
-    ) {
-
-        return valores[0]
-            .toLocaleString(
-                "pt-BR",
-                {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }
-            );
-
-    }
-
-
-    return "";
-
-}
-
-
-// ==========================================
 // IDENTIFICAR DATAS COM CONTEXTO
 // ==========================================
 
-function identificarDatasComContexto(
-    texto
-) {
+function identificarDatasOCR(texto) {
 
     const resultado = {
         checkin: "",
@@ -2328,24 +941,22 @@ function identificarDatasComContexto(
     };
 
 
-    if (!texto) {
-        return resultado;
-    }
-
-
     const linhas =
         texto.split("\n");
 
 
     for (
-        let i = 0;
-        i < linhas.length;
-        i++
+        const linhaOriginal
+        of linhas
     ) {
 
         const linha =
-            linhas[i]
-                .trim();
+            linhaOriginal.trim();
+
+
+        if (!linha) {
+            continue;
+        }
 
 
         const normalizada =
@@ -2359,84 +970,27 @@ function identificarDatasComContexto(
 
 
         const datas =
-            encontrarDatas(
-                linha
-            );
+            encontrarDatas(linha);
 
 
-        if (
-            !datas.length
-        ) {
-
+        if (!datas.length) {
             continue;
-
         }
-
-
-        if (
-            normalizada.includes(
-                "check-in"
-            ) ||
-            normalizada.includes(
-                "check in"
-            ) ||
-            normalizada.includes(
-                "entrada"
-            )
-        ) {
-
-            if (
-                !resultado.checkin
-            ) {
-
-                resultado.checkin =
-                    datas[0];
-
-            }
-
-        }
-
-
-        if (
-            normalizada.includes(
-                "check-out"
-            ) ||
-            normalizada.includes(
-                "check out"
-            ) ||
-            normalizada.includes(
-                "saida"
-            )
-        ) {
-
-            if (
-                !resultado.checkout
-            ) {
-
-                resultado.checkout =
-                    datas[0];
-
-            }
-
-        }
-
-    }
-
-
-    if (
-        !resultado.checkin ||
-        !resultado.checkout
-    ) {
-
-        const datas =
-            encontrarDatas(
-                texto
-            );
 
 
         if (
             !resultado.checkin &&
-            datas.length >= 1
+            (
+                normalizada.includes(
+                    "check-in"
+                ) ||
+                normalizada.includes(
+                    "check in"
+                ) ||
+                normalizada.includes(
+                    "entrada"
+                )
+            )
         ) {
 
             resultado.checkin =
@@ -2447,11 +1001,58 @@ function identificarDatasComContexto(
 
         if (
             !resultado.checkout &&
-            datas.length >= 2
+            (
+                normalizada.includes(
+                    "check-out"
+                ) ||
+                normalizada.includes(
+                    "check out"
+                ) ||
+                normalizada.includes(
+                    "saida"
+                )
+            )
         ) {
 
             resultado.checkout =
-                datas[1];
+                datas[0];
+
+        }
+
+    }
+
+
+    // Caso o OCR não tenha identificado
+    // as palavras Check-in / Check-out,
+    // usa as duas primeiras datas encontradas.
+
+    if (
+        !resultado.checkin ||
+        !resultado.checkout
+    ) {
+
+        const todasAsDatas =
+            encontrarDatas(texto);
+
+
+        if (
+            !resultado.checkin &&
+            todasAsDatas.length >= 1
+        ) {
+
+            resultado.checkin =
+                todasAsDatas[0];
+
+        }
+
+
+        if (
+            !resultado.checkout &&
+            todasAsDatas.length >= 2
+        ) {
+
+            resultado.checkout =
+                todasAsDatas[1];
 
         }
 
@@ -2464,52 +1065,550 @@ function identificarDatasComContexto(
 
 
 // ==========================================
-// PREENCHER CAMPOS OCR — VERSÃO COMPLETA
+// IDENTIFICAR HÓSPEDES
 // ==========================================
 
-function aplicarDadosOCR(
-    textoOriginal
-) {
+function identificarHospedesOCR(texto) {
 
-    const texto =
-        normalizarTextoOCR(
-            textoOriginal
+    const resultado = {
+        adultos: "",
+        criancas: ""
+    };
+
+
+    const normalizado =
+        texto
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(
+                /[\u0300-\u036f]/g,
+                ""
+            );
+
+
+    // Adultos
+
+    let match =
+        normalizado.match(
+            /(\d+)\s*adultos?/i
         );
 
 
-    const datas =
-        identificarDatasComContexto(
+    if (!match) {
+
+        match =
+            normalizado.match(
+                /adultos?\s*[:\-]?\s*(\d+)/i
+            );
+
+    }
+
+
+    if (!match) {
+
+        match =
+            normalizado.match(
+                /(\d+)\s*pax/i
+            );
+
+    }
+
+
+    if (match) {
+
+        resultado.adultos =
+            match[1];
+
+    }
+
+
+    // Crianças
+
+    const matchCrianca =
+        normalizado.match(
+            /(\d+)\s*criancas?/i
+        );
+
+
+    if (matchCrianca) {
+
+        resultado.criancas =
+            matchCrianca[1];
+
+    }
+
+
+    return resultado;
+
+}
+
+
+// ==========================================
+// IDENTIFICAR QUARTO
+// ==========================================
+
+function identificarQuartoOCR(texto) {
+
+    const normalizado =
+        texto
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(
+                /[\u0300-\u036f]/g,
+                ""
+            );
+
+
+    // Conjugado
+
+    if (
+        normalizado.includes(
+            "conjugado"
+        )
+    ) {
+
+        return "S2C";
+
+    }
+
+
+    // Sofá-cama
+
+    if (
+        normalizado.includes("sofa") &&
+        normalizado.includes("cama")
+    ) {
+
+        return "DSC";
+
+    }
+
+
+    // Superior + casal
+
+    if (
+        normalizado.includes("superior") &&
+        (
+            normalizado.includes("casal") ||
+            normalizado.includes("double")
+        )
+    ) {
+
+        return "DBB";
+
+    }
+
+
+    // Superior + solteiro
+
+    if (
+        normalizado.includes("superior") &&
+        (
+            normalizado.includes("solteiro") ||
+            normalizado.includes("twin")
+        )
+    ) {
+
+        return "TWB";
+
+    }
+
+
+    // Casal
+
+    if (
+        normalizado.includes("casal") ||
+        normalizado.includes("double")
+    ) {
+
+        return "DBC";
+
+    }
+
+
+    // Solteiro
+
+    if (
+        normalizado.includes("solteiro") ||
+        normalizado.includes("twin")
+    ) {
+
+        return "TWC";
+
+    }
+
+
+    return "";
+
+}
+
+
+// ==========================================
+// IDENTIFICAR CAFÉ
+// ==========================================
+
+function identificarCafeOCR(texto) {
+
+    const normalizado =
+        texto
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(
+                /[\u0300-\u036f]/g,
+                ""
+            );
+
+
+    if (
+        normalizado.includes(
+            "sem cafe"
+        )
+    ) {
+
+        return "nao";
+
+    }
+
+
+    if (
+        normalizado.includes(
+            "cafe da manha"
+        )
+    ) {
+
+        return "sim";
+
+    }
+
+
+    if (
+        normalizado.includes(
+            "breakfast included"
+        )
+    ) {
+
+        return "sim";
+
+    }
+
+
+    if (
+        normalizado.includes(
+            "breakfast"
+        ) &&
+        normalizado.includes(
+            "included"
+        )
+    ) {
+
+        return "sim";
+
+    }
+
+
+    return "";
+
+}
+
+
+// ==========================================
+// IDENTIFICAR VALOR DA DIÁRIA
+// ==========================================
+
+function identificarValorOCR(texto) {
+
+    const linhas =
+        texto.split("\n");
+
+
+    // Primeiro procura valores
+    // próximos de palavras relacionadas
+    // à diária.
+
+    const palavras =
+        [
+            "diaria",
+            "diária",
+            "noite",
+            "noites",
+            "acomodacao",
+            "acomodação",
+            "hospedagem"
+        ];
+
+
+    for (
+        const linha
+        of linhas
+    ) {
+
+        const normalizada =
+            linha
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(
+                    /[\u0300-\u036f]/g,
+                    ""
+                );
+
+
+        const temContexto =
+            palavras.some(
+                palavra => {
+
+                    const palavraNormalizada =
+                        palavra
+                            .normalize("NFD")
+                            .replace(
+                                /[\u0300-\u036f]/g,
+                                ""
+                            );
+
+                    return normalizada.includes(
+                        palavraNormalizada
+                    );
+
+                }
+            );
+
+
+        if (!temContexto) {
+            continue;
+        }
+
+
+        const valores =
+            linha.match(
+                /(?:R\$\s*)?\d{1,3}(?:\.\d{3})*(?:,\d{2})?/g
+            );
+
+
+        if (
+            valores &&
+            valores.length
+        ) {
+
+            const valor =
+                valores[
+                    valores.length - 1
+                ];
+
+
+            return limparValorOCR(
+                valor
+            );
+
+        }
+
+    }
+
+
+    // Fallback: procura qualquer R$.
+
+    const valores =
+        texto.match(
+            /R\$\s*\d{1,3}(?:\.\d{3})*(?:,\d{2})?/g
+        );
+
+
+    if (
+        valores &&
+        valores.length
+    ) {
+
+        return limparValorOCR(
+            valores[0]
+        );
+
+    }
+
+
+    return "";
+
+}
+
+
+// ==========================================
+// LIMPAR VALOR
+// ==========================================
+
+function limparValorOCR(valor) {
+
+    if (!valor) {
+        return "";
+    }
+
+
+    let texto =
+        valor
+            .toString()
+            .replace(
+                /R\$/gi,
+                ""
+            )
+            .replace(
+                /\s/g,
+                ""
+            );
+
+
+    if (
+        texto.includes(",")
+    ) {
+
+        texto =
+            texto.replace(
+                /\./g,
+                ""
+            );
+
+        texto =
+            texto.replace(
+                ",",
+                "."
+            );
+
+    }
+
+
+    const numero =
+        parseFloat(texto);
+
+
+    if (
+        isNaN(numero)
+    ) {
+
+        return "";
+
+    }
+
+
+    return numero.toLocaleString(
+        "pt-BR",
+        {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }
+    );
+
+}
+
+
+// ==========================================
+// CONVERTER DATA PARA INPUT
+// ==========================================
+
+function converterDataParaInputOCR(data) {
+
+    if (!data) {
+        return "";
+    }
+
+
+    if (
+        /^\d{4}-\d{2}-\d{2}$/.test(
+            data
+        )
+    ) {
+
+        return data;
+
+    }
+
+
+    const match =
+        data.match(
+            /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/
+        );
+
+
+    if (!match) {
+        return "";
+    }
+
+
+    const dia =
+        match[1].padStart(
+            2,
+            "0"
+        );
+
+
+    const mes =
+        match[2].padStart(
+            2,
+            "0"
+        );
+
+
+    let ano =
+        match[3];
+
+
+    if (
+        ano.length === 2
+    ) {
+
+        ano =
+            `20${ano}`;
+
+    }
+
+
+    return `${ano}-${mes}-${dia}`;
+
+}
+
+
+// ==========================================
+// APLICAR RESULTADO DO OCR
+// ==========================================
+
+function aplicarResultadoOCR(texto) {
+
+    const textoLimpo =
+        normalizarTextoOCR(
             texto
+        );
+
+
+    console.log(
+        "===== TEXTO OCR ====="
+    );
+
+    console.log(
+        textoLimpo
+    );
+
+
+    const datas =
+        identificarDatasOCR(
+            textoLimpo
         );
 
 
     const hospedes =
-        identificarHospedes(
-            texto
+        identificarHospedesOCR(
+            textoLimpo
         );
 
 
     const quarto =
-        identificarQuarto(
-            texto
+        identificarQuartoOCR(
+            textoLimpo
         );
 
 
     const cafe =
-        identificarCafe(
-            texto
+        identificarCafeOCR(
+            textoLimpo
         );
 
 
     const valor =
-        identificarValorDiaria(
-            texto
-        );
-
-
-    const nome =
-        identificarNomeHospede(
-            texto
+        identificarValorOCR(
+            textoLimpo
         );
 
 
@@ -2555,19 +1654,15 @@ function aplicarDadosOCR(
         );
 
 
-    const campoNome =
-        document.getElementById(
-            "nomeHospede"
-        );
-
-
     if (
         campoCheckin &&
         datas.checkin
     ) {
 
         campoCheckin.value =
-            datas.checkin;
+            converterDataParaInputOCR(
+                datas.checkin
+            );
 
     }
 
@@ -2578,7 +1673,9 @@ function aplicarDadosOCR(
     ) {
 
         campoCheckout.value =
-            datas.checkout;
+            converterDataParaInputOCR(
+                datas.checkout
+            );
 
     }
 
@@ -2638,1071 +1735,7 @@ function aplicarDadosOCR(
     }
 
 
-    if (
-        campoNome &&
-        nome
-    ) {
-
-        campoNome.value =
-            nome;
-
-    }
-
-
-    // Dispara eventos para manter
-    // qualquer lógica adicional da página.
-
     [
-        campoCheckin,
-        campoCheckout,
-        campoAdultos,
-        campoCriancas,
-        campoQuarto,
-        campoCafe,
-        campoValor,
-        campoNome
-
-    ].forEach(
-        campo => {
-
-            if (campo) {
-
-                campo.dispatchEvent(
-                    new Event(
-                        "input",
-                        {
-                            bubbles: true
-                        }
-                    )
-                );
-
-
-                campo.dispatchEvent(
-                    new Event(
-                        "change",
-                        {
-                            bubbles: true
-                        }
-                    )
-                );
-
-            }
-
-        }
-    );
-
-}
-
-
-// ==========================================
-// COMPATIBILIDADE COM OCR EXISTENTE
-// ==========================================
-
-function preencherCamposComOCRSeguro(
-    texto
-) {
-
-    try {
-
-        aplicarDadosOCR(
-            texto
-        );
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao preencher campos pelo OCR:",
-            erro
-        );
-
-
-        try {
-
-            preencherCamposComOCR(
-                texto
-            );
-
-        } catch (
-            erroFallback
-        ) {
-
-            console.error(
-                "Erro no preenchimento alternativo:",
-                erroFallback
-            );
-
-        }
-
-    }
-
-}
-
-
-// ==========================================
-// BOTÃO LIMPAR OCR
-// ==========================================
-
-const btnLimparOcr =
-    document.getElementById(
-        "btnLimparOcr"
-    );
-
-
-if (btnLimparOcr) {
-
-    btnLimparOcr.addEventListener(
-        "click",
-        function () {
-
-            if (arquivoOrcamento) {
-
-                arquivoOrcamento.value =
-                    "";
-
-            }
-
-
-            if (imagemSelecionada) {
-
-                imagemSelecionada.src =
-                    "";
-
-                imagemSelecionada.style.display =
-                    "none";
-
-            }
-
-
-            if (statusOcr) {
-
-                statusOcr.textContent =
-                    "";
-
-            }
-
-
-            if (btnLerOrcamento) {
-
-                btnLerOrcamento.disabled =
-                    true;
-
-            }
-
-        }
-    );
-
-}
-
-
-// ==========================================
-// GERAR AUTOMATICAMENTE AO USAR OCR
-// ==========================================
-
-const btnGerarOrcamento =
-    document.getElementById(
-        "btnGerarOrcamento"
-    );
-
-
-if (btnGerarOrcamento) {
-
-    btnGerarOrcamento.addEventListener(
-        "click",
-        function () {
-
-            gerarOrcamento();
-
-        }
-    );
-
-}
-
-
-// ==========================================
-// ATUALIZAR PRÉVIA QUANDO CAMPOS MUDAM
-// ==========================================
-
-const camposFormulario = [
-
-    "nomeHospede",
-    "checkin",
-    "checkout",
-    "adultos",
-    "criancas",
-    "tipoQuarto",
-    "cafe",
-    "valorDiaria",
-    "observacoes"
-
-];
-
-
-camposFormulario.forEach(
-    id => {
-
-        const campo =
-            document.getElementById(
-                id
-            );
-
-
-        if (!campo) {
-            return;
-        }
-
-
-        campo.addEventListener(
-            "input",
-            function () {
-
-                // Não gera automaticamente
-                // se ainda não houver datas.
-                // Apenas mantém o comportamento
-                // normal do formulário.
-
-            }
-        );
-
-    }
-);
-
-
-// ==========================================
-// FIM DA PARTE 2
-// ==========================================
-// ==========================================
-// MELHORIAS NO OCR
-// ==========================================
-
-// Alguns sistemas de reserva exibem as datas
-// no formato DD/MM/YYYY.
-// Esta função converte para YYYY-MM-DD,
-// que é o formato aceito pelos inputs type="date".
-
-function converterDataParaInput(
-    data
-) {
-
-    if (!data) {
-        return "";
-    }
-
-
-    // Já está no formato correto.
-
-    if (
-        /^\d{4}-\d{2}-\d{2}$/.test(
-            data
-        )
-    ) {
-
-        return data;
-
-    }
-
-
-    const match =
-        data.match(
-            /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/
-        );
-
-
-    if (!match) {
-        return "";
-    }
-
-
-    let dia =
-        match[1].padStart(
-            2,
-            "0"
-        );
-
-
-    let mes =
-        match[2].padStart(
-            2,
-            "0"
-        );
-
-
-    let ano =
-        match[3];
-
-
-    if (
-        ano.length === 2
-    ) {
-
-        ano =
-            `20${ano}`;
-
-    }
-
-
-    return `${ano}-${mes}-${dia}`;
-
-}
-
-
-// ==========================================
-// LIMPAR VALOR OCR
-// ==========================================
-
-function limparValorOCR(
-    valor
-) {
-
-    if (!valor) {
-        return "";
-    }
-
-
-    let texto =
-        valor
-            .toString()
-            .replace(
-                /R\$/gi,
-                ""
-            )
-            .trim();
-
-
-    // Remove espaços.
-
-    texto =
-        texto.replace(
-            /\s/g,
-            ""
-        );
-
-
-    // Se houver ponto e vírgula,
-    // considera ponto como separador
-    // de milhares.
-
-    if (
-        texto.includes(",")
-    ) {
-
-        texto =
-            texto.replace(
-                /\./g,
-                ""
-            );
-
-
-        texto =
-            texto.replace(
-                ",",
-                "."
-            );
-
-    }
-
-
-    const numero =
-        parseFloat(
-            texto
-        );
-
-
-    if (
-        isNaN(numero)
-    ) {
-
-        return "";
-
-    }
-
-
-    return numero.toLocaleString(
-        "pt-BR",
-        {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }
-    );
-
-}
-
-
-// ==========================================
-// OCR — TENTAR ENCONTRAR PREÇO
-// ==========================================
-
-function encontrarPrecoOCR(
-    texto
-) {
-
-    if (!texto) {
-        return "";
-    }
-
-
-    const linhas =
-        texto.split("\n");
-
-
-    // Primeiro procura linhas que
-    // tenham palavras relacionadas
-    // à diária.
-
-    const palavrasDiaria = [
-
-        "diaria",
-        "diária",
-        "noite",
-        "noites",
-        "apartamento",
-        "acomodacao",
-        "acomodação",
-        "hospedagem",
-        "total"
-
-    ];
-
-
-    for (
-        const linha
-        of linhas
-    ) {
-
-        const linhaNormalizada =
-            linha
-                .toLowerCase()
-                .normalize("NFD")
-                .replace(
-                    /[\u0300-\u036f]/g,
-                    ""
-                );
-
-
-        const temPalavra =
-            palavrasDiaria.some(
-                palavra => {
-
-                    const palavraNormalizada =
-                        palavra
-                            .normalize("NFD")
-                            .replace(
-                                /[\u0300-\u036f]/g,
-                                ""
-                            );
-
-                    return linhaNormalizada.includes(
-                        palavraNormalizada
-                    );
-
-                }
-            );
-
-
-        if (!temPalavra) {
-            continue;
-        }
-
-
-        const valores =
-            linha.match(
-                /(?:R\$\s*)?\d{1,3}(?:\.\d{3})*(?:,\d{2})?/g
-            );
-
-
-        if (
-            valores &&
-            valores.length
-        ) {
-
-            const ultimo =
-                valores[
-                    valores.length - 1
-                ];
-
-
-            const limpo =
-                limparValorOCR(
-                    ultimo
-                );
-
-
-            if (limpo) {
-                return limpo;
-            }
-
-        }
-
-    }
-
-
-    // Se não encontrar por contexto,
-    // procura qualquer valor monetário.
-
-    const valores =
-        texto.match(
-            /R\$\s*\d{1,3}(?:\.\d{3})*(?:,\d{2})?/g
-        );
-
-
-    if (
-        valores &&
-        valores.length
-    ) {
-
-        return limparValorOCR(
-            valores[0]
-        );
-
-    }
-
-
-    return "";
-
-}
-
-
-// ==========================================
-// OCR — IDENTIFICAR TIPO DE QUARTO
-// ==========================================
-
-function identificarTipoQuartoOCR(
-    texto
-) {
-
-    if (!texto) {
-        return "";
-    }
-
-
-    const normalizado =
-        texto
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(
-                /[\u0300-\u036f]/g,
-                ""
-            );
-
-
-    // Conjugado
-
-    if (
-        normalizado.includes(
-            "conjugado"
-        )
-    ) {
-
-        return "S2C";
-
-    }
-
-
-    // Sofá-cama
-
-    if (
-        (
-            normalizado.includes(
-                "sofa"
-            ) ||
-            normalizado.includes(
-                "sofa-cama"
-            )
-        ) &&
-        normalizado.includes(
-            "cama"
-        )
-    ) {
-
-        return "DSC";
-
-    }
-
-
-    // Superior + casal
-
-    if (
-        normalizado.includes(
-            "superior"
-        ) &&
-        (
-            normalizado.includes(
-                "casal"
-            ) ||
-            normalizado.includes(
-                "double"
-            )
-        )
-    ) {
-
-        return "DBB";
-
-    }
-
-
-    // Superior + solteiro
-
-    if (
-        normalizado.includes(
-            "superior"
-        ) &&
-        (
-            normalizado.includes(
-                "solteiro"
-            ) ||
-            normalizado.includes(
-                "twin"
-            )
-        )
-    ) {
-
-        return "TWB";
-
-    }
-
-
-    // Casal
-
-    if (
-        normalizado.includes(
-            "casal"
-        ) ||
-        normalizado.includes(
-            "double"
-        )
-    ) {
-
-        return "DBC";
-
-    }
-
-
-    // Solteiro
-
-    if (
-        normalizado.includes(
-            "solteiro"
-        ) ||
-        normalizado.includes(
-            "twin"
-        )
-    ) {
-
-        return "TWC";
-
-    }
-
-
-    return "";
-
-}
-
-
-// ==========================================
-// OCR — IDENTIFICAR QUANTIDADE DE ADULTOS
-// ==========================================
-
-function identificarAdultosOCR(
-    texto
-) {
-
-    if (!texto) {
-        return "";
-    }
-
-
-    const normalizado =
-        texto
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(
-                /[\u0300-\u036f]/g,
-                ""
-            );
-
-
-    const padroes = [
-
-        /(\d+)\s*adultos?/i,
-
-        /adultos?\s*[:\-]?\s*(\d+)/i,
-
-        /(\d+)\s*pax/i,
-
-        /pax\s*[:\-]?\s*(\d+)/i
-
-    ];
-
-
-    for (
-        const padrao
-        of padroes
-    ) {
-
-        const resultado =
-            normalizado.match(
-                padrao
-            );
-
-
-        if (
-            resultado
-        ) {
-
-            return resultado[1];
-
-        }
-
-    }
-
-
-    return "";
-
-}
-
-
-// ==========================================
-// OCR — IDENTIFICAR CRIANÇAS
-// ==========================================
-
-function identificarCriancasOCR(
-    texto
-) {
-
-    if (!texto) {
-        return "";
-    }
-
-
-    const normalizado =
-        texto
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(
-                /[\u0300-\u036f]/g,
-                ""
-            );
-
-
-    const resultado =
-        normalizado.match(
-            /(\d+)\s*criancas?/i
-        );
-
-
-    if (
-        resultado
-    ) {
-
-        return resultado[1];
-
-    }
-
-
-    return "";
-
-}
-
-
-// ==========================================
-// OCR — IDENTIFICAR CAFÉ
-// ==========================================
-
-function identificarCafeOCR(
-    texto
-) {
-
-    if (!texto) {
-        return "";
-    }
-
-
-    const normalizado =
-        texto
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(
-                /[\u0300-\u036f]/g,
-                ""
-            );
-
-
-    if (
-        normalizado.includes(
-            "sem cafe"
-        )
-    ) {
-
-        return "nao";
-
-    }
-
-
-    if (
-        normalizado.includes(
-            "cafe da manha"
-        )
-    ) {
-
-        return "sim";
-
-    }
-
-
-    if (
-        normalizado.includes(
-            "cafe incluso"
-        )
-    ) {
-
-        return "sim";
-
-    }
-
-
-    if (
-        normalizado.includes(
-            "breakfast included"
-        )
-    ) {
-
-        return "sim";
-
-    }
-
-
-    return "";
-
-}
-
-
-// ==========================================
-// OCR — APLICAR RESULTADO FINAL
-// ==========================================
-
-function processarResultadoOCR(
-    texto
-) {
-
-    if (!texto) {
-
-        throw new Error(
-            "O OCR não retornou texto."
-        );
-
-    }
-
-
-    const textoLimpo =
-        normalizarTextoOCR(
-            texto
-        );
-
-
-    console.log(
-        "===== TEXTO OCR ====="
-    );
-
-    console.log(
-        textoLimpo
-    );
-
-
-    const datas =
-        identificarDatasComContexto(
-            textoLimpo
-        );
-
-
-    const valor =
-        encontrarPrecoOCR(
-            textoLimpo
-        );
-
-
-    const quarto =
-        identificarTipoQuartoOCR(
-            textoLimpo
-        );
-
-
-    const adultos =
-        identificarAdultosOCR(
-            textoLimpo
-        );
-
-
-    const criancas =
-        identificarCriancasOCR(
-            textoLimpo
-        );
-
-
-    const cafe =
-        identificarCafeOCR(
-            textoLimpo
-        );
-
-
-    const campoNome =
-        document.getElementById(
-            "nomeHospede"
-        );
-
-
-    const campoCheckin =
-        document.getElementById(
-            "checkin"
-        );
-
-
-    const campoCheckout =
-        document.getElementById(
-            "checkout"
-        );
-
-
-    const campoAdultos =
-        document.getElementById(
-            "adultos"
-        );
-
-
-    const campoCriancas =
-        document.getElementById(
-            "criancas"
-        );
-
-
-    const campoQuarto =
-        document.getElementById(
-            "tipoQuarto"
-        );
-
-
-    const campoCafe =
-        document.getElementById(
-            "cafe"
-        );
-
-
-    const campoValor =
-        document.getElementById(
-            "valorDiaria"
-        );
-
-
-    // --------------------------------------
-    // DATAS
-    // --------------------------------------
-
-    if (
-        campoCheckin &&
-        datas.checkin
-    ) {
-
-        campoCheckin.value =
-            converterDataParaInput(
-                datas.checkin
-            );
-
-    }
-
-
-    if (
-        campoCheckout &&
-        datas.checkout
-    ) {
-
-        campoCheckout.value =
-            converterDataParaInput(
-                datas.checkout
-            );
-
-    }
-
-
-    // --------------------------------------
-    // ADULTOS
-    // --------------------------------------
-
-    if (
-        campoAdultos &&
-        adultos
-    ) {
-
-        campoAdultos.value =
-            adultos;
-
-    }
-
-
-    // --------------------------------------
-    // CRIANÇAS
-    // --------------------------------------
-
-    if (
-        campoCriancas &&
-        criancas
-    ) {
-
-        campoCriancas.value =
-            criancas;
-
-    }
-
-
-    // --------------------------------------
-    // QUARTO
-    // --------------------------------------
-
-    if (
-        campoQuarto &&
-        quarto
-    ) {
-
-        campoQuarto.value =
-            quarto;
-
-    }
-
-
-    // --------------------------------------
-    // CAFÉ
-    // --------------------------------------
-
-    if (
-        campoCafe &&
-        cafe
-    ) {
-
-        campoCafe.value =
-            cafe;
-
-    }
-
-
-    // --------------------------------------
-    // VALOR
-    // --------------------------------------
-
-    if (
-        campoValor &&
-        valor
-    ) {
-
-        campoValor.value =
-            valor;
-
-    }
-
-
-    // --------------------------------------
-    // EVENTOS
-    // --------------------------------------
-
-    const campos = [
-
-        campoNome,
         campoCheckin,
         campoCheckout,
         campoAdultos,
@@ -3711,10 +1744,7 @@ function processarResultadoOCR(
         campoCafe,
         campoValor
 
-    ];
-
-
-    campos.forEach(
+    ].forEach(
         campo => {
 
             if (!campo) {
@@ -3745,204 +1775,22 @@ function processarResultadoOCR(
     );
 
 
-    return {
-
-        datas,
-        valor,
-        quarto,
-        adultos,
-        criancas,
-        cafe
-
-    };
+    console.log(
+        "Dados extraídos:",
+        {
+            datas,
+            hospedes,
+            quarto,
+            cafe,
+            valor
+        }
+    );
 
 }
 
 
 // ==========================================
-// GARANTIR QUE O BOTÃO OCR USE O PROCESSADOR
-// ==========================================
-
-if (btnLerOrcamento) {
-
-    btnLerOrcamento.onclick =
-        async function () {
-
-            if (
-                !arquivoOrcamento ||
-                !arquivoOrcamento.files ||
-                !arquivoOrcamento.files.length
-            ) {
-
-                alert(
-                    "Selecione o print do orçamento primeiro."
-                );
-
-                return;
-
-            }
-
-
-            const arquivo =
-                arquivoOrcamento.files[0];
-
-
-            if (
-                !arquivo.type.startsWith(
-                    "image/"
-                )
-            ) {
-
-                alert(
-                    "Selecione um arquivo de imagem."
-                );
-
-                return;
-
-            }
-
-
-            try {
-
-                btnLerOrcamento.disabled =
-                    true;
-
-
-                if (statusOcr) {
-
-                    statusOcr.textContent =
-                        "⏳ Preparando leitura do print...";
-
-                }
-
-
-                await carregarTesseract();
-
-
-                if (statusOcr) {
-
-                    statusOcr.textContent =
-                        "⏳ Lendo o print...";
-
-                }
-
-
-                const resultado =
-                    await Tesseract.recognize(
-                        arquivo,
-                        "por",
-                        {
-
-                            logger:
-                                info => {
-
-                                    if (
-                                        !statusOcr
-                                    ) {
-
-                                        return;
-
-                                    }
-
-
-                                    if (
-                                        info.status ===
-                                        "recognizing text"
-                                    ) {
-
-                                        const porcentagem =
-                                            Math.round(
-                                                (
-                                                    info.progress ||
-                                                    0
-                                                ) * 100
-                                            );
-
-
-                                        statusOcr.textContent =
-                                            `⏳ Lendo o orçamento... ${porcentagem}%`;
-
-                                    } else if (
-                                        info.status
-                                    ) {
-
-                                        statusOcr.textContent =
-                                            `⏳ ${info.status}`;
-
-                                    }
-
-                                }
-
-                        }
-                    );
-
-
-                const texto =
-                    resultado &&
-                    resultado.data
-                        ? resultado.data.text
-                        : "";
-
-
-                if (
-                    !texto.trim()
-                ) {
-
-                    throw new Error(
-                        "Nenhum texto foi identificado no print."
-                    );
-
-                }
-
-
-                processarResultadoOCR(
-                    texto
-                );
-
-
-                if (statusOcr) {
-
-                    statusOcr.textContent =
-                        "✅ Dados extraídos. Confira os campos antes de gerar o orçamento.";
-
-                }
-
-
-            } catch (erro) {
-
-                console.error(
-                    "Erro completo no OCR:",
-                    erro
-                );
-
-
-                if (statusOcr) {
-
-                    statusOcr.textContent =
-                        "❌ Erro ao ler o print.";
-
-                }
-
-
-                alert(
-                    "Não foi possível ler o print. Tente novamente com uma imagem mais nítida."
-                );
-
-
-            } finally {
-
-                btnLerOrcamento.disabled =
-                    false;
-
-            }
-
-        };
-
-}
-
-
-// ==========================================
-// PREVIEW DA IMAGEM SELECIONADA
+// SELECIONAR PRINT
 // ==========================================
 
 if (arquivoOrcamento) {
@@ -3957,9 +1805,7 @@ if (arquivoOrcamento) {
 
 
             if (!arquivo) {
-
                 return;
-
             }
 
 
@@ -3973,10 +1819,7 @@ if (arquivoOrcamento) {
                     "Selecione uma imagem válida."
                 );
 
-
-                this.value =
-                    "";
-
+                this.value = "";
 
                 return;
 
@@ -4048,6 +1891,231 @@ if (arquivoOrcamento) {
     );
 
 }
+
+
+// ==========================================
+// LER PRINT
+// ==========================================
+
+if (btnLerOrcamento) {
+
+    btnLerOrcamento.addEventListener(
+        "click",
+        async function () {
+
+            if (
+                !arquivoOrcamento ||
+                !arquivoOrcamento.files ||
+                !arquivoOrcamento.files[0]
+            ) {
+
+                alert(
+                    "Selecione o print do orçamento primeiro."
+                );
+
+                return;
+
+            }
+
+
+            const arquivo =
+                arquivoOrcamento.files[0];
+
+
+            try {
+
+                btnLerOrcamento.disabled =
+                    true;
+
+
+                if (statusOcr) {
+
+                    statusOcr.textContent =
+                        "⏳ Preparando leitura do print...";
+
+                }
+
+
+                await carregarTesseract();
+
+
+                if (statusOcr) {
+
+                    statusOcr.textContent =
+                        "⏳ Lendo o print...";
+
+                }
+
+
+                const resultado =
+                    await Tesseract.recognize(
+                        arquivo,
+                        "por+eng",
+                        {
+
+                            logger:
+                                info => {
+
+                                    if (
+                                        !statusOcr
+                                    ) {
+                                        return;
+                                    }
+
+
+                                    if (
+                                        info.status ===
+                                        "recognizing text"
+                                    ) {
+
+                                        const progresso =
+                                            Math.round(
+                                                (
+                                                    info.progress ||
+                                                    0
+                                                ) * 100
+                                            );
+
+
+                                        statusOcr.textContent =
+                                            `⏳ Lendo o orçamento... ${progresso}%`;
+
+                                    }
+
+                                }
+
+                        }
+                    );
+
+
+                const texto =
+                    resultado &&
+                    resultado.data
+                        ? resultado.data.text
+                        : "";
+
+
+                if (
+                    !texto.trim()
+                ) {
+
+                    throw new Error(
+                        "Nenhum texto foi identificado no print."
+                    );
+
+                }
+
+
+                aplicarResultadoOCR(
+                    texto
+                );
+
+
+                if (statusOcr) {
+
+                    statusOcr.textContent =
+                        "✅ Orçamento lido. Confira os campos antes de gerar.";
+
+                }
+
+
+            } catch (erro) {
+
+                console.error(
+                    "Erro completo no OCR:",
+                    erro
+                );
+
+
+                if (statusOcr) {
+
+                    statusOcr.textContent =
+                        "❌ Não foi possível ler o print.";
+
+                }
+
+
+                alert(
+                    "Não foi possível ler o print. Tente novamente com uma imagem mais nítida."
+                );
+
+
+            } finally {
+
+                btnLerOrcamento.disabled =
+                    false;
+
+            }
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// LIMPAR OCR
+// ==========================================
+
+const btnLimparOcr =
+    document.getElementById(
+        "btnLimparOcr"
+    );
+
+
+if (btnLimparOcr) {
+
+    btnLimparOcr.addEventListener(
+        "click",
+        function () {
+
+            if (arquivoOrcamento) {
+
+                arquivoOrcamento.value =
+                    "";
+
+            }
+
+
+            if (imagemSelecionada) {
+
+                imagemSelecionada.src =
+                    "";
+
+                imagemSelecionada.style.display =
+                    "none";
+
+            }
+
+
+            if (statusOcr) {
+
+                statusOcr.textContent =
+                    "";
+
+            }
+
+
+            if (btnLerOrcamento) {
+
+                btnLerOrcamento.disabled =
+                    true;
+
+            }
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// FIM DO OCR
+// ==========================================
+
+console.log(
+    "✅ Gerador de Orçamentos carregado."
+);
 
 
 // ==========================================
