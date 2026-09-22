@@ -1849,9 +1849,6 @@ ${
 }
 
 
-// ==========================================
-// COPIAR IMAGEM DO ORÇAMENTO
-// ==========================================
 
 // ==========================================
 // COPIAR IMAGEM DO ORÇAMENTO
@@ -1873,18 +1870,15 @@ async function copiarImagemOrcamento() {
         return;
     }
 
-
     const botao =
         document.querySelector(
             '.acoes-compartilhar button[onclick="copiarImagemOrcamento()"]'
         );
 
-
     const textoOriginal =
         botao
             ? botao.innerHTML
             : "";
-
 
     if (botao) {
 
@@ -1895,9 +1889,449 @@ async function copiarImagemOrcamento() {
 
     }
 
+    let areaCaptura = null;
 
     try {
 
+        // --------------------------------------
+        // CARREGAR HTML2CANVAS
+        // --------------------------------------
+
+        await carregarHtml2Canvas();
+
+
+        // --------------------------------------
+        // CRIAR CÓPIA DA ARTE
+        // --------------------------------------
+
+        const copia =
+            elemento.cloneNode(true);
+
+
+        // --------------------------------------
+        // TAMANHO FIXO
+        // --------------------------------------
+
+        copia.style.width = "600px";
+        copia.style.maxWidth = "600px";
+        copia.style.minWidth = "600px";
+
+        copia.style.height = "auto";
+
+        copia.style.margin = "0";
+
+        copia.style.boxSizing =
+            "border-box";
+
+        copia.style.overflow =
+            "hidden";
+
+        copia.style.background =
+            "#ffffff";
+
+
+        // --------------------------------------
+        // CORRIGIR LOGO
+        // --------------------------------------
+
+        const logo =
+            copia.querySelector(
+                ".logo-hotel img"
+            );
+
+        if (logo) {
+
+            logo.style.width = "180px";
+
+            logo.style.maxWidth = "180px";
+
+            logo.style.height = "auto";
+
+            logo.style.maxHeight = "120px";
+
+            logo.style.objectFit =
+                "contain";
+
+            logo.style.display =
+                "block";
+        }
+
+
+        // --------------------------------------
+        // CORRIGIR CABEÇALHO
+        // --------------------------------------
+
+        const topo =
+            copia.querySelector(
+                ".orcamento-topo"
+            );
+
+        if (topo) {
+
+            topo.style.width =
+                "100%";
+
+            topo.style.boxSizing =
+                "border-box";
+
+            topo.style.overflow =
+                "hidden";
+
+            topo.style.display =
+                "flex";
+
+            topo.style.alignItems =
+                "center";
+
+            topo.style.justifyContent =
+                "space-between";
+        }
+
+
+        // --------------------------------------
+        // ÁREA TEMPORÁRIA
+        // --------------------------------------
+
+        areaCaptura =
+            document.createElement("div");
+
+        areaCaptura.style.position =
+            "fixed";
+
+        areaCaptura.style.left =
+            "-10000px";
+
+        areaCaptura.style.top =
+            "0";
+
+        areaCaptura.style.width =
+            "600px";
+
+        areaCaptura.style.background =
+            "#ffffff";
+
+        areaCaptura.style.zIndex =
+            "-1";
+
+
+        areaCaptura.appendChild(
+            copia
+        );
+
+        document.body.appendChild(
+            areaCaptura
+        );
+
+
+        // --------------------------------------
+        // ESPERAR IMAGENS
+        // --------------------------------------
+
+        const imagens =
+            copia.querySelectorAll(
+                "img"
+            );
+
+        await Promise.all(
+
+            Array.from(imagens).map(
+                img => {
+
+                    if (img.complete) {
+                        return Promise.resolve();
+                    }
+
+                    return new Promise(
+                        resolve => {
+
+                            img.onload =
+                                resolve;
+
+                            img.onerror =
+                                resolve;
+
+                        }
+                    );
+
+                }
+            )
+
+        );
+
+
+        // --------------------------------------
+        // GERAR IMAGEM
+        // --------------------------------------
+
+        const canvas =
+            await html2canvas(
+                copia,
+                {
+
+                    scale: 2,
+
+                    backgroundColor:
+                        "#ffffff",
+
+                    useCORS:
+                        true,
+
+                    allowTaint:
+                        false,
+
+                    imageTimeout:
+                        15000,
+
+                    logging:
+                        false,
+
+                    width:
+                        600,
+
+                    windowWidth:
+                        600
+
+                }
+            );
+
+
+        // --------------------------------------
+        // REMOVER CÓPIA
+        // --------------------------------------
+
+        if (areaCaptura) {
+
+            areaCaptura.remove();
+
+            areaCaptura = null;
+        }
+
+
+        // --------------------------------------
+        // GERAR PNG
+        // --------------------------------------
+
+        const blob =
+            await new Promise(
+                resolve => {
+
+                    canvas.toBlob(
+                        resolve,
+                        "image/png"
+                    );
+
+                }
+            );
+
+
+        if (!blob) {
+
+            throw new Error(
+                "Não foi possível criar a imagem."
+            );
+        }
+
+
+        // --------------------------------------
+        // COPIAR PARA ÁREA DE TRANSFERÊNCIA
+        // --------------------------------------
+
+        if (
+            navigator.clipboard &&
+            window.ClipboardItem
+        ) {
+
+            const item =
+                new ClipboardItem({
+
+                    "image/png":
+                        blob
+
+                });
+
+            await navigator.clipboard.write([
+                item
+            ]);
+
+
+            if (botao) {
+
+                botao.innerHTML =
+                    "✅ Imagem copiada!";
+
+            }
+
+
+            setTimeout(
+                () => {
+
+                    if (botao) {
+
+                        botao.innerHTML =
+                            textoOriginal;
+
+                    }
+
+                },
+                2500
+            );
+
+
+        } else {
+
+            // ----------------------------------
+            // ALTERNATIVA: BAIXAR IMAGEM
+            // ----------------------------------
+
+            baixarImagemOrcamento(
+                blob
+            );
+
+            alert(
+                "Seu navegador não permite copiar imagens diretamente. A imagem foi salva no computador."
+            );
+
+
+            if (botao) {
+
+                botao.innerHTML =
+                    textoOriginal;
+
+            }
+
+        }
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao copiar imagem:",
+            erro
+        );
+
+
+        if (areaCaptura) {
+
+            areaCaptura.remove();
+
+        }
+
+
+        alert(
+            "Não foi possível copiar a imagem do orçamento."
+        );
+
+
+        if (botao) {
+
+            botao.innerHTML =
+                textoOriginal;
+
+        }
+
+    }
+
+
+    if (botao) {
+
+        botao.disabled =
+            false;
+
+    }
+
+}
+
+
+// ==========================================
+// CARREGAR HTML2CANVAS
+// ==========================================
+
+function carregarHtml2Canvas() {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            if (
+                window.html2canvas
+            ) {
+
+                resolve();
+
+                return;
+            }
+
+
+            const script =
+                document.createElement(
+                    "script"
+                );
+
+
+            script.src =
+                "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
+
+
+            script.onload =
+                resolve;
+
+            script.onerror =
+                reject;
+
+
+            document.head.appendChild(
+                script
+            );
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// SALVAR IMAGEM COMO ALTERNATIVA
+// ==========================================
+
+function baixarImagemOrcamento(blob) {
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href =
+        url;
+
+
+    link.download =
+        "orcamento-ibis-styles.png";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    document.body.removeChild(
+        link
+    );
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+}
         // --------------------------------------
         // CARREGAR HTML2CANVAS
         // --------------------------------------
