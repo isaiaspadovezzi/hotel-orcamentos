@@ -100,46 +100,7 @@ function formatarData(data) {
 
     return `${partes[2]}/${partes[1]}/${partes[0]}`;
 }
-// ------------------------------------------
-// DATA COM DIA DA SEMANA
-// ------------------------------------------
 
-function formatarDataCompleta(data) {
-
-    if (!data) {
-        return "";
-    }
-
-    const partes = data.split("-");
-
-    if (partes.length !== 3) {
-        return data;
-    }
-
-    const ano = parseInt(partes[0]);
-    const mes = parseInt(partes[1]) - 1;
-    const dia = parseInt(partes[2]);
-
-    const dataObj = new Date(ano, mes, dia);
-
-    const diasSemana = [
-        "domingo",
-        "segunda-feira",
-        "terça-feira",
-        "quarta-feira",
-        "quinta-feira",
-        "sexta-feira",
-        "sábado"
-    ];
-
-    const diaSemana =
-        diasSemana[dataObj.getDay()];
-
-    return {
-        data: `${partes[2]}/${partes[1]}/${partes[0]}`,
-        semana: diaSemana
-    };
-}
 
 // ==========================================
 // FORMATAR DATA + DIA DA SEMANA
@@ -171,94 +132,68 @@ function formatarDataCompleta(data) {
         "sábado"
     ];
 
-    const diaSemana = diasSemana[dataObj.getDay()];
+    const diaSemana =
+        diasSemana[dataObj.getDay()];
 
     return `${formatarData(data)} — ${diaSemana}`;
 }
 
 
 // ==========================================
-// ESCAPAR HTML
+// CALCULAR NOITES
 // ==========================================
 
-function escaparHTML(texto) {
+function calcularNoites(checkin, checkout) {
+
+    if (!checkin || !checkout) {
+        return 0;
+    }
+
+    const entrada = new Date(
+        `${checkin}T12:00:00`
+    );
+
+    const saida = new Date(
+        `${checkout}T12:00:00`
+    );
+
+    const diferenca =
+        saida.getTime() - entrada.getTime();
+
+    const noites =
+        Math.round(
+            diferenca /
+            (1000 * 60 * 60 * 24)
+        );
+
+    return noites > 0 ? noites : 0;
+}
+
+
+// ==========================================
+// CAPITALIZAR PRIMEIRA LETRA
+// ==========================================
+
+function capitalizar(texto) {
 
     if (!texto) {
         return "";
     }
 
-    return texto
-        .toString()
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    return texto.charAt(0).toUpperCase() +
+        texto.slice(1);
 }
 
 
 // ==========================================
-// OBTER DADOS DO QUARTO
+// ELEMENTOS
 // ==========================================
 
-function obterDadosQuarto(tipoQuarto, descricaoOriginal) {
+const formulario =
+    document.getElementById("formOrcamento");
 
-    const codigo = (tipoQuarto || "")
-        .trim()
-        .toUpperCase();
-
-    if (QUARTOS[codigo]) {
-
-        return {
-            codigo: codigo,
-            nome: QUARTOS[codigo].nome,
-            foto: QUARTOS[codigo].foto,
-            quantidadeQuartos: QUARTOS[codigo].quantidadeQuartos
-        };
-
-    }
-
-    return {
-        codigo: codigo,
-        nome: descricaoOriginal || "Quarto",
-        foto: "",
-        quantidadeQuartos: 1
-    };
-}
-
-
-// ==========================================
-// GERAR TEXTO DOS HÓSPEDES
-// ==========================================
-
-function gerarTextoHospedes(adultos, criancas) {
-
-    let texto = "";
-
-    if (adultos > 0) {
-
-        texto +=
-            adultos +
-            (adultos === 1 ? " adulto" : " adultos");
-    }
-
-    if (criancas > 0) {
-
-        if (texto !== "") {
-            texto += " + ";
-        }
-
-        texto +=
-            criancas +
-            (criancas === 1 ? " criança" : " crianças");
-    }
-
-    if (texto === "") {
-        texto = "Não informado";
-    }
-
-    return texto;
-}
+const orcamentoPreview =
+    document.getElementById("orcamentoPreview");
 
 
 // ==========================================
@@ -267,63 +202,46 @@ function gerarTextoHospedes(adultos, criancas) {
 
 function gerarOrcamento() {
 
+    const nome =
+        document.getElementById("nomeHospede").value.trim();
+
     const checkin =
         document.getElementById("checkin").value;
 
     const checkout =
         document.getElementById("checkout").value;
 
-    const noites =
-        parseInt(document.getElementById("noites").value) || 0;
-
     const adultos =
-        parseInt(document.getElementById("adultos").value) || 0;
+        parseInt(
+            document.getElementById("adultos").value
+        ) || 0;
 
     const criancas =
-        parseInt(document.getElementById("criancas").value) || 0;
-
-    const tipoQuarto =
-        document.getElementById("tipoQuarto").value
-            .trim()
-            .toUpperCase();
-
-    const descricaoOriginal =
-        document.getElementById("descricaoQuarto").value.trim();
-
-    const cafe =
-        document.getElementById("cafe").checked;
-
-    const promo =
-        document.getElementById("promo").checked;
-
-    const valorOriginal =
-        converterValor(
-            document.getElementById("valorOriginal").value
-        );
-
-    const valorTotal =
-        converterValor(
-            document.getElementById("valorTotal").value
-        );
-
-    const pagamento =
-        document.getElementById("pagamento").value;
-
-
-    // --------------------------------------
-    // DADOS DO QUARTO
-    // --------------------------------------
+        parseInt(
+            document.getElementById("criancas").value
+        ) || 0;
 
     const quarto =
-        obterDadosQuarto(
-            tipoQuarto,
-            descricaoOriginal
+        document.getElementById("tipoQuarto").value;
+
+    const cafe =
+        document.getElementById("cafe").value;
+
+    const valorDiaria =
+        converterValor(
+            document.getElementById("valorDiaria").value
         );
 
+    const observacoes =
+        document.getElementById("observacoes").value.trim();
 
-    // --------------------------------------
-    // VALIDAÇÃO
-    // --------------------------------------
+
+    const noites =
+        calcularNoites(
+            checkin,
+            checkout
+        );
+
 
     if (!checkin || !checkout) {
 
@@ -334,184 +252,80 @@ function gerarOrcamento() {
         return;
     }
 
-    if (!quarto.nome) {
+
+    if (!quarto) {
 
         alert(
-            "Informe o tipo ou a descrição do quarto."
-        );
-
-        return;
-    }
-
-    if (valorTotal <= 0) {
-
-        alert(
-            "Informe o valor total da hospedagem."
+            "Selecione o tipo de quarto."
         );
 
         return;
     }
 
 
-    // --------------------------------------
-    // HÓSPEDES
-    // --------------------------------------
+    if (noites <= 0) {
 
-    const textoHospedes =
-        gerarTextoHospedes(
-            adultos,
-            criancas
+        alert(
+            "A data de check-out deve ser posterior ao check-in."
         );
 
-
-    // --------------------------------------
-    // CAFÉ DA MANHÃ
-    // --------------------------------------
-
-    let blocoCafe = "";
-
-    if (cafe) {
-
-        blocoCafe = `
-            <div class="info">
-                <span>☕</span>
-
-                <div>
-                    <small>CAFÉ DA MANHÃ</small>
-                    <strong>Incluído</strong>
-                </div>
-            </div>
-        `;
-
-    } else {
-
-        blocoCafe = `
-            <div class="info info-cafe-nao-incluido">
-                <span>☕</span>
-
-                <div>
-                    <small>CAFÉ DA MANHÃ</small>
-                    <strong>Não incluído</strong>
-                </div>
-            </div>
-
-            <div class="aviso-cafe">
-                Café da manhã não incluso na tarifa.
-                Disponível para contratação à parte por
-                <strong>R$ 53,00 por pessoa, por dia.</strong>
-            </div>
-        `;
+        return;
     }
 
 
-    // --------------------------------------
-    // PAGAMENTO
-    // --------------------------------------
+    const dadosQuarto =
+        QUARTOS[quarto];
 
-    let textoPagamento = "";
 
-    if (pagamento === "hotel") {
+    const valorTotal =
+        valorDiaria * noites;
 
-        textoPagamento =
-            "Pagamento no hotel";
 
-    } else {
+    const valorFormatado =
+        formatarMoeda(valorTotal);
 
-        textoPagamento =
-            "Pagamento antecipado";
+
+    const diariaFormatada =
+        formatarMoeda(valorDiaria);
+
+
+    let textoHospedes = "";
+
+
+    if (adultos > 0) {
+
+        textoHospedes +=
+            `${adultos} adulto${adultos > 1 ? "s" : ""}`;
+
     }
 
 
-    // --------------------------------------
-    // VALOR PROMOCIONAL
-    // --------------------------------------
+    if (criancas > 0) {
 
-    let blocoValor = "";
+        if (textoHospedes) {
+            textoHospedes += " • ";
+        }
 
-    if (
-        promo &&
-        valorOriginal > 0 &&
-        valorOriginal > valorTotal
-    ) {
+        textoHospedes +=
+            `${criancas} criança${criancas > 1 ? "s" : ""}`;
 
-        blocoValor = `
-            <div class="valor-original">
-                ${formatarMoeda(valorOriginal)}
-            </div>
-
-            <div class="valor-total">
-                ${formatarMoeda(valorTotal)}
-            </div>
-        `;
-
-    } else {
-
-        blocoValor = `
-            <div class="valor-total">
-                ${formatarMoeda(valorTotal)}
-            </div>
-        `;
     }
 
 
-    // --------------------------------------
-    // QUANTIDADE DE QUARTOS
-    // --------------------------------------
-
-    let textoQuantidadeQuartos = "";
-
-    if (quarto.quantidadeQuartos > 1) {
-
-        textoQuantidadeQuartos = `
-            <div class="quantidade-quartos">
-                🛏️ ${quarto.quantidadeQuartos} quartos conjugados
-            </div>
-        `;
-
-    } else {
-
-        textoQuantidadeQuartos = `
-            <div class="quantidade-quartos">
-                🛏️ 1 quarto
-            </div>
-        `;
+    if (!textoHospedes) {
+        textoHospedes = "Não informado";
     }
 
 
-    // --------------------------------------
-    // FOTO DO QUARTO
-    // --------------------------------------
-
-    let blocoFoto = "";
-
-    if (quarto.foto) {
-
-        blocoFoto = `
-            <div class="foto-quarto">
-                <img
-                    src="${quarto.foto}"
-                    alt="${escaparHTML(quarto.nome)}"
-                >
-            </div>
-        `;
-    }
+    const cafeTexto =
+        cafe === "sim"
+            ? "Café da manhã incluso"
+            : "Sem café da manhã";
 
 
-    // --------------------------------------
-    // PREVIEW
-    // --------------------------------------
-
-    const preview =
-        document.getElementById(
-            "orcamentoPreview"
-        );
-
-
-    preview.innerHTML = `
+    orcamentoPreview.innerHTML = `
 
         <div class="orcamento">
-
-            <!-- CABEÇALHO -->
 
             <div class="orcamento-topo">
 
@@ -519,1182 +333,326 @@ function gerarOrcamento() {
 
                     <img
                         src="img/logo.png"
-                        alt="ibis Styles"
+                        alt="ibis Styles Curitiba Centro Cívico"
                     >
 
-                    <div class="hotel">
-                        Curitiba Centro Cívico
-                    </div>
-
                 </div>
 
-                <div class="titulo-arte">
-                    ORÇAMENTO DE HOSPEDAGEM
+                <div class="titulo-orcamento">
+
+                    <h2>
+                        ORÇAMENTO DE HOSPEDAGEM
+                    </h2>
+
+                    <p>
+                        ibis Styles Curitiba Centro Cívico
+                    </p>
+
                 </div>
 
             </div>
 
 
-            <!-- CORPO -->
-
-            <div class="orcamento-corpo">
+            <div class="orcamento-conteudo">
 
 
-                <!-- ESTADIA -->
-
-                <div class="bloco-estadia">
-
-                    <div class="titulo-secao">
-                        ESTADIA
-                    </div>
-
-                    <div class="datas">
-
-                       <div class="data-box">
-
-    <span>CHECK-IN</span>
-
-    <strong>
-        ${formatarDataCompleta(checkin).data}
-    </strong>
-
-    <small>
-        ${formatarDataCompleta(checkin).semana}
-    </small>
-
-</div>
-
-                        <div class="seta">
-                            →
-                        </div>
+                ${
+                    nome
+                        ? `
+                            <div class="bloco">
+                                <strong>Hóspede</strong>
+                                <span>${nome}</span>
+                            </div>
+                          `
+                        : ""
+                }
 
 
-                       <div class="data-box">
+                <div class="bloco">
 
-    <span>CHECK-OUT</span>
+                    <strong>Período da hospedagem</strong>
 
-    <strong>
-        ${formatarDataCompleta(checkout).data}
-    </strong>
+                    <div class="datas-hospedagem">
 
-    <small>
-        ${formatarDataCompleta(checkout).semana}
-    </small>
+                        <div>
 
-</div>
+                            <small>Check-in</small>
 
-                    </div>
-
-
-                    <div class="noites">
-
-                        <span>ESTADIA</span>
-
-                        <strong>
-                            ${noites}
-                            ${noites === 1 ? "NOITE" : "NOITES"}
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                <!-- QUARTO + HÓSPEDES -->
-
-                <div class="bloco-quarto">
-
-                    ${blocoFoto}
-
-                    <div class="dados-quarto">
-
-                        <span class="rotulo">
-                            ACOMODAÇÃO
-                        </span>
-
-                        <strong class="tipo">
-                            ${escaparHTML(quarto.nome)}
-                        </strong>
-
-                        ${textoQuantidadeQuartos}
-
-                        <div class="hospedes">
-
-                            <span class="rotulo">
-                                HÓSPEDES
+                            <span>
+                                ${formatarDataCompleta(checkin)}
                             </span>
 
-                            <strong>
-                                ${escaparHTML(textoHospedes)}
-                            </strong>
+                        </div>
+
+
+                        <div>
+
+                            <small>Check-out</small>
+
+                            <span>
+                                ${formatarDataCompleta(checkout)}
+                            </span>
 
                         </div>
 
+
                     </div>
 
                 </div>
 
 
-                <!-- CAFÉ -->
+                <div class="bloco">
 
-                <div class="informacoes">
+                    <strong>Hóspedes</strong>
 
-                    ${blocoCafe}
+                    <span>
+                        ${textoHospedes}
+                    </span>
 
                 </div>
 
 
-                <!-- VALOR -->
+                <div class="bloco">
 
-                <div class="valor-area">
+                    <strong>Acomodação</strong>
 
-                    <div>
+                    <span>
+                        ${dadosQuarto.nome}
+                    </span>
 
-                        <small>
-                            TOTAL DA HOSPEDAGEM
-                        </small>
-
-                        ${blocoValor}
-
-                    </div>
+                </div>
 
 
-                    <div class="pagamento">
+                <div class="bloco">
 
-                        ${textoPagamento}
+                    <strong>Café da manhã</strong>
 
-                    </div>
+                    <span>
+                        ${cafeTexto}
+                    </span>
+
+                </div>
+
+
+                <div class="bloco">
+
+                    <strong>Valor da diária</strong>
+
+                    <span>
+                        ${diariaFormatada}
+                    </span>
+
+                </div>
+
+
+                <div class="bloco">
+
+                    <strong>Número de noites</strong>
+
+                    <span>
+                        ${noites}
+                    </span>
+
+                </div>
+
+
+                <div class="valor-total">
+
+                    <span>
+                        Valor total da hospedagem
+                    </span>
+
+                    <strong>
+                        ${valorFormatado}
+                    </strong>
+
+                </div>
+
+
+                ${
+                    observacoes
+                        ? `
+                            <div class="observacoes">
+
+                                <strong>
+                                    Observações
+                                </strong>
+
+                                <p>
+                                    ${observacoes}
+                                </p>
+
+                            </div>
+                          `
+                        : ""
+                }
+
+
+                <div class="rodape-orcamento">
+
+                    <p>
+                        Este orçamento está sujeito à disponibilidade no momento da reserva.
+                    </p>
+
+                    <p>
+                        ibis Styles Curitiba Centro Cívico
+                    </p>
+
+                    <p>
+                        R. Comendador Araújo, 730 — Batel — Curitiba/PR
+                    </p>
 
                 </div>
 
 
             </div>
-
-
-            <!-- RODAPÉ -->
-
-            <div class="orcamento-rodape">
-
-                <div>
-                    ibis Styles Curitiba Centro Cívico
-                </div>
-
-                <div>
-                    Orçamento sujeito à disponibilidade
-                </div>
-
-            </div>
-
 
         </div>
 
     `;
 
 
-    // --------------------------------------
-    // MOSTRAR PREVIEW
-    // --------------------------------------
-
-    document.getElementById(
-        "previewArea"
-    ).style.display = "block";
-
-
-    // --------------------------------------
-    // ROLAR ATÉ A PRÉVIA
-    // --------------------------------------
-
-    document.getElementById(
-        "previewArea"
-    ).scrollIntoView({
-        behavior: "smooth"
-    });
-
+    orcamentoPreview.style.display =
+        "block";
 }
 
 
 // ==========================================
-// LIMPAR FORMULÁRIO
+// EVENTO DO FORMULÁRIO
 // ==========================================
 
-function limparFormulario() {
+if (formulario) {
 
-    document.getElementById("checkin").value = "";
+    formulario.addEventListener(
+        "submit",
+        function (evento) {
 
-    document.getElementById("checkout").value = "";
+            evento.preventDefault();
 
-    document.getElementById("noites").value = "1";
-
-    document.getElementById("adultos").value = "1";
-
-    document.getElementById("criancas").value = "0";
-
-    document.getElementById("tipoQuarto").value = "";
-
-    document.getElementById("descricaoQuarto").value = "";
-
-    const tarifa =
-        document.getElementById("tarifa");
-
-    if (tarifa) {
-        tarifa.value = "";
-    }
-
-    document.getElementById("cafe").checked = false;
-
-    document.getElementById("promo").checked = false;
-
-    document.getElementById("valorOriginal").value = "";
-
-    document.getElementById("valorTotal").value = "";
-
-    document.getElementById("pagamento").value = "hotel";
-
-
-    document.getElementById(
-        "previewArea"
-    ).style.display = "none";
-
-
-    document.getElementById(
-        "orcamentoPreview"
-    ).innerHTML = "";
-
-}
-
-
-// ==========================================
-// LEITURA AUTOMÁTICA DO PRINT - OCR
-// ==========================================
-
-const arquivoOrcamento =
-    document.getElementById("arquivoOrcamento");
-
-const imagemSelecionada =
-    document.getElementById("imagemSelecionada");
-
-const btnLerOrcamento =
-    document.getElementById("btnLerOrcamento");
-
-const statusOcr =
-    document.getElementById("statusOcr");
-
-
-// ------------------------------------------
-// QUANDO O USUÁRIO ESCOLHE O PRINT
-// ------------------------------------------
-
-arquivoOrcamento.addEventListener(
-    "change",
-    function () {
-
-        const arquivo =
-            this.files[0];
-
-        if (!arquivo) {
-            return;
-        }
-
-        const url =
-            URL.createObjectURL(arquivo);
-
-        imagemSelecionada.innerHTML = `
-            <img
-                src="${url}"
-                alt="Print do orçamento"
-            >
-        `;
-
-        imagemSelecionada.style.display =
-            "block";
-
-        btnLerOrcamento.disabled =
-            false;
-
-        statusOcr.innerHTML =
-            "Print carregado. Clique em <strong>Ler orçamento automaticamente</strong>.";
-
-        statusOcr.className =
-            "status-ocr";
-
-    }
-);
-
-
-// ==========================================
-// CARREGAR TESSERACT
-// ==========================================
-
-function carregarTesseract() {
-
-    return new Promise(
-        (resolve, reject) => {
-
-            if (window.Tesseract) {
-
-                resolve();
-                return;
-            }
-
-            const script =
-                document.createElement("script");
-
-            script.src =
-                "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
-
-            script.onload =
-                resolve;
-
-            script.onerror =
-                reject;
-
-            document.head.appendChild(
-                script
-            );
+            gerarOrcamento();
 
         }
-    );
-}
-
-
-// ==========================================
-// LER PRINT
-// ==========================================
-
-btnLerOrcamento.addEventListener(
-    "click",
-    async function () {
-
-        const arquivo =
-            arquivoOrcamento.files[0];
-
-        if (!arquivo) {
-            return;
-        }
-
-        btnLerOrcamento.disabled =
-            true;
-
-        statusOcr.className =
-            "status-ocr";
-
-        statusOcr.innerHTML =
-            "🔍 Lendo o orçamento...";
-
-
-        try {
-
-            await carregarTesseract();
-
-
-            const resultado =
-                await Tesseract.recognize(
-                    arquivo,
-                    "por+eng",
-                    {
-
-                        logger:
-                            function (info) {
-
-                                if (
-                                    info.status ===
-                                    "recognizing text"
-                                ) {
-
-                                    const porcentagem =
-                                        Math.round(
-                                            info.progress *
-                                            100
-                                        );
-
-                                    statusOcr.innerHTML =
-                                        `🔍 Lendo orçamento... ${porcentagem}%`;
-
-                                }
-
-                            }
-
-                    }
-                );
-
-
-            const texto =
-                resultado.data.text;
-
-
-            console.log(
-                "TEXTO RECONHECIDO:"
-            );
-
-            console.log(texto);
-
-
-            statusOcr.className =
-                "status-ocr sucesso";
-
-            statusOcr.innerHTML =
-                "✅ Print lido. Agora vamos preencher os campos.";
-
-
-            preencherCamposComOCR(
-                texto
-            );
-
-
-        } catch (erro) {
-
-            console.error(erro);
-
-            statusOcr.className =
-                "status-ocr erro";
-
-            statusOcr.innerHTML =
-                "❌ Não foi possível ler o print.";
-
-        }
-
-
-        btnLerOrcamento.disabled =
-            false;
-
-    }
-);
-
-
-// ==========================================
-// INTERPRETAR TEXTO DO OCR
-// ==========================================
-
-function preencherCamposComOCR(texto) {
-
-    console.log(
-        "Iniciando interpretação do orçamento..."
-    );
-
-
-    // --------------------------------------
-    // LIMPAR TEXTO
-    // --------------------------------------
-
-    const textoOriginal =
-        texto;
-
-    const linhas =
-        texto
-            .split("\n")
-            .map(linha =>
-                linha.trim()
-            )
-            .filter(linha =>
-                linha.length > 0
-            );
-
-
-    // --------------------------------------
-    // TIPO + DESCRIÇÃO DO QUARTO
-    // --------------------------------------
-
-    let tipoQuarto = "";
-
-    let descricaoQuarto = "";
-
-
-    for (
-        let linha of linhas
-    ) {
-
-        const encontrado =
-            linha.match(
-                /^\s*\d+\s*-\s*([A-Z0-9]+)\s*-\s*(.+)$/i
-            );
-
-
-        if (encontrado) {
-
-            tipoQuarto =
-                encontrado[1]
-                    .trim()
-                    .toUpperCase();
-
-            descricaoQuarto =
-                encontrado[2]
-                    .trim();
-
-            break;
-        }
-
-    }
-
-
-    // --------------------------------------
-    // TARIFA
-    // --------------------------------------
-
-    let tarifa = "";
-
-
-    if (tipoQuarto) {
-
-        const indiceTipo =
-            linhas.findIndex(
-                linha =>
-                    linha
-                        .toUpperCase()
-                        .includes(
-                            tipoQuarto
-                        )
-            );
-
-
-        if (
-            indiceTipo >= 0
-        ) {
-
-            for (
-                let i = indiceTipo + 1;
-                i < Math.min(
-                    linhas.length,
-                    indiceTipo + 4
-                );
-                i++
-            ) {
-
-                const linha =
-                    linhas[i];
-
-
-                if (
-                    !linha ||
-                    /details per night/i.test(linha) ||
-                    /price breakdown/i.test(linha) ||
-                    /total/i.test(linha) ||
-                    /brl/i.test(linha) ||
-                    /\d{1,2}\s+[A-Za-z]{3}\s+\d{4}/.test(linha)
-                ) {
-
-                    continue;
-                }
-
-
-                tarifa =
-                    linha;
-
-                break;
-            }
-
-        }
-
-    }
-
-
-    // --------------------------------------
-    // DATAS
-    // --------------------------------------
-
-const meses = {
-
-    jan: "01",
-    janeiro: "01",
-
-    fev: "02",
-    feb: "02",
-    fevereiro: "02",
-
-    mar: "03",
-    março: "03",
-    marco: "03",
-
-    abr: "04",
-    apr: "04",
-    abril: "04",
-
-    mai: "05",
-    may: "05",
-    maio: "05",
-
-    jun: "06",
-    junho: "06",
-
-    jul: "07",
-    julho: "07",
-
-    ago: "08",
-    aug: "08",
-    agosto: "08",
-
-    set: "09",
-    sep: "09",
-    setembro: "09",
-
-    out: "10",
-    oct: "10",
-    outubro: "10",
-
-    nov: "11",
-    novembro: "11",
-
-    dez: "12",
-    dec: "12",
-    dezembro: "12"
-};
-
-    const regexData =
-        /(\d{1,2})\s+([A-Za-zçÇãõÃÕ]+)\s+(\d{4})/gi;
-
-
-    const datasEncontradas = [];
-
-
-    let resultadoData;
-
-
-    while (
-        (
-            resultadoData =
-                regexData.exec(
-                    textoOriginal
-                )
-        ) !== null
-    ) {
-
-        const dia =
-            resultadoData[1]
-                .padStart(
-                    2,
-                    "0"
-                );
-
-
-        const mesTexto =
-            resultadoData[2]
-                .toLowerCase();
-
-
-        const ano =
-            resultadoData[3];
-
-
-        const mes =
-            meses[mesTexto];
-
-
-        if (mes) {
-
-            datasEncontradas.push(
-                `${ano}-${mes}-${dia}`
-            );
-
-        }
-
-    }
-
-
-    if (
-        datasEncontradas.length >= 2
-    ) {
-
-        document.getElementById(
-            "checkin"
-        ).value =
-            datasEncontradas[0];
-
-
-        document.getElementById(
-            "checkout"
-        ).value =
-            datasEncontradas[1];
-
-    }
-
-
-    // --------------------------------------
-    // NÚMERO DE NOITES
-    // --------------------------------------
-
-    let noites = 0;
-
-
-    const encontrouNoites =
-        textoOriginal.match(
-            /\((\d+)\s*(?:night|nights|noite|noites)/i
-        );
-
-
-    if (encontrouNoites) {
-
-        noites =
-            parseInt(
-                encontrouNoites[1]
-            );
-
-    }
-
-
-    if (noites > 0) {
-
-        document.getElementById(
-            "noites"
-        ).value =
-            noites;
-
-    }
-
-
-    // --------------------------------------
-    // ADULTOS E CRIANÇAS
-    // --------------------------------------
-
-    let adultos = 0;
-
-    let criancas = 0;
-
-
-    const encontrouHospedes =
-        textoOriginal.match(
-            /(\d+)\s*Adults?\s*\/\s*(\d+)\s*Child(?:ren)?/i
-        );
-
-
-    if (encontrouHospedes) {
-
-        adultos =
-            parseInt(
-                encontrouHospedes[1]
-            );
-
-        criancas =
-            parseInt(
-                encontrouHospedes[2]
-            );
-
-    }
-
-
-    document.getElementById(
-        "adultos"
-    ).value =
-        adultos;
-
-
-    document.getElementById(
-        "criancas"
-    ).value =
-        criancas;
-
-
-    // --------------------------------------
-    // CAFÉ DA MANHÃ
-    // --------------------------------------
-
-    const temCafe =
-        /breakfast/i.test(
-            textoOriginal
-        ) &&
-        /included/i.test(
-            textoOriginal
-        );
-
-
-    document.getElementById(
-        "cafe"
-    ).checked =
-        temCafe;
-
-
-    // --------------------------------------
-    // TARIFA PROMOCIONAL
-    // --------------------------------------
-
-    const temPromo =
-        /promo/i.test(
-            textoOriginal
-        ) ||
-        /m[eê]s do cliente/i.test(
-            textoOriginal
-        );
-
-
-    document.getElementById(
-        "promo"
-    ).checked =
-        temPromo;
-
-
-    // --------------------------------------
-    // VALORES EM BRL
-    // --------------------------------------
-
-    const valoresBRL = [];
-
-
-    const regexBRL =
-        /([\d.,]+)\s*BRL/gi;
-
-
-    let resultadoValor;
-
-
-    while (
-        (
-            resultadoValor =
-                regexBRL.exec(
-                    textoOriginal
-                )
-        ) !== null
-    ) {
-
-        let valorTexto =
-            resultadoValor[1];
-
-
-        if (
-            valorTexto.includes(".") &&
-            !valorTexto.includes(",")
-        ) {
-
-            valorTexto =
-                valorTexto;
-
-        } else {
-
-            valorTexto =
-                valorTexto
-                    .replace(/\./g, "")
-                    .replace(",", ".");
-
-        }
-
-
-        const valor =
-            parseFloat(
-                valorTexto
-            );
-
-
-        if (
-            !isNaN(valor)
-        ) {
-
-            valoresBRL.push(
-                valor
-            );
-
-        }
-
-    }
-
-
-    // --------------------------------------
-    // VALOR TOTAL
-    // --------------------------------------
-
-    if (
-        valoresBRL.length > 0
-    ) {
-
-        const valorTotal =
-            valoresBRL[0];
-
-
-        document.getElementById(
-            "valorTotal"
-        ).value =
-            formatarMoeda(
-                valorTotal
-            );
-
-    }
-
-
-    // --------------------------------------
-    // VALOR ORIGINAL
-    // --------------------------------------
-
-    if (
-        valoresBRL.length > 1
-    ) {
-
-        const valorTotal =
-            valoresBRL[0];
-
-
-        const valoresMaiores =
-            valoresBRL.filter(
-                valor =>
-                    valor > valorTotal
-            );
-
-
-        if (
-            valoresMaiores.length > 0
-        ) {
-
-            const valorOriginal =
-                Math.max(
-                    ...valoresMaiores
-                );
-
-
-            document.getElementById(
-                "valorOriginal"
-            ).value =
-                formatarMoeda(
-                    valorOriginal
-                );
-
-        }
-
-    }
-
-
-    // --------------------------------------
-    // PAGAMENTO
-    // --------------------------------------
-
-    if (
-        /to be paid at the hotel/i.test(
-            textoOriginal
-        ) ||
-        /paid at the hotel/i.test(
-            textoOriginal
-        )
-    ) {
-
-        document.getElementById(
-            "pagamento"
-        ).value =
-            "hotel";
-
-    }
-
-
-    // --------------------------------------
-    // PREENCHER CAMPOS
-    // --------------------------------------
-
-    document.getElementById(
-        "tipoQuarto"
-    ).value =
-        tipoQuarto;
-
-
-    document.getElementById(
-        "descricaoQuarto"
-    ).value =
-        descricaoQuarto;
-
-
-    const campoTarifa =
-        document.getElementById(
-            "tarifa"
-        );
-
-    if (campoTarifa) {
-
-        campoTarifa.value =
-            tarifa;
-
-    }
-
-
-    // --------------------------------------
-    // MOSTRAR RESULTADO
-    // --------------------------------------
-
-    statusOcr.className =
-        "status-ocr sucesso";
-
-
-    statusOcr.innerHTML =
-        "✅ Dados identificados! Confira os campos abaixo antes de gerar o orçamento.";
-
-
-    // --------------------------------------
-    // DESTACAR CAMPOS
-    // --------------------------------------
-
-    const campos =
-        document.querySelectorAll(
-            "#checkin, #checkout, #noites, #adultos, #criancas, #tipoQuarto, #descricaoQuarto, #valorTotal"
-        );
-
-
-    campos.forEach(
-        campo => {
-
-            campo.style.borderColor =
-                "var(--verde)";
-
-            campo.style.boxShadow =
-                "0 0 0 3px rgba(99, 193, 50, 0.12)";
-
-        }
-    );
-
-
-    console.log(
-        "Tipo:",
-        tipoQuarto
-    );
-
-    console.log(
-        "Descrição:",
-        descricaoQuarto
-    );
-
-    console.log(
-        "Tarifa:",
-        tarifa
-    );
-
-    console.log(
-        "Datas:",
-        datasEncontradas
-    );
-
-    console.log(
-        "Noites:",
-        noites
-    );
-
-    console.log(
-        "Adultos:",
-        adultos
-    );
-
-    console.log(
-        "Crianças:",
-        criancas
-    );
-
-    console.log(
-        "Valores:",
-        valoresBRL
     );
 
 }
 
 
 // ==========================================
-// COPIAR ORÇAMENTO
+// COPIAR TEXTO DO ORÇAMENTO
 // ==========================================
 
 function copiarOrcamento() {
 
+    const nome =
+        document.getElementById("nomeHospede").value.trim();
+
     const checkin =
-        document.getElementById(
-            "checkin"
-        ).value;
+        document.getElementById("checkin").value;
 
     const checkout =
-        document.getElementById(
-            "checkout"
-        ).value;
-
-    const noites =
-        document.getElementById(
-            "noites"
-        ).value;
+        document.getElementById("checkout").value;
 
     const adultos =
-        document.getElementById(
-            "adultos"
-        ).value;
+        parseInt(
+            document.getElementById("adultos").value
+        ) || 0;
 
     const criancas =
-        document.getElementById(
-            "criancas"
-        ).value;
-
-    const tipoQuarto =
-        document.getElementById(
-            "tipoQuarto"
-        ).value
-            .trim()
-            .toUpperCase();
-
-    const descricaoOriginal =
-        document.getElementById(
-            "descricaoQuarto"
-        ).value;
-
-    const cafe =
-        document.getElementById(
-            "cafe"
-        ).checked;
-
-    const valorTotal =
-        document.getElementById(
-            "valorTotal"
-        ).value;
-
-    const pagamento =
-        document.getElementById(
-            "pagamento"
-        ).value;
-
+        parseInt(
+            document.getElementById("criancas").value
+        ) || 0;
 
     const quarto =
-        obterDadosQuarto(
-            tipoQuarto,
-            descricaoOriginal
+        document.getElementById("tipoQuarto").value;
+
+    const cafe =
+        document.getElementById("cafe").value;
+
+    const valorDiaria =
+        converterValor(
+            document.getElementById("valorDiaria").value
+        );
+
+    const observacoes =
+        document.getElementById("observacoes").value.trim();
+
+
+    const noites =
+        calcularNoites(
+            checkin,
+            checkout
         );
 
 
-    let hospedes =
-        `${adultos} ${adultos == 1 ? "adulto" : "adultos"}`;
+    const valorTotal =
+        valorDiaria * noites;
 
 
-    if (criancas > 0) {
-
-        hospedes +=
-            ` + ${criancas} ${criancas == 1 ? "criança" : "crianças"}`;
-
-    }
+    const dadosQuarto =
+        QUARTOS[quarto];
 
 
-    let texto =
-        `IBIS STYLES CURITIBA CENTRO CÍVICO
+    const textoHospedes =
+        `${adultos} adulto${adultos !== 1 ? "s" : ""}` +
+        (
+            criancas > 0
+                ? ` • ${criancas} criança${criancas !== 1 ? "s" : ""}`
+                : ""
+        );
 
-ORÇAMENTO DE HOSPEDAGEM
+
+    const texto = `
+
+🏨 IBIS STYLES CURITIBA CENTRO CÍVICO
+
+${nome ? `👤 Hóspede: ${nome}` : ""}
 
 📅 Check-in: ${formatarDataCompleta(checkin)}
 📅 Check-out: ${formatarDataCompleta(checkout)}
-🌙 Estadia: ${noites} ${noites == 1 ? "noite" : "noites"}
 
-🏨 ${quarto.nome}
+👥 Hóspedes: ${textoHospedes}
 
-🛏️ ${quarto.quantidadeQuartos} ${quarto.quantidadeQuartos == 1 ? "quarto" : "quartos"}
+🛏️ Acomodação:
+${dadosQuarto ? dadosQuarto.nome : ""}
 
-👥 Hóspedes: ${hospedes}
+☕ Café da manhã:
+${
+    cafe === "sim"
+        ? "Incluso"
+        : "Não incluso"
+}
 
-☕ Café da manhã: ${cafe ? "Incluído" : "Não incluído — disponível à parte por R$ 53,00 por pessoa, por dia."}
+🌙 Noites: ${noites}
 
-💰 Valor total: ${valorTotal}
+💰 Valor da diária:
+${formatarMoeda(valorDiaria)}
 
-${pagamento === "hotel"
-    ? "💳 Pagamento no hotel"
-    : "💳 Pagamento antecipado"}`;
+💵 Valor total:
+${formatarMoeda(valorTotal)}
 
+${observacoes ? `📝 Observações:\n${observacoes}` : ""}
 
-    texto =
-        texto.trim();
+Este orçamento está sujeito à disponibilidade no momento da reserva.
+
+ibis Styles Curitiba Centro Cívico
+R. Comendador Araújo, 730 — Batel — Curitiba/PR
+`;
 
 
     navigator.clipboard.writeText(
-        texto
+        texto.trim()
     )
         .then(() => {
 
             alert(
-                "✅ Orçamento copiado! Agora é só colar no WhatsApp."
+                "Orçamento copiado!"
             );
 
         })
         .catch(() => {
 
             alert(
-                "Não foi possível copiar automaticamente."
+                "Não foi possível copiar o orçamento."
             );
 
         });
@@ -1706,148 +664,855 @@ ${pagamento === "hotel"
 // COMPARTILHAR ORÇAMENTO
 // ==========================================
 
-async function compartilharOrcamento() {
+function compartilharOrcamento() {
+
+    const nome =
+        document.getElementById("nomeHospede").value.trim();
 
     const checkin =
-        document.getElementById(
-            "checkin"
-        ).value;
+        document.getElementById("checkin").value;
 
     const checkout =
-        document.getElementById(
-            "checkout"
-        ).value;
-
-    const noites =
-        document.getElementById(
-            "noites"
-        ).value;
+        document.getElementById("checkout").value;
 
     const adultos =
-        document.getElementById(
-            "adultos"
-        ).value;
+        parseInt(
+            document.getElementById("adultos").value
+        ) || 0;
 
     const criancas =
-        document.getElementById(
-            "criancas"
-        ).value;
-
-    const tipoQuarto =
-        document.getElementById(
-            "tipoQuarto"
-        ).value
-            .trim()
-            .toUpperCase();
-
-    const descricaoOriginal =
-        document.getElementById(
-            "descricaoQuarto"
-        ).value;
-
-    const cafe =
-        document.getElementById(
-            "cafe"
-        ).checked;
-
-    const valorTotal =
-        document.getElementById(
-            "valorTotal"
-        ).value;
-
-
-    const pagamento =
-        document.getElementById(
-            "pagamento"
-        ).value;
-
+        parseInt(
+            document.getElementById("criancas").value
+        ) || 0;
 
     const quarto =
-        obterDadosQuarto(
-            tipoQuarto,
-            descricaoOriginal
+        document.getElementById("tipoQuarto").value;
+
+    const cafe =
+        document.getElementById("cafe").value;
+
+    const valorDiaria =
+        converterValor(
+            document.getElementById("valorDiaria").value
+        );
+
+    const noites =
+        calcularNoites(
+            checkin,
+            checkout
+        );
+
+    const valorTotal =
+        valorDiaria * noites;
+
+    const dadosQuarto =
+        QUARTOS[quarto];
+
+
+    const textoHospedes =
+        `${adultos} adulto${adultos !== 1 ? "s" : ""}` +
+        (
+            criancas > 0
+                ? ` • ${criancas} criança${criancas !== 1 ? "s" : ""}`
+                : ""
         );
 
 
-    let hospedes =
-        `${adultos} ${adultos == 1 ? "adulto" : "adultos"}`;
+    const texto = `
 
+🏨 *IBIS STYLES CURITIBA CENTRO CÍVICO*
 
-    if (criancas > 0) {
+${nome ? `👤 *Hóspede:* ${nome}` : ""}
 
-        hospedes +=
-            ` + ${criancas} ${criancas == 1 ? "criança" : "crianças"}`;
+📅 *Check-in:* ${formatarDataCompleta(checkin)}
+📅 *Check-out:* ${formatarDataCompleta(checkout)}
 
-    }
+👥 *Hóspedes:* ${textoHospedes}
 
+🛏️ *Acomodação:*
+${dadosQuarto ? dadosQuarto.nome : ""}
 
-    const texto =
-        `IBIS STYLES CURITIBA CENTRO CÍVICO
-
-ORÇAMENTO DE HOSPEDAGEM
-
-📅 ${formatarDataCompleta(checkin)} → ${formatarDataCompleta(checkout)}
-🌙 ${noites} ${noites == 1 ? "noite" : "noites"}
-
-🏨 ${quarto.nome}
-
-🛏️ ${quarto.quantidadeQuartos} ${quarto.quantidadeQuartos == 1 ? "quarto" : "quartos"}
-
-👥 ${hospedes}
-
-☕ Café da manhã: ${
-        cafe
-            ? "Incluído"
-            : "Não incluído — disponível à parte por R$ 53,00 por pessoa, por dia."
-    }
-
-💰 TOTAL: ${valorTotal}
-
+☕ *Café da manhã:*
 ${
-    pagamento === "hotel"
-        ? "💳 Pagamento no hotel."
-        : "💳 Pagamento antecipado."
-}`;
+    cafe === "sim"
+        ? "Incluso"
+        : "Não incluso"
+}
+
+🌙 *Noites:* ${noites}
+
+💰 *Valor da diária:*
+${formatarMoeda(valorDiaria)}
+
+💵 *Valor total:*
+${formatarMoeda(valorTotal)}
+
+Este orçamento está sujeito à disponibilidade no momento da reserva.
+
+ibis Styles Curitiba Centro Cívico
+R. Comendador Araújo, 730 — Batel — Curitiba/PR
+`;
 
 
-    if (
-        navigator.share
+    const mensagem =
+        encodeURIComponent(
+            texto.trim()
+        );
+
+
+    const url =
+        `https://wa.me/?text=${mensagem}`;
+
+
+    window.open(
+        url,
+        "_blank"
+    );
+
+}
+
+
+// ==========================================
+// OCR — ELEMENTOS
+// ==========================================
+
+const arquivoOrcamento =
+    document.getElementById(
+        "arquivoOrcamento"
+    );
+
+const imagemSelecionada =
+    document.getElementById(
+        "imagemSelecionada"
+    );
+
+const btnLerOrcamento =
+    document.getElementById(
+        "btnLerOrcamento"
+    );
+
+const statusOcr =
+    document.getElementById(
+        "statusOcr"
+    );
+
+
+// ==========================================
+// OCR — SELECIONAR IMAGEM
+// ==========================================
+
+if (arquivoOrcamento) {
+
+    arquivoOrcamento.addEventListener(
+        "change",
+        function () {
+
+            const arquivo =
+                this.files &&
+                this.files[0];
+
+            if (!arquivo) {
+                return;
+            }
+
+
+            const leitor =
+                new FileReader();
+
+
+            leitor.onload =
+                function (evento) {
+
+                    if (imagemSelecionada) {
+
+                        imagemSelecionada.src =
+                            evento.target.result;
+
+                        imagemSelecionada.style.display =
+                            "block";
+
+                    }
+
+                    if (btnLerOrcamento) {
+
+                        btnLerOrcamento.disabled =
+                            false;
+
+                    }
+
+                    if (statusOcr) {
+
+                        statusOcr.textContent =
+                            "Imagem carregada. Clique em “Ler orçamento”.";
+
+                    }
+
+                };
+
+
+            leitor.readAsDataURL(
+                arquivo
+            );
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// OCR — LER ORÇAMENTO
+// ==========================================
+
+if (btnLerOrcamento) {
+
+    btnLerOrcamento.addEventListener(
+        "click",
+        async function () {
+
+            if (
+                !arquivoOrcamento ||
+                !arquivoOrcamento.files ||
+                !arquivoOrcamento.files[0]
+            ) {
+
+                alert(
+                    "Selecione uma imagem primeiro."
+                );
+
+                return;
+
+            }
+
+
+            const arquivo =
+                arquivoOrcamento.files[0];
+
+
+            try {
+
+                btnLerOrcamento.disabled =
+                    true;
+
+
+                if (statusOcr) {
+
+                    statusOcr.textContent =
+                        "⏳ Lendo o orçamento...";
+
+                }
+
+
+                if (
+                    typeof Tesseract ===
+                    "undefined"
+                ) {
+
+                    await carregarTesseract();
+
+                }
+
+
+                const resultado =
+                    await Tesseract.recognize(
+                        arquivo,
+                        "por",
+                        {
+                            logger:
+                                function (info) {
+
+                                    if (
+                                        statusOcr &&
+                                        info.status
+                                    ) {
+
+                                        let progresso =
+                                            "";
+
+                                        if (
+                                            typeof info.progress ===
+                                            "number"
+                                        ) {
+
+                                            progresso =
+                                                ` ${Math.round(info.progress * 100)}%`;
+
+                                        }
+
+                                        statusOcr.textContent =
+                                            `⏳ ${info.status}${progresso}`;
+
+                                    }
+
+                                }
+                        }
+                    );
+
+
+                const texto =
+                    resultado &&
+                    resultado.data
+                        ? resultado.data.text
+                        : "";
+
+
+                if (!texto.trim()) {
+
+                    throw new Error(
+                        "Nenhum texto foi encontrado na imagem."
+                    );
+
+                }
+
+
+                preencherCamposComOCR(
+                    texto
+                );
+
+
+                if (statusOcr) {
+
+                    statusOcr.textContent =
+                        "✅ Orçamento lido. Confira os dados antes de gerar.";
+
+                }
+
+
+            } catch (erro) {
+
+                console.error(
+                    "Erro no OCR:",
+                    erro
+                );
+
+
+                if (statusOcr) {
+
+                    statusOcr.textContent =
+                        "❌ Não foi possível ler o orçamento.";
+
+                }
+
+
+                alert(
+                    "Não foi possível ler o orçamento automaticamente. Confira a imagem e tente novamente."
+                );
+
+
+            } finally {
+
+                btnLerOrcamento.disabled =
+                    false;
+
+            }
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// CARREGAR TESSERACT
+// ==========================================
+
+function carregarTesseract() {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            if (
+                typeof Tesseract !==
+                "undefined"
+            ) {
+
+                resolve();
+
+                return;
+
+            }
+
+
+            const script =
+                document.createElement(
+                    "script"
+                );
+
+
+            script.src =
+                "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+
+
+            script.onload =
+                function () {
+
+                    resolve();
+
+                };
+
+
+            script.onerror =
+                function () {
+
+                    reject(
+                        new Error(
+                            "Não foi possível carregar o OCR."
+                        )
+                    );
+
+                };
+
+
+            document.head.appendChild(
+                script
+            );
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// NORMALIZAR TEXTO OCR
+// ==========================================
+
+function normalizarTextoOCR(texto) {
+
+    return texto
+        .replace(/\r/g, "")
+        .replace(/[ \t]+/g, " ")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
+
+}
+
+
+// ==========================================
+// ENCONTRAR DATA NO TEXTO
+// ==========================================
+
+function encontrarDatas(texto) {
+
+    const datas = [];
+
+
+    const padrao =
+        /\b(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})\b/g;
+
+
+    let resultado;
+
+
+    while (
+        (resultado =
+            padrao.exec(texto)) !== null
     ) {
 
-        try {
+        let dia =
+            resultado[1]
+                .padStart(2, "0");
 
-            await navigator.share({
+        let mes =
+            resultado[2]
+                .padStart(2, "0");
 
-                title:
-                    "Orçamento de hospedagem",
+        let ano =
+            resultado[3];
 
-                text:
-                    texto
 
-            });
+        if (ano.length === 2) {
 
-        } catch (erro) {
+            ano =
+                `20${ano}`;
 
-            console.log(
-                "Compartilhamento cancelado."
+        }
+
+
+        datas.push(
+            `${ano}-${mes}-${dia}`
+        );
+
+    }
+
+
+    return datas;
+
+}
+
+
+// ==========================================
+// ENCONTRAR VALOR EM REAIS
+// ==========================================
+
+function encontrarValores(texto) {
+
+    const valores = [];
+
+
+    const padrao =
+        /R\$\s*([\d.]+(?:,\d{1,2})?)/gi;
+
+
+    let resultado;
+
+
+    while (
+        (resultado =
+            padrao.exec(texto)) !== null
+    ) {
+
+        const valor =
+            converterValor(
+                resultado[1]
+            );
+
+
+        if (valor > 0) {
+
+            valores.push(
+                valor
             );
 
         }
 
-    } else {
+    }
 
-        await navigator.clipboard.writeText(
+
+    return valores;
+
+}
+
+
+// ==========================================
+// IDENTIFICAR QUARTO
+// ==========================================
+
+function identificarQuarto(texto) {
+
+    const textoNormalizado =
+        texto
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(
+                /[\u0300-\u036f]/g,
+                ""
+            );
+
+
+    if (
+        textoNormalizado.includes(
+            "conjugado"
+        )
+    ) {
+
+        return "S2C";
+
+    }
+
+
+    if (
+        textoNormalizado.includes(
+            "sofa"
+        ) &&
+        textoNormalizado.includes(
+            "cama"
+        )
+    ) {
+
+        return "DSC";
+
+    }
+
+
+    if (
+        textoNormalizado.includes(
+            "superior"
+        ) &&
+        (
+            textoNormalizado.includes(
+                "casal"
+            ) ||
+            textoNormalizado.includes(
+                "double"
+            )
+        )
+    ) {
+
+        return "DBB";
+
+    }
+
+
+    if (
+        textoNormalizado.includes(
+            "superior"
+        ) &&
+        (
+            textoNormalizado.includes(
+                "solteiro"
+            ) ||
+            textoNormalizado.includes(
+                "twin"
+            )
+        )
+    ) {
+
+        return "TWB";
+
+    }
+
+
+    if (
+        textoNormalizado.includes(
+            "casal"
+        ) ||
+        textoNormalizado.includes(
+            "double"
+        )
+    ) {
+
+        return "DBC";
+
+    }
+
+
+    if (
+        textoNormalizado.includes(
+            "solteiro"
+        ) ||
+        textoNormalizado.includes(
+            "twin"
+        )
+    ) {
+
+        return "TWC";
+
+    }
+
+
+    return "";
+
+}
+
+
+// ==========================================
+// PREENCHER CAMPOS COM OCR
+// ==========================================
+
+function preencherCamposComOCR(
+    textoOriginal
+) {
+
+    const texto =
+        normalizarTextoOCR(
+            textoOriginal
+        );
+
+
+    console.log(
+        "Texto OCR:",
+        texto
+    );
+
+
+    const datas =
+        encontrarDatas(
             texto
         );
 
-        alert(
-            "Seu navegador não possui compartilhamento direto. O orçamento foi copiado para a área de transferência."
+
+    if (datas.length >= 1) {
+
+        const campoCheckin =
+            document.getElementById(
+                "checkin"
+            );
+
+
+        if (
+            campoCheckin &&
+            !campoCheckin.value
+        ) {
+
+            campoCheckin.value =
+                datas[0];
+
+        }
+
+    }
+
+
+    if (datas.length >= 2) {
+
+        const campoCheckout =
+            document.getElementById(
+                "checkout"
+            );
+
+
+        if (
+            campoCheckout &&
+            !campoCheckout.value
+        ) {
+
+            campoCheckout.value =
+                datas[1];
+
+        }
+
+    }
+
+
+    const valores =
+        encontrarValores(
+            texto
         );
+
+
+    if (valores.length) {
+
+        const campoValor =
+            document.getElementById(
+                "valorDiaria"
+            );
+
+
+        if (
+            campoValor &&
+            !campoValor.value
+        ) {
+
+            campoValor.value =
+                valores[0]
+                    .toLocaleString(
+                        "pt-BR",
+                        {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }
+                    );
+
+        }
+
+    }
+
+
+    const quarto =
+        identificarQuarto(
+            texto
+        );
+
+
+    if (quarto) {
+
+        const campoQuarto =
+            document.getElementById(
+                "tipoQuarto"
+            );
+
+
+        if (
+            campoQuarto
+        ) {
+
+            campoQuarto.value =
+                quarto;
+
+        }
+
+    }
+
+
+    const textoNormalizado =
+        texto
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(
+                /[\u0300-\u036f]/g,
+                ""
+            );
+
+
+    const campoCafe =
+        document.getElementById(
+            "cafe"
+        );
+
+
+    if (campoCafe) {
+
+        if (
+            textoNormalizado.includes(
+                "cafe da manha incluso"
+            ) ||
+            textoNormalizado.includes(
+                "cafe da manha"
+            )
+        ) {
+
+            campoCafe.value =
+                "sim";
+
+        }
+
+    }
+
+
+    const campoAdultos =
+        document.getElementById(
+            "adultos"
+        );
+
+
+    if (campoAdultos) {
+
+        const adultoMatch =
+            texto.match(
+                /(\d+)\s*adultos?/i
+            );
+
+
+        if (
+            adultoMatch &&
+            !campoAdultos.value
+        ) {
+
+            campoAdultos.value =
+                adultoMatch[1];
+
+        }
+
+    }
+
+
+    const campoCriancas =
+        document.getElementById(
+            "criancas"
+        );
+
+
+    if (campoCriancas) {
+
+        const criancaMatch =
+            texto.match(
+                /(\d+)\s*crian[cç]as?/i
+            );
+
+
+        if (
+            criancaMatch &&
+            !campoCriancas.value
+        ) {
+
+            campoCriancas.value =
+                criancaMatch[1];
+
+        }
 
     }
 
 }
-
 
 
 // ==========================================
@@ -1861,6 +1526,7 @@ async function copiarImagemOrcamento() {
             "#orcamentoPreview .orcamento"
         );
 
+
     if (!elemento) {
 
         alert(
@@ -1868,496 +1534,60 @@ async function copiarImagemOrcamento() {
         );
 
         return;
+
     }
+
 
     const botao =
         document.querySelector(
             '.acoes-compartilhar button[onclick="copiarImagemOrcamento()"]'
         );
 
+
     const textoOriginal =
         botao
             ? botao.innerHTML
             : "";
 
+
     if (botao) {
 
-        botao.disabled = true;
+        botao.disabled =
+            true;
 
         botao.innerHTML =
             "⏳ Preparando imagem...";
 
     }
 
-    let areaCaptura = null;
+
+    let areaCaptura =
+        null;
+
 
     try {
 
-        // --------------------------------------
-        // CARREGAR HTML2CANVAS
-        // --------------------------------------
-
         await carregarHtml2Canvas();
 
-
-        // --------------------------------------
-        // CRIAR CÓPIA DA ARTE
-        // --------------------------------------
 
         const copia =
             elemento.cloneNode(true);
 
 
-        // --------------------------------------
-        // TAMANHO FIXO
-        // --------------------------------------
-
-        copia.style.width = "600px";
-        copia.style.maxWidth = "600px";
-        copia.style.minWidth = "600px";
-
-        copia.style.height = "auto";
-
-        copia.style.margin = "0";
-
-        copia.style.boxSizing =
-            "border-box";
-
-        copia.style.overflow =
-            "hidden";
-
-        copia.style.background =
-            "#ffffff";
-
-
-        // --------------------------------------
-        // CORRIGIR LOGO
-        // --------------------------------------
-
-        const logo =
-            copia.querySelector(
-                ".logo-hotel img"
-            );
-
-        if (logo) {
-
-            logo.style.width = "180px";
-
-            logo.style.maxWidth = "180px";
-
-            logo.style.height = "auto";
-
-            logo.style.maxHeight = "120px";
-
-            logo.style.objectFit =
-                "contain";
-
-            logo.style.display =
-                "block";
-        }
-
-
-        // --------------------------------------
-        // CORRIGIR CABEÇALHO
-        // --------------------------------------
-
-        const topo =
-            copia.querySelector(
-                ".orcamento-topo"
-            );
-
-        if (topo) {
-
-            topo.style.width =
-                "100%";
-
-            topo.style.boxSizing =
-                "border-box";
-
-            topo.style.overflow =
-                "hidden";
-
-            topo.style.display =
-                "flex";
-
-            topo.style.alignItems =
-                "center";
-
-            topo.style.justifyContent =
-                "space-between";
-        }
-
-
-        // --------------------------------------
-        // ÁREA TEMPORÁRIA
-        // --------------------------------------
-
-        areaCaptura =
-            document.createElement("div");
-
-        areaCaptura.style.position =
-            "fixed";
-
-        areaCaptura.style.left =
-            "-10000px";
-
-        areaCaptura.style.top =
-            "0";
-
-        areaCaptura.style.width =
+        copia.style.width =
             "600px";
 
-        areaCaptura.style.background =
-            "#ffffff";
+        copia.style.maxWidth =
+            "600px";
 
-        areaCaptura.style.zIndex =
-            "-1";
+        copia.style.minWidth =
+            "600px";
 
+        copia.style.height =
+            "auto";
 
-        areaCaptura.appendChild(
-            copia
-        );
-
-        document.body.appendChild(
-            areaCaptura
-        );
-
-
-        // --------------------------------------
-        // ESPERAR IMAGENS
-        // --------------------------------------
-
-        const imagens =
-            copia.querySelectorAll(
-                "img"
-            );
-
-        await Promise.all(
-
-            Array.from(imagens).map(
-                img => {
-
-                    if (img.complete) {
-                        return Promise.resolve();
-                    }
-
-                    return new Promise(
-                        resolve => {
-
-                            img.onload =
-                                resolve;
-
-                            img.onerror =
-                                resolve;
-
-                        }
-                    );
-
-                }
-            )
-
-        );
-
-
-        // --------------------------------------
-        // GERAR IMAGEM
-        // --------------------------------------
-
-        const canvas =
-            await html2canvas(
-                copia,
-                {
-
-                    scale: 2,
-
-                    backgroundColor:
-                        "#ffffff",
-
-                    useCORS:
-                        true,
-
-                    allowTaint:
-                        false,
-
-                    imageTimeout:
-                        15000,
-
-                    logging:
-                        false,
-
-                    width:
-                        600,
-
-                    windowWidth:
-                        600
-
-                }
-            );
-
-
-        // --------------------------------------
-        // REMOVER CÓPIA
-        // --------------------------------------
-
-        if (areaCaptura) {
-
-            areaCaptura.remove();
-
-            areaCaptura = null;
-        }
-
-
-        // --------------------------------------
-        // GERAR PNG
-        // --------------------------------------
-
-        const blob =
-            await new Promise(
-                resolve => {
-
-                    canvas.toBlob(
-                        resolve,
-                        "image/png"
-                    );
-
-                }
-            );
-
-
-        if (!blob) {
-
-            throw new Error(
-                "Não foi possível criar a imagem."
-            );
-        }
-
-
-        // --------------------------------------
-        // COPIAR PARA ÁREA DE TRANSFERÊNCIA
-        // --------------------------------------
-
-        if (
-            navigator.clipboard &&
-            window.ClipboardItem
-        ) {
-
-            const item =
-                new ClipboardItem({
-
-                    "image/png":
-                        blob
-
-                });
-
-            await navigator.clipboard.write([
-                item
-            ]);
-
-
-            if (botao) {
-
-                botao.innerHTML =
-                    "✅ Imagem copiada!";
-
-            }
-
-
-            setTimeout(
-                () => {
-
-                    if (botao) {
-
-                        botao.innerHTML =
-                            textoOriginal;
-
-                    }
-
-                },
-                2500
-            );
-
-
-        } else {
-
-            // ----------------------------------
-            // ALTERNATIVA: BAIXAR IMAGEM
-            // ----------------------------------
-
-            baixarImagemOrcamento(
-                blob
-            );
-
-            alert(
-                "Seu navegador não permite copiar imagens diretamente. A imagem foi salva no computador."
-            );
-
-
-            if (botao) {
-
-                botao.innerHTML =
-                    textoOriginal;
-
-            }
-
-        }
-
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao copiar imagem:",
-            erro
-        );
-
-
-        if (areaCaptura) {
-
-            areaCaptura.remove();
-
-        }
-
-
-        alert(
-            "Não foi possível copiar a imagem do orçamento."
-        );
-
-
-        if (botao) {
-
-            botao.innerHTML =
-                textoOriginal;
-
-        }
-
-    }
-
-
-    if (botao) {
-
-        botao.disabled =
-            false;
-
-    }
-
-}
-
-
-// ==========================================
-// CARREGAR HTML2CANVAS
-// ==========================================
-
-function carregarHtml2Canvas() {
-
-    return new Promise(
-        (resolve, reject) => {
-
-            if (
-                window.html2canvas
-            ) {
-
-                resolve();
-
-                return;
-            }
-
-
-            const script =
-                document.createElement(
-                    "script"
-                );
-
-
-            script.src =
-                "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
-
-
-            script.onload =
-                resolve;
-
-            script.onerror =
-                reject;
-
-
-            document.head.appendChild(
-                script
-            );
-
-        }
-    );
-
-}
-
-
-// ==========================================
-// SALVAR IMAGEM COMO ALTERNATIVA
-// ==========================================
-
-function baixarImagemOrcamento(blob) {
-
-    const url =
-        URL.createObjectURL(
-            blob
-        );
-
-
-    const link =
-        document.createElement(
-            "a"
-        );
-
-
-    link.href =
-        url;
-
-
-    link.download =
-        "orcamento-ibis-styles.png";
-
-
-    document.body.appendChild(
-        link
-    );
-
-
-    link.click();
-
-
-    document.body.removeChild(
-        link
-    );
-
-
-    URL.revokeObjectURL(
-        url
-    );
-
-}
-        // --------------------------------------
-        // CARREGAR HTML2CANVAS
-        // --------------------------------------
-
-        await carregarHtml2Canvas();
-
-
-        // --------------------------------------
-        // CRIAR CÓPIA DA ARTE
-        // --------------------------------------
-
-        const copia =
-            elemento.cloneNode(true);
-
-
-        // --------------------------------------
-        // TAMANHO FIXO DA ARTE
-        // --------------------------------------
-
-        copia.style.width = "600px";
-        copia.style.maxWidth = "600px";
-        copia.style.minWidth = "600px";
-
-        copia.style.height = "auto";
-
-        copia.style.margin = "0";
+        copia.style.margin =
+            "0";
 
         copia.style.boxSizing =
             "border-box";
@@ -2369,10 +1599,6 @@ function baixarImagemOrcamento(blob) {
             "#ffffff";
 
 
-        // --------------------------------------
-        // CORRIGIR LOGO
-        // --------------------------------------
-
         const logo =
             copia.querySelector(
                 ".logo-hotel img"
@@ -2381,7 +1607,8 @@ function baixarImagemOrcamento(blob) {
 
         if (logo) {
 
-            logo.style.width = "180px";
+            logo.style.width =
+                "180px";
 
             logo.style.maxWidth =
                 "180px";
@@ -2401,10 +1628,6 @@ function baixarImagemOrcamento(blob) {
         }
 
 
-        // --------------------------------------
-        // CORRIGIR CABEÇALHO
-        // --------------------------------------
-
         const topo =
             copia.querySelector(
                 ".orcamento-topo"
@@ -2434,11 +1657,7 @@ function baixarImagemOrcamento(blob) {
         }
 
 
-        // --------------------------------------
-        // ÁREA TEMPORÁRIA PARA CAPTURA
-        // --------------------------------------
-
-        const areaCaptura =
+        areaCaptura =
             document.createElement(
                 "div"
             );
@@ -2473,10 +1692,6 @@ function baixarImagemOrcamento(blob) {
         );
 
 
-        // --------------------------------------
-        // ESPERAR IMAGENS
-        // --------------------------------------
-
         const imagens =
             copia.querySelectorAll(
                 "img"
@@ -2484,11 +1699,12 @@ function baixarImagemOrcamento(blob) {
 
 
         await Promise.all(
-
             Array.from(imagens).map(
                 img => {
 
-                    if (img.complete) {
+                    if (
+                        img.complete
+                    ) {
 
                         return Promise.resolve();
 
@@ -2509,56 +1725,36 @@ function baixarImagemOrcamento(blob) {
 
                 }
             )
-
         );
 
-
-        // --------------------------------------
-        // GERAR CANVAS
-        // --------------------------------------
 
         const canvas =
             await html2canvas(
                 copia,
                 {
-
                     scale: 2,
-
                     backgroundColor:
                         "#ffffff",
-
-                    useCORS:
-                        true,
-
-                    allowTaint:
-                        false,
-
+                    useCORS: true,
+                    allowTaint: false,
                     imageTimeout:
                         15000,
-
-                    logging:
-                        false,
-
-                    width:
-                        600,
-
-                    windowWidth:
-                        600
-
+                    logging: false,
+                    width: 600,
+                    windowWidth: 600
                 }
             );
 
 
-        // --------------------------------------
-        // REMOVER CÓPIA TEMPORÁRIA
-        // --------------------------------------
+        if (areaCaptura) {
 
-        areaCaptura.remove();
+            areaCaptura.remove();
 
+            areaCaptura =
+                null;
 
-        // --------------------------------------
-        // CONVERTER PARA PNG
-        // --------------------------------------
+        }
+
 
         const blob =
             await new Promise(
@@ -2582,10 +1778,6 @@ function baixarImagemOrcamento(blob) {
         }
 
 
-        // --------------------------------------
-        // COPIAR IMAGEM
-        // --------------------------------------
-
         if (
             navigator.clipboard &&
             window.ClipboardItem
@@ -2593,16 +1785,13 @@ function baixarImagemOrcamento(blob) {
 
             const item =
                 new ClipboardItem({
-
-                    "image/png":
-                        blob
-
+                    "image/png": blob
                 });
 
 
-            await navigator.clipboard.write([
-                item
-            ]);
+            await navigator.clipboard.write(
+                [item]
+            );
 
 
             if (botao) {
@@ -2629,11 +1818,6 @@ function baixarImagemOrcamento(blob) {
 
 
         } else {
-
-
-            // ----------------------------------
-            // NAVEGADOR SEM SUPORTE
-            // ----------------------------------
 
             baixarImagemOrcamento(
                 blob
@@ -2663,163 +1847,11 @@ function baixarImagemOrcamento(blob) {
         );
 
 
-        alert(
-            "Não foi possível copiar a imagem do orçamento."
-        );
+        if (areaCaptura) {
 
-
-        if (botao) {
-
-            botao.innerHTML =
-                textoOriginal;
+            areaCaptura.remove();
 
         }
-
-    }
-
-
-    if (botao) {
-
-        botao.disabled =
-            false;
-
-    }
-
-}
-
-        // --------------------------------------
-        // CARREGAR HTML2CANVAS
-        // --------------------------------------
-
-        await carregarHtml2Canvas();
-
-
-        // --------------------------------------
-        // TRANSFORMAR A ARTE EM IMAGEM
-        // --------------------------------------
-
-        const canvas =
-            await html2canvas(
-                elemento,
-                {
-
-                    scale: 2,
-
-                    backgroundColor:
-                        "#ffffff",
-
-                    useCORS:
-                        true,
-
-                    logging:
-                        false
-
-                }
-            );
-
-
-        // --------------------------------------
-        // TRANSFORMAR CANVAS EM PNG
-        // --------------------------------------
-
-        const blob =
-            await new Promise(
-                resolve => {
-
-                    canvas.toBlob(
-                        resolve,
-                        "image/png"
-                    );
-
-                }
-            );
-
-
-        if (!blob) {
-
-            throw new Error(
-                "Não foi possível criar a imagem."
-            );
-
-        }
-
-
-        // --------------------------------------
-        // COPIAR IMAGEM
-        // --------------------------------------
-
-        if (
-            navigator.clipboard &&
-            window.ClipboardItem
-        ) {
-
-            const item =
-                new ClipboardItem({
-                    "image/png":
-                        blob
-                });
-
-
-            await navigator.clipboard.write([
-                item
-            ]);
-
-
-            if (botao) {
-
-                botao.innerHTML =
-                    "✅ Imagem copiada!";
-
-            }
-
-
-            setTimeout(
-                () => {
-
-                    if (botao) {
-
-                        botao.innerHTML =
-                            textoOriginal;
-
-                    }
-
-                },
-                2500
-            );
-
-
-        } else {
-
-            // ----------------------------------
-            // NAVEGADOR SEM SUPORTE
-            // ----------------------------------
-
-            baixarImagemOrcamento(
-                blob
-            );
-
-
-            alert(
-                "Seu navegador não permite copiar imagens diretamente. A imagem foi salva no computador."
-            );
-
-
-            if (botao) {
-
-                botao.innerHTML =
-                    textoOriginal;
-
-            }
-
-        }
-
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao copiar imagem:",
-            erro
-        );
 
 
         alert(
@@ -2863,6 +1895,7 @@ function carregarHtml2Canvas() {
                 resolve();
 
                 return;
+
             }
 
 
@@ -2879,6 +1912,7 @@ function carregarHtml2Canvas() {
             script.onload =
                 resolve;
 
+
             script.onerror =
                 reject;
 
@@ -2894,10 +1928,12 @@ function carregarHtml2Canvas() {
 
 
 // ==========================================
-// SALVAR IMAGEM COMO ALTERNATIVA
+// BAIXAR IMAGEM DO ORÇAMENTO
 // ==========================================
 
-function baixarImagemOrcamento(blob) {
+function baixarImagemOrcamento(
+    blob
+) {
 
     const url =
         URL.createObjectURL(
@@ -2937,3 +1973,2087 @@ function baixarImagemOrcamento(blob) {
     );
 
 }
+// ==========================================
+// FUNÇÕES AUXILIARES PARA OCR
+// ==========================================
+
+function extrairNumero(texto) {
+
+    if (!texto) {
+        return "";
+    }
+
+    const match =
+        texto.match(/\d+/);
+
+    return match
+        ? match[0]
+        : "";
+}
+
+
+// ==========================================
+// IDENTIFICAR NÚMERO DE HÓSPEDES
+// ==========================================
+
+function identificarHospedes(texto) {
+
+    const resultado = {
+        adultos: "",
+        criancas: ""
+    };
+
+
+    if (!texto) {
+        return resultado;
+    }
+
+
+    const textoNormalizado =
+        texto
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(
+                /[\u0300-\u036f]/g,
+                ""
+            );
+
+
+    const adultos =
+        textoNormalizado.match(
+            /(\d+)\s*adultos?/
+        );
+
+
+    if (adultos) {
+
+        resultado.adultos =
+            adultos[1];
+
+    }
+
+
+    const criancas =
+        textoNormalizado.match(
+            /(\d+)\s*criancas?/
+        );
+
+
+    if (criancas) {
+
+        resultado.criancas =
+            criancas[1];
+
+    }
+
+
+    return resultado;
+
+}
+
+
+// ==========================================
+// IDENTIFICAR CAFÉ DA MANHÃ
+// ==========================================
+
+function identificarCafe(texto) {
+
+    if (!texto) {
+        return "";
+    }
+
+
+    const textoNormalizado =
+        texto
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(
+                /[\u0300-\u036f]/g,
+                ""
+            );
+
+
+    if (
+        textoNormalizado.includes(
+            "cafe da manha incluso"
+        )
+    ) {
+
+        return "sim";
+
+    }
+
+
+    if (
+        textoNormalizado.includes(
+            "cafe da manha"
+        )
+    ) {
+
+        return "sim";
+
+    }
+
+
+    if (
+        textoNormalizado.includes(
+            "sem cafe"
+        )
+    ) {
+
+        return "nao";
+
+    }
+
+
+    return "";
+
+}
+
+
+// ==========================================
+// IDENTIFICAR NOME DO HÓSPEDE
+// ==========================================
+
+function identificarNomeHospede(texto) {
+
+    if (!texto) {
+        return "";
+    }
+
+
+    const linhas =
+        texto
+            .split("\n")
+            .map(
+                linha =>
+                    linha.trim()
+            )
+            .filter(Boolean);
+
+
+    const palavrasIgnoradas = [
+
+        "ibis",
+        "styles",
+        "curitiba",
+        "centro",
+        "civico",
+        "hotel",
+        "orcamento",
+        "reserva",
+        "check-in",
+        "check-out",
+        "hospede",
+        "adultos",
+        "criancas",
+        "acomodacao",
+        "quarto",
+        "cafe",
+        "manha",
+        "total",
+        "diaria"
+
+    ];
+
+
+    for (
+        const linha
+        of linhas
+    ) {
+
+        const linhaNormalizada =
+            linha
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(
+                    /[\u0300-\u036f]/g,
+                    ""
+                );
+
+
+        if (
+            linha.length < 3 ||
+            linha.length > 80
+        ) {
+
+            continue;
+
+        }
+
+
+        if (
+            palavrasIgnoradas.some(
+                palavra =>
+                    linhaNormalizada.includes(
+                        palavra
+                    )
+            )
+        ) {
+
+            continue;
+
+        }
+
+
+        if (
+            /\d/.test(linha)
+        ) {
+
+            continue;
+
+        }
+
+
+        const palavras =
+            linha.split(/\s+/);
+
+
+        if (
+            palavras.length >= 2 &&
+            palavras.length <= 6
+        ) {
+
+            return linha;
+
+        }
+
+    }
+
+
+    return "";
+
+}
+
+
+// ==========================================
+// IDENTIFICAR VALOR DA DIÁRIA
+// ==========================================
+
+function identificarValorDiaria(
+    texto
+) {
+
+    if (!texto) {
+        return "";
+    }
+
+
+    const linhas =
+        texto.split("\n");
+
+
+    for (
+        const linha
+        of linhas
+    ) {
+
+        if (
+            !linha.includes("R$") &&
+            !linha.includes("R$")
+        ) {
+
+            continue;
+
+        }
+
+
+        const valores =
+            linha.match(
+                /R\$\s*[\d.,]+/g
+            );
+
+
+        if (
+            valores &&
+            valores.length
+        ) {
+
+            const ultimo =
+                valores[
+                    valores.length - 1
+                ];
+
+
+            return ultimo
+                .replace(
+                    /R\$\s*/i,
+                    ""
+                )
+                .trim();
+
+        }
+
+    }
+
+
+    const valores =
+        encontrarValores(
+            texto
+        );
+
+
+    if (
+        valores.length
+    ) {
+
+        return valores[0]
+            .toLocaleString(
+                "pt-BR",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+    }
+
+
+    return "";
+
+}
+
+
+// ==========================================
+// IDENTIFICAR DATAS COM CONTEXTO
+// ==========================================
+
+function identificarDatasComContexto(
+    texto
+) {
+
+    const resultado = {
+        checkin: "",
+        checkout: ""
+    };
+
+
+    if (!texto) {
+        return resultado;
+    }
+
+
+    const linhas =
+        texto.split("\n");
+
+
+    for (
+        let i = 0;
+        i < linhas.length;
+        i++
+    ) {
+
+        const linha =
+            linhas[i]
+                .trim();
+
+
+        const normalizada =
+            linha
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(
+                    /[\u0300-\u036f]/g,
+                    ""
+                );
+
+
+        const datas =
+            encontrarDatas(
+                linha
+            );
+
+
+        if (
+            !datas.length
+        ) {
+
+            continue;
+
+        }
+
+
+        if (
+            normalizada.includes(
+                "check-in"
+            ) ||
+            normalizada.includes(
+                "check in"
+            ) ||
+            normalizada.includes(
+                "entrada"
+            )
+        ) {
+
+            if (
+                !resultado.checkin
+            ) {
+
+                resultado.checkin =
+                    datas[0];
+
+            }
+
+        }
+
+
+        if (
+            normalizada.includes(
+                "check-out"
+            ) ||
+            normalizada.includes(
+                "check out"
+            ) ||
+            normalizada.includes(
+                "saida"
+            )
+        ) {
+
+            if (
+                !resultado.checkout
+            ) {
+
+                resultado.checkout =
+                    datas[0];
+
+            }
+
+        }
+
+    }
+
+
+    if (
+        !resultado.checkin ||
+        !resultado.checkout
+    ) {
+
+        const datas =
+            encontrarDatas(
+                texto
+            );
+
+
+        if (
+            !resultado.checkin &&
+            datas.length >= 1
+        ) {
+
+            resultado.checkin =
+                datas[0];
+
+        }
+
+
+        if (
+            !resultado.checkout &&
+            datas.length >= 2
+        ) {
+
+            resultado.checkout =
+                datas[1];
+
+        }
+
+    }
+
+
+    return resultado;
+
+}
+
+
+// ==========================================
+// PREENCHER CAMPOS OCR — VERSÃO COMPLETA
+// ==========================================
+
+function aplicarDadosOCR(
+    textoOriginal
+) {
+
+    const texto =
+        normalizarTextoOCR(
+            textoOriginal
+        );
+
+
+    const datas =
+        identificarDatasComContexto(
+            texto
+        );
+
+
+    const hospedes =
+        identificarHospedes(
+            texto
+        );
+
+
+    const quarto =
+        identificarQuarto(
+            texto
+        );
+
+
+    const cafe =
+        identificarCafe(
+            texto
+        );
+
+
+    const valor =
+        identificarValorDiaria(
+            texto
+        );
+
+
+    const nome =
+        identificarNomeHospede(
+            texto
+        );
+
+
+    const campoCheckin =
+        document.getElementById(
+            "checkin"
+        );
+
+
+    const campoCheckout =
+        document.getElementById(
+            "checkout"
+        );
+
+
+    const campoAdultos =
+        document.getElementById(
+            "adultos"
+        );
+
+
+    const campoCriancas =
+        document.getElementById(
+            "criancas"
+        );
+
+
+    const campoQuarto =
+        document.getElementById(
+            "tipoQuarto"
+        );
+
+
+    const campoCafe =
+        document.getElementById(
+            "cafe"
+        );
+
+
+    const campoValor =
+        document.getElementById(
+            "valorDiaria"
+        );
+
+
+    const campoNome =
+        document.getElementById(
+            "nomeHospede"
+        );
+
+
+    if (
+        campoCheckin &&
+        datas.checkin
+    ) {
+
+        campoCheckin.value =
+            datas.checkin;
+
+    }
+
+
+    if (
+        campoCheckout &&
+        datas.checkout
+    ) {
+
+        campoCheckout.value =
+            datas.checkout;
+
+    }
+
+
+    if (
+        campoAdultos &&
+        hospedes.adultos
+    ) {
+
+        campoAdultos.value =
+            hospedes.adultos;
+
+    }
+
+
+    if (
+        campoCriancas &&
+        hospedes.criancas
+    ) {
+
+        campoCriancas.value =
+            hospedes.criancas;
+
+    }
+
+
+    if (
+        campoQuarto &&
+        quarto
+    ) {
+
+        campoQuarto.value =
+            quarto;
+
+    }
+
+
+    if (
+        campoCafe &&
+        cafe
+    ) {
+
+        campoCafe.value =
+            cafe;
+
+    }
+
+
+    if (
+        campoValor &&
+        valor
+    ) {
+
+        campoValor.value =
+            valor;
+
+    }
+
+
+    if (
+        campoNome &&
+        nome
+    ) {
+
+        campoNome.value =
+            nome;
+
+    }
+
+
+    // Dispara eventos para manter
+    // qualquer lógica adicional da página.
+
+    [
+        campoCheckin,
+        campoCheckout,
+        campoAdultos,
+        campoCriancas,
+        campoQuarto,
+        campoCafe,
+        campoValor,
+        campoNome
+
+    ].forEach(
+        campo => {
+
+            if (campo) {
+
+                campo.dispatchEvent(
+                    new Event(
+                        "input",
+                        {
+                            bubbles: true
+                        }
+                    )
+                );
+
+
+                campo.dispatchEvent(
+                    new Event(
+                        "change",
+                        {
+                            bubbles: true
+                        }
+                    )
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// COMPATIBILIDADE COM OCR EXISTENTE
+// ==========================================
+
+function preencherCamposComOCRSeguro(
+    texto
+) {
+
+    try {
+
+        aplicarDadosOCR(
+            texto
+        );
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao preencher campos pelo OCR:",
+            erro
+        );
+
+
+        try {
+
+            preencherCamposComOCR(
+                texto
+            );
+
+        } catch (
+            erroFallback
+        ) {
+
+            console.error(
+                "Erro no preenchimento alternativo:",
+                erroFallback
+            );
+
+        }
+
+    }
+
+}
+
+
+// ==========================================
+// BOTÃO LIMPAR OCR
+// ==========================================
+
+const btnLimparOcr =
+    document.getElementById(
+        "btnLimparOcr"
+    );
+
+
+if (btnLimparOcr) {
+
+    btnLimparOcr.addEventListener(
+        "click",
+        function () {
+
+            if (arquivoOrcamento) {
+
+                arquivoOrcamento.value =
+                    "";
+
+            }
+
+
+            if (imagemSelecionada) {
+
+                imagemSelecionada.src =
+                    "";
+
+                imagemSelecionada.style.display =
+                    "none";
+
+            }
+
+
+            if (statusOcr) {
+
+                statusOcr.textContent =
+                    "";
+
+            }
+
+
+            if (btnLerOrcamento) {
+
+                btnLerOrcamento.disabled =
+                    true;
+
+            }
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// GERAR AUTOMATICAMENTE AO USAR OCR
+// ==========================================
+
+const btnGerarOrcamento =
+    document.getElementById(
+        "btnGerarOrcamento"
+    );
+
+
+if (btnGerarOrcamento) {
+
+    btnGerarOrcamento.addEventListener(
+        "click",
+        function () {
+
+            gerarOrcamento();
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// ATUALIZAR PRÉVIA QUANDO CAMPOS MUDAM
+// ==========================================
+
+const camposFormulario = [
+
+    "nomeHospede",
+    "checkin",
+    "checkout",
+    "adultos",
+    "criancas",
+    "tipoQuarto",
+    "cafe",
+    "valorDiaria",
+    "observacoes"
+
+];
+
+
+camposFormulario.forEach(
+    id => {
+
+        const campo =
+            document.getElementById(
+                id
+            );
+
+
+        if (!campo) {
+            return;
+        }
+
+
+        campo.addEventListener(
+            "input",
+            function () {
+
+                // Não gera automaticamente
+                // se ainda não houver datas.
+                // Apenas mantém o comportamento
+                // normal do formulário.
+
+            }
+        );
+
+    }
+);
+
+
+// ==========================================
+// FIM DA PARTE 2
+// ==========================================
+// ==========================================
+// MELHORIAS NO OCR
+// ==========================================
+
+// Alguns sistemas de reserva exibem as datas
+// no formato DD/MM/YYYY.
+// Esta função converte para YYYY-MM-DD,
+// que é o formato aceito pelos inputs type="date".
+
+function converterDataParaInput(
+    data
+) {
+
+    if (!data) {
+        return "";
+    }
+
+
+    // Já está no formato correto.
+
+    if (
+        /^\d{4}-\d{2}-\d{2}$/.test(
+            data
+        )
+    ) {
+
+        return data;
+
+    }
+
+
+    const match =
+        data.match(
+            /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/
+        );
+
+
+    if (!match) {
+        return "";
+    }
+
+
+    let dia =
+        match[1].padStart(
+            2,
+            "0"
+        );
+
+
+    let mes =
+        match[2].padStart(
+            2,
+            "0"
+        );
+
+
+    let ano =
+        match[3];
+
+
+    if (
+        ano.length === 2
+    ) {
+
+        ano =
+            `20${ano}`;
+
+    }
+
+
+    return `${ano}-${mes}-${dia}`;
+
+}
+
+
+// ==========================================
+// LIMPAR VALOR OCR
+// ==========================================
+
+function limparValorOCR(
+    valor
+) {
+
+    if (!valor) {
+        return "";
+    }
+
+
+    let texto =
+        valor
+            .toString()
+            .replace(
+                /R\$/gi,
+                ""
+            )
+            .trim();
+
+
+    // Remove espaços.
+
+    texto =
+        texto.replace(
+            /\s/g,
+            ""
+        );
+
+
+    // Se houver ponto e vírgula,
+    // considera ponto como separador
+    // de milhares.
+
+    if (
+        texto.includes(",")
+    ) {
+
+        texto =
+            texto.replace(
+                /\./g,
+                ""
+            );
+
+
+        texto =
+            texto.replace(
+                ",",
+                "."
+            );
+
+    }
+
+
+    const numero =
+        parseFloat(
+            texto
+        );
+
+
+    if (
+        isNaN(numero)
+    ) {
+
+        return "";
+
+    }
+
+
+    return numero.toLocaleString(
+        "pt-BR",
+        {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }
+    );
+
+}
+
+
+// ==========================================
+// OCR — TENTAR ENCONTRAR PREÇO
+// ==========================================
+
+function encontrarPrecoOCR(
+    texto
+) {
+
+    if (!texto) {
+        return "";
+    }
+
+
+    const linhas =
+        texto.split("\n");
+
+
+    // Primeiro procura linhas que
+    // tenham palavras relacionadas
+    // à diária.
+
+    const palavrasDiaria = [
+
+        "diaria",
+        "diária",
+        "noite",
+        "noites",
+        "apartamento",
+        "acomodacao",
+        "acomodação",
+        "hospedagem",
+        "total"
+
+    ];
+
+
+    for (
+        const linha
+        of linhas
+    ) {
+
+        const linhaNormalizada =
+            linha
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(
+                    /[\u0300-\u036f]/g,
+                    ""
+                );
+
+
+        const temPalavra =
+            palavrasDiaria.some(
+                palavra => {
+
+                    const palavraNormalizada =
+                        palavra
+                            .normalize("NFD")
+                            .replace(
+                                /[\u0300-\u036f]/g,
+                                ""
+                            );
+
+                    return linhaNormalizada.includes(
+                        palavraNormalizada
+                    );
+
+                }
+            );
+
+
+        if (!temPalavra) {
+            continue;
+        }
+
+
+        const valores =
+            linha.match(
+                /(?:R\$\s*)?\d{1,3}(?:\.\d{3})*(?:,\d{2})?/g
+            );
+
+
+        if (
+            valores &&
+            valores.length
+        ) {
+
+            const ultimo =
+                valores[
+                    valores.length - 1
+                ];
+
+
+            const limpo =
+                limparValorOCR(
+                    ultimo
+                );
+
+
+            if (limpo) {
+                return limpo;
+            }
+
+        }
+
+    }
+
+
+    // Se não encontrar por contexto,
+    // procura qualquer valor monetário.
+
+    const valores =
+        texto.match(
+            /R\$\s*\d{1,3}(?:\.\d{3})*(?:,\d{2})?/g
+        );
+
+
+    if (
+        valores &&
+        valores.length
+    ) {
+
+        return limparValorOCR(
+            valores[0]
+        );
+
+    }
+
+
+    return "";
+
+}
+
+
+// ==========================================
+// OCR — IDENTIFICAR TIPO DE QUARTO
+// ==========================================
+
+function identificarTipoQuartoOCR(
+    texto
+) {
+
+    if (!texto) {
+        return "";
+    }
+
+
+    const normalizado =
+        texto
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(
+                /[\u0300-\u036f]/g,
+                ""
+            );
+
+
+    // Conjugado
+
+    if (
+        normalizado.includes(
+            "conjugado"
+        )
+    ) {
+
+        return "S2C";
+
+    }
+
+
+    // Sofá-cama
+
+    if (
+        (
+            normalizado.includes(
+                "sofa"
+            ) ||
+            normalizado.includes(
+                "sofa-cama"
+            )
+        ) &&
+        normalizado.includes(
+            "cama"
+        )
+    ) {
+
+        return "DSC";
+
+    }
+
+
+    // Superior + casal
+
+    if (
+        normalizado.includes(
+            "superior"
+        ) &&
+        (
+            normalizado.includes(
+                "casal"
+            ) ||
+            normalizado.includes(
+                "double"
+            )
+        )
+    ) {
+
+        return "DBB";
+
+    }
+
+
+    // Superior + solteiro
+
+    if (
+        normalizado.includes(
+            "superior"
+        ) &&
+        (
+            normalizado.includes(
+                "solteiro"
+            ) ||
+            normalizado.includes(
+                "twin"
+            )
+        )
+    ) {
+
+        return "TWB";
+
+    }
+
+
+    // Casal
+
+    if (
+        normalizado.includes(
+            "casal"
+        ) ||
+        normalizado.includes(
+            "double"
+        )
+    ) {
+
+        return "DBC";
+
+    }
+
+
+    // Solteiro
+
+    if (
+        normalizado.includes(
+            "solteiro"
+        ) ||
+        normalizado.includes(
+            "twin"
+        )
+    ) {
+
+        return "TWC";
+
+    }
+
+
+    return "";
+
+}
+
+
+// ==========================================
+// OCR — IDENTIFICAR QUANTIDADE DE ADULTOS
+// ==========================================
+
+function identificarAdultosOCR(
+    texto
+) {
+
+    if (!texto) {
+        return "";
+    }
+
+
+    const normalizado =
+        texto
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(
+                /[\u0300-\u036f]/g,
+                ""
+            );
+
+
+    const padroes = [
+
+        /(\d+)\s*adultos?/i,
+
+        /adultos?\s*[:\-]?\s*(\d+)/i,
+
+        /(\d+)\s*pax/i,
+
+        /pax\s*[:\-]?\s*(\d+)/i
+
+    ];
+
+
+    for (
+        const padrao
+        of padroes
+    ) {
+
+        const resultado =
+            normalizado.match(
+                padrao
+            );
+
+
+        if (
+            resultado
+        ) {
+
+            return resultado[1];
+
+        }
+
+    }
+
+
+    return "";
+
+}
+
+
+// ==========================================
+// OCR — IDENTIFICAR CRIANÇAS
+// ==========================================
+
+function identificarCriancasOCR(
+    texto
+) {
+
+    if (!texto) {
+        return "";
+    }
+
+
+    const normalizado =
+        texto
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(
+                /[\u0300-\u036f]/g,
+                ""
+            );
+
+
+    const resultado =
+        normalizado.match(
+            /(\d+)\s*criancas?/i
+        );
+
+
+    if (
+        resultado
+    ) {
+
+        return resultado[1];
+
+    }
+
+
+    return "";
+
+}
+
+
+// ==========================================
+// OCR — IDENTIFICAR CAFÉ
+// ==========================================
+
+function identificarCafeOCR(
+    texto
+) {
+
+    if (!texto) {
+        return "";
+    }
+
+
+    const normalizado =
+        texto
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(
+                /[\u0300-\u036f]/g,
+                ""
+            );
+
+
+    if (
+        normalizado.includes(
+            "sem cafe"
+        )
+    ) {
+
+        return "nao";
+
+    }
+
+
+    if (
+        normalizado.includes(
+            "cafe da manha"
+        )
+    ) {
+
+        return "sim";
+
+    }
+
+
+    if (
+        normalizado.includes(
+            "cafe incluso"
+        )
+    ) {
+
+        return "sim";
+
+    }
+
+
+    if (
+        normalizado.includes(
+            "breakfast included"
+        )
+    ) {
+
+        return "sim";
+
+    }
+
+
+    return "";
+
+}
+
+
+// ==========================================
+// OCR — APLICAR RESULTADO FINAL
+// ==========================================
+
+function processarResultadoOCR(
+    texto
+) {
+
+    if (!texto) {
+
+        throw new Error(
+            "O OCR não retornou texto."
+        );
+
+    }
+
+
+    const textoLimpo =
+        normalizarTextoOCR(
+            texto
+        );
+
+
+    console.log(
+        "===== TEXTO OCR ====="
+    );
+
+    console.log(
+        textoLimpo
+    );
+
+
+    const datas =
+        identificarDatasComContexto(
+            textoLimpo
+        );
+
+
+    const valor =
+        encontrarPrecoOCR(
+            textoLimpo
+        );
+
+
+    const quarto =
+        identificarTipoQuartoOCR(
+            textoLimpo
+        );
+
+
+    const adultos =
+        identificarAdultosOCR(
+            textoLimpo
+        );
+
+
+    const criancas =
+        identificarCriancasOCR(
+            textoLimpo
+        );
+
+
+    const cafe =
+        identificarCafeOCR(
+            textoLimpo
+        );
+
+
+    const campoNome =
+        document.getElementById(
+            "nomeHospede"
+        );
+
+
+    const campoCheckin =
+        document.getElementById(
+            "checkin"
+        );
+
+
+    const campoCheckout =
+        document.getElementById(
+            "checkout"
+        );
+
+
+    const campoAdultos =
+        document.getElementById(
+            "adultos"
+        );
+
+
+    const campoCriancas =
+        document.getElementById(
+            "criancas"
+        );
+
+
+    const campoQuarto =
+        document.getElementById(
+            "tipoQuarto"
+        );
+
+
+    const campoCafe =
+        document.getElementById(
+            "cafe"
+        );
+
+
+    const campoValor =
+        document.getElementById(
+            "valorDiaria"
+        );
+
+
+    // --------------------------------------
+    // DATAS
+    // --------------------------------------
+
+    if (
+        campoCheckin &&
+        datas.checkin
+    ) {
+
+        campoCheckin.value =
+            converterDataParaInput(
+                datas.checkin
+            );
+
+    }
+
+
+    if (
+        campoCheckout &&
+        datas.checkout
+    ) {
+
+        campoCheckout.value =
+            converterDataParaInput(
+                datas.checkout
+            );
+
+    }
+
+
+    // --------------------------------------
+    // ADULTOS
+    // --------------------------------------
+
+    if (
+        campoAdultos &&
+        adultos
+    ) {
+
+        campoAdultos.value =
+            adultos;
+
+    }
+
+
+    // --------------------------------------
+    // CRIANÇAS
+    // --------------------------------------
+
+    if (
+        campoCriancas &&
+        criancas
+    ) {
+
+        campoCriancas.value =
+            criancas;
+
+    }
+
+
+    // --------------------------------------
+    // QUARTO
+    // --------------------------------------
+
+    if (
+        campoQuarto &&
+        quarto
+    ) {
+
+        campoQuarto.value =
+            quarto;
+
+    }
+
+
+    // --------------------------------------
+    // CAFÉ
+    // --------------------------------------
+
+    if (
+        campoCafe &&
+        cafe
+    ) {
+
+        campoCafe.value =
+            cafe;
+
+    }
+
+
+    // --------------------------------------
+    // VALOR
+    // --------------------------------------
+
+    if (
+        campoValor &&
+        valor
+    ) {
+
+        campoValor.value =
+            valor;
+
+    }
+
+
+    // --------------------------------------
+    // EVENTOS
+    // --------------------------------------
+
+    const campos = [
+
+        campoNome,
+        campoCheckin,
+        campoCheckout,
+        campoAdultos,
+        campoCriancas,
+        campoQuarto,
+        campoCafe,
+        campoValor
+
+    ];
+
+
+    campos.forEach(
+        campo => {
+
+            if (!campo) {
+                return;
+            }
+
+
+            campo.dispatchEvent(
+                new Event(
+                    "input",
+                    {
+                        bubbles: true
+                    }
+                )
+            );
+
+
+            campo.dispatchEvent(
+                new Event(
+                    "change",
+                    {
+                        bubbles: true
+                    }
+                )
+            );
+
+        }
+    );
+
+
+    return {
+
+        datas,
+        valor,
+        quarto,
+        adultos,
+        criancas,
+        cafe
+
+    };
+
+}
+
+
+// ==========================================
+// GARANTIR QUE O BOTÃO OCR USE O PROCESSADOR
+// ==========================================
+
+if (btnLerOrcamento) {
+
+    btnLerOrcamento.onclick =
+        async function () {
+
+            if (
+                !arquivoOrcamento ||
+                !arquivoOrcamento.files ||
+                !arquivoOrcamento.files.length
+            ) {
+
+                alert(
+                    "Selecione o print do orçamento primeiro."
+                );
+
+                return;
+
+            }
+
+
+            const arquivo =
+                arquivoOrcamento.files[0];
+
+
+            if (
+                !arquivo.type.startsWith(
+                    "image/"
+                )
+            ) {
+
+                alert(
+                    "Selecione um arquivo de imagem."
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                btnLerOrcamento.disabled =
+                    true;
+
+
+                if (statusOcr) {
+
+                    statusOcr.textContent =
+                        "⏳ Preparando leitura do print...";
+
+                }
+
+
+                await carregarTesseract();
+
+
+                if (statusOcr) {
+
+                    statusOcr.textContent =
+                        "⏳ Lendo o print...";
+
+                }
+
+
+                const resultado =
+                    await Tesseract.recognize(
+                        arquivo,
+                        "por",
+                        {
+
+                            logger:
+                                info => {
+
+                                    if (
+                                        !statusOcr
+                                    ) {
+
+                                        return;
+
+                                    }
+
+
+                                    if (
+                                        info.status ===
+                                        "recognizing text"
+                                    ) {
+
+                                        const porcentagem =
+                                            Math.round(
+                                                (
+                                                    info.progress ||
+                                                    0
+                                                ) * 100
+                                            );
+
+
+                                        statusOcr.textContent =
+                                            `⏳ Lendo o orçamento... ${porcentagem}%`;
+
+                                    } else if (
+                                        info.status
+                                    ) {
+
+                                        statusOcr.textContent =
+                                            `⏳ ${info.status}`;
+
+                                    }
+
+                                }
+
+                        }
+                    );
+
+
+                const texto =
+                    resultado &&
+                    resultado.data
+                        ? resultado.data.text
+                        : "";
+
+
+                if (
+                    !texto.trim()
+                ) {
+
+                    throw new Error(
+                        "Nenhum texto foi identificado no print."
+                    );
+
+                }
+
+
+                processarResultadoOCR(
+                    texto
+                );
+
+
+                if (statusOcr) {
+
+                    statusOcr.textContent =
+                        "✅ Dados extraídos. Confira os campos antes de gerar o orçamento.";
+
+                }
+
+
+            } catch (erro) {
+
+                console.error(
+                    "Erro completo no OCR:",
+                    erro
+                );
+
+
+                if (statusOcr) {
+
+                    statusOcr.textContent =
+                        "❌ Erro ao ler o print.";
+
+                }
+
+
+                alert(
+                    "Não foi possível ler o print. Tente novamente com uma imagem mais nítida."
+                );
+
+
+            } finally {
+
+                btnLerOrcamento.disabled =
+                    false;
+
+            }
+
+        };
+
+}
+
+
+// ==========================================
+// PREVIEW DA IMAGEM SELECIONADA
+// ==========================================
+
+if (arquivoOrcamento) {
+
+    arquivoOrcamento.addEventListener(
+        "change",
+        function () {
+
+            const arquivo =
+                this.files &&
+                this.files[0];
+
+
+            if (!arquivo) {
+
+                return;
+
+            }
+
+
+            if (
+                !arquivo.type.startsWith(
+                    "image/"
+                )
+            ) {
+
+                alert(
+                    "Selecione uma imagem válida."
+                );
+
+
+                this.value =
+                    "";
+
+
+                return;
+
+            }
+
+
+            const leitor =
+                new FileReader();
+
+
+            leitor.onload =
+                function (evento) {
+
+                    if (
+                        imagemSelecionada
+                    ) {
+
+                        imagemSelecionada.src =
+                            evento.target.result;
+
+                        imagemSelecionada.style.display =
+                            "block";
+
+                    }
+
+
+                    if (
+                        btnLerOrcamento
+                    ) {
+
+                        btnLerOrcamento.disabled =
+                            false;
+
+                    }
+
+
+                    if (
+                        statusOcr
+                    ) {
+
+                        statusOcr.textContent =
+                            "✅ Print carregado. Clique em “Ler orçamento”.";
+
+                    }
+
+                };
+
+
+            leitor.onerror =
+                function () {
+
+                    if (
+                        statusOcr
+                    ) {
+
+                        statusOcr.textContent =
+                            "❌ Não foi possível carregar o print.";
+
+                    }
+
+                };
+
+
+            leitor.readAsDataURL(
+                arquivo
+            );
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// FINALIZAÇÃO
+// ==========================================
+
+console.log(
+    "✅ Gerador de Orçamentos carregado."
+);
