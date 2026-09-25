@@ -2233,3 +2233,17 @@ body > footer p {
     flex-direction: row;
     align-items: center;
 }
+.orcamento .logo-hotel img {
+    width: 78px !important;
+    height: 78px !important;
+    object-fit: contain;
+}
+
+.orcamento .logo-hotel {
+    gap: 18px;
+}
+
+.orcamento .nome-hotel {
+    font-size: 18px;
+    padding-left: 18px;
+}
