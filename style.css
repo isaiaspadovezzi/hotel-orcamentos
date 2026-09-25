@@ -1424,3 +1424,771 @@ body > footer p {
     }
 
 }
+
+/* =========================================================
+   ORÇAMENTO — MODELO VISUAL
+   ========================================================= */
+
+
+/* CABEÇALHO */
+
+.orcamento-topo {
+
+    min-height: 125px;
+
+    padding:
+        25px 40px;
+
+}
+
+
+.logo-hotel {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 22px;
+
+}
+
+
+.logo-hotel img {
+
+    width: 82px;
+
+    height: 82px;
+
+    object-fit: contain;
+
+}
+
+
+.nome-hotel {
+
+    padding-left: 22px;
+
+    border-left:
+        1px solid #d9d9d9;
+
+    color: #555;
+
+    font-size: 20px;
+
+    font-weight: 600;
+
+}
+
+
+.titulo-orcamento h2 {
+
+    margin: 0;
+
+    color:
+        #4c9d2a;
+
+    font-size: 22px;
+
+    font-weight: 800;
+
+}
+
+
+/* ESTADIA */
+
+.estadia-box {
+
+    padding: 30px;
+
+    background:
+        #edf8e8;
+
+    border:
+        1px solid #d6e8cf;
+
+    border-radius:
+        20px;
+
+}
+
+
+.estadia-titulo {
+
+    margin-bottom: 20px;
+
+    color:
+        #4c9d2a;
+
+    font-size: 16px;
+
+    font-weight: 800;
+
+    letter-spacing:
+        1.5px;
+
+}
+
+
+.datas-hospedagem {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 50px 1fr;
+
+    align-items: center;
+
+    gap: 15px;
+
+}
+
+
+.data-box {
+
+    padding: 22px;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid #dfe4df;
+
+    border-radius:
+        15px;
+
+}
+
+
+.data-box small {
+
+    display: block;
+
+    margin-bottom: 10px;
+
+    color:
+        #777;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+.data-box strong {
+
+    display: block;
+
+    color:
+        #252525;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+}
+
+
+.seta-data {
+
+    color:
+        #4c9d2a;
+
+    font-size: 32px;
+
+    text-align:
+        center;
+
+}
+
+
+.estadia-noites {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-top: 18px;
+
+    padding:
+        18px 20px;
+
+    background:
+        rgba(255,255,255,0.72);
+
+    border-radius:
+        13px;
+
+}
+
+
+.estadia-noites span {
+
+    color:
+        #777;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+.estadia-noites strong {
+
+    color:
+        #4c9d2a;
+
+    font-size: 17px;
+
+}
+
+
+/* ACOMODAÇÃO */
+
+.acomodacao-box {
+
+    display: grid;
+
+    grid-template-columns:
+        355px 1fr;
+
+    gap: 32px;
+
+    margin-top: 30px;
+
+    padding-bottom: 30px;
+
+    border-bottom:
+        1px solid #e5e5e5;
+
+}
+
+
+.foto-quarto {
+
+    height: 285px;
+
+    overflow: hidden;
+
+    border-radius:
+        20px;
+
+}
+
+
+.foto-quarto img {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+}
+
+
+.acomodacao-info {
+
+    padding-top: 10px;
+
+}
+
+
+.label-verde {
+
+    color:
+        #777;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    letter-spacing:
+        1.2px;
+
+}
+
+
+.acomodacao-info h3 {
+
+    margin:
+        10px 0 18px;
+
+    color:
+        #252525;
+
+    font-size: 27px;
+
+    line-height: 1.2;
+
+    font-weight: 800;
+
+}
+
+
+.quartos-pill {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding:
+        10px 15px;
+
+    background:
+        #edf8e8;
+
+    border-radius:
+        11px;
+
+    color:
+        #4c9d2a;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+}
+
+
+.linha-info {
+
+    height: 1px;
+
+    margin:
+        22px 0;
+
+    background:
+        #e5e5e5;
+
+}
+
+
+.hospedes-info span {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color:
+        #777;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+.hospedes-info strong {
+
+    color:
+        #292929;
+
+    font-size: 18px;
+
+}
+
+
+/* CAFÉ */
+
+.cafe-box {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    padding:
+        22px 0;
+
+    border-bottom:
+        1px solid #e5e5e5;
+
+}
+
+
+.cafe-icone {
+
+    width: 56px;
+
+    height: 56px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        #edf8e8;
+
+    border-radius:
+        14px;
+
+    font-size: 27px;
+
+}
+
+
+.cafe-box span {
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    color:
+        #777;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+.cafe-box strong {
+
+    display: block;
+
+    color:
+        #292929;
+
+    font-size: 18px;
+
+}
+
+
+/* TARIFA */
+
+.tarifa-info {
+
+    padding:
+        20px 0;
+
+    border-bottom:
+        1px solid #e5e5e5;
+
+}
+
+
+.tarifa-info span {
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    color:
+        #777;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+}
+
+
+.tarifa-info strong {
+
+    color:
+        #333;
+
+    font-size: 14px;
+
+}
+
+
+/* TOTAL */
+
+.total-box {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 25px;
+
+    margin-top: 30px;
+
+    padding:
+        28px;
+
+    background:
+        #fafbfb;
+
+    border:
+        1px solid #dfe2e2;
+
+    border-radius:
+        18px;
+
+}
+
+
+.total-box span {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color:
+        #777;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+.total-box strong {
+
+    display: block;
+
+    color:
+        #4c9d2a;
+
+    font-size: 40px;
+
+    font-weight: 800;
+
+}
+
+
+.pagamento-box {
+
+    padding:
+        15px 20px;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid #d9dddd;
+
+    border-radius:
+        12px;
+
+    color:
+        #555;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    white-space:
+        nowrap;
+
+}
+
+
+/* RODAPÉ */
+
+.rodape-orcamento {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin:
+        35px -38px -38px;
+
+    padding:
+        20px 38px;
+
+    background:
+        #fafafa;
+
+}
+
+
+.rodape-orcamento p {
+
+    margin: 0;
+
+    color:
+        #888;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVO
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+    .acomodacao-box {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .foto-quarto {
+
+        height: 260px;
+
+    }
+
+
+    .acomodacao-info h3 {
+
+        font-size: 23px;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .orcamento-topo {
+
+        padding:
+            22px;
+
+    }
+
+
+    .logo-hotel {
+
+        gap: 15px;
+
+    }
+
+
+    .logo-hotel img {
+
+        width: 65px;
+
+        height: 65px;
+
+    }
+
+
+    .nome-hotel {
+
+        padding-left: 15px;
+
+        font-size: 16px;
+
+    }
+
+
+    .titulo-orcamento h2 {
+
+        font-size: 18px;
+
+    }
+
+
+    .estadia-box {
+
+        padding:
+            20px;
+
+    }
+
+
+    .datas-hospedagem {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .seta-data {
+
+        transform:
+            rotate(90deg);
+
+    }
+
+
+    .foto-quarto {
+
+        height: 220px;
+
+    }
+
+
+    .total-box {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+    }
+
+
+    .total-box strong {
+
+        font-size:
+            32px;
+
+    }
+
+
+    .pagamento-box {
+
+        width: 100%;
+
+        text-align:
+            center;
+
+    }
+
+
+    .rodape-orcamento {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+        gap: 7px;
+
+        margin:
+            25px -20px -20px;
+
+        padding:
+            18px 20px;
+
+    }
+
+}
