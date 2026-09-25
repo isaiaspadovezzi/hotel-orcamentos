@@ -881,7 +881,7 @@ input::placeholder {
 }
 
 
-.datas-hospedagem > div {
+.datas-hospedagem .data-box {
 
     padding:
         20px;
@@ -2191,4 +2191,45 @@ body > footer p {
 
     }
 
+}
+/* =========================================================
+   ORÇAMENTO — FORMATO FIXO PARA GERAÇÃO DA IMAGEM
+   ========================================================= */
+
+.orcamento {
+    width: 1100px;
+    max-width: 1100px;
+    min-width: 1100px;
+}
+
+.orcamento-topo {
+    flex-direction: row;
+    align-items: center;
+}
+
+.logo-hotel {
+    flex-direction: row;
+    align-items: center;
+}
+
+.titulo-orcamento {
+    text-align: right;
+}
+
+.datas-hospedagem {
+    grid-template-columns: 1fr 50px 1fr;
+}
+
+.acomodacao-box {
+    grid-template-columns: 355px 1fr;
+}
+
+.total-box {
+    flex-direction: row;
+    align-items: center;
+}
+
+.rodape-orcamento {
+    flex-direction: row;
+    align-items: center;
 }
