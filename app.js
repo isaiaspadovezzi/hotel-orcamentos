@@ -2015,14 +2015,9 @@ async function copiarImagemOrcamento() {
             elemento.cloneNode(true);
 
 
-        copia.style.width =
-            "600px";
-
-        copia.style.maxWidth =
-            "600px";
-
-        copia.style.minWidth =
-            "600px";
+        copia.style.width = "1100px";
+copia.style.maxWidth = "1100px";
+copia.style.minWidth = "1100px";
 
         copia.style.height =
             "auto";
@@ -2173,8 +2168,8 @@ async function copiarImagemOrcamento() {
                     allowTaint: false,
                     imageTimeout: 15000,
                     logging: false,
-                    width: 600,
-                    windowWidth: 600
+                    width: 1100,
+                    windowWidth: 1100
                 }
             );
 
