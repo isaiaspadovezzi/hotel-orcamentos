@@ -195,6 +195,43 @@ const btnLerOrcamento =
 
 const statusOcr =
     document.getElementById("statusOcr");
+// ==========================================
+// ABRIR SELETOR DE ARQUIVO
+// ==========================================
+
+const areaUpload =
+    document.getElementById("areaUpload");
+
+
+if (areaUpload && arquivoOrcamento) {
+
+    areaUpload.addEventListener(
+        "click",
+        function () {
+            arquivoOrcamento.click();
+        }
+    );
+
+
+    areaUpload.addEventListener(
+        "keydown",
+        function (evento) {
+
+            if (
+                evento.key === "Enter" ||
+                evento.key === " "
+            ) {
+
+                evento.preventDefault();
+
+                arquivoOrcamento.click();
+
+            }
+
+        }
+    );
+
+}
 
 
 // ==========================================
