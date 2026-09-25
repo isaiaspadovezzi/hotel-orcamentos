@@ -1136,6 +1136,10 @@ if (btnLerOrcamento) {
 // GERAR ORÇAMENTO
 // ==========================================
 
+// ==========================================
+// GERAR ORÇAMENTO
+// ==========================================
+
 function gerarOrcamento() {
 
     const checkin =
@@ -1155,7 +1159,7 @@ function gerarOrcamento() {
         ) || 0;
 
     const tipoQuarto =
-        document.getElementById("tipoQuarto").value;
+        document.getElementById("tipoQuarto").value.trim();
 
     const descricaoQuarto =
         document.getElementById("descricaoQuarto").value.trim();
@@ -1165,6 +1169,9 @@ function gerarOrcamento() {
 
     const cafe =
         document.getElementById("cafe").checked;
+
+    const promocional =
+        document.getElementById("promo").checked;
 
     const valorOriginal =
         document.getElementById("valorOriginal").value;
@@ -1176,6 +1183,10 @@ function gerarOrcamento() {
         document.getElementById("pagamento").value;
 
 
+    // ------------------------------------------
+    // VALIDAÇÕES
+    // ------------------------------------------
+
     if (!checkin || !checkout) {
 
         alert(
@@ -1183,7 +1194,6 @@ function gerarOrcamento() {
         );
 
         return;
-
     }
 
 
@@ -1201,9 +1211,12 @@ function gerarOrcamento() {
         );
 
         return;
-
     }
 
+
+    // ------------------------------------------
+    // DADOS DO QUARTO
+    // ------------------------------------------
 
     const dadosQuarto =
         QUARTOS[tipoQuarto];
@@ -1214,24 +1227,89 @@ function gerarOrcamento() {
         (
             dadosQuarto
                 ? dadosQuarto.nome
-                : "Quarto não informado"
+                : "Acomodação não informada"
+        );
+
+
+    const fotoQuarto =
+        dadosQuarto &&
+        dadosQuarto.foto
+            ? dadosQuarto.foto
+            : "";
+
+
+    const quantidadeQuartos =
+        dadosQuarto &&
+        dadosQuarto.quantidadeQuartos
+            ? dadosQuarto.quantidadeQuartos
+            : 1;
+
+
+    // ------------------------------------------
+    // VALORES
+    // ------------------------------------------
+
+    const valorOriginalNumero =
+        converterValor(
+            valorOriginal
         );
 
 
     const valorTotal =
-        converterValor(valorTotalCampo);
+        converterValor(
+            valorTotalCampo
+        );
 
-    const valorOriginalNumero =
-        converterValor(valorOriginal);
+
+    // ------------------------------------------
+    // HÓSPEDES
+    // ------------------------------------------
+
+    let textoHospedes = "";
+
+    if (adultos > 0) {
+
+        textoHospedes =
+            `${adultos} adulto${adultos !== 1 ? "s" : ""}`;
+
+    }
 
 
-    const valorFinal =
-        valorTotal ||
-        valorOriginalNumero;
+    if (criancas > 0) {
 
+        if (textoHospedes) {
+            textoHospedes += " • ";
+        }
+
+        textoHospedes +=
+            `${criancas} criança${criancas !== 1 ? "s" : ""}`;
+
+    }
+
+
+    if (!textoHospedes) {
+        textoHospedes = "Não informado";
+    }
+
+
+    // ------------------------------------------
+    // PAGAMENTO
+    // ------------------------------------------
+
+    const textoPagamento =
+        pagamento === "antecipado"
+            ? "Pagamento antecipado"
+            : "Pagamento no hotel";
+
+
+    // ------------------------------------------
+    // PREVIEW
+    // ------------------------------------------
 
     const preview =
-        document.getElementById("orcamentoPreview");
+        document.getElementById(
+            "orcamentoPreview"
+        );
 
 
     if (!preview) {
@@ -1243,6 +1321,8 @@ function gerarOrcamento() {
 
         <div class="orcamento">
 
+            <!-- CABEÇALHO -->
+
             <div class="orcamento-topo">
 
                 <div class="logo-hotel">
@@ -1252,7 +1332,12 @@ function gerarOrcamento() {
                         alt="ibis Styles Curitiba Centro Cívico"
                     >
 
+                    <div class="nome-hotel">
+                        Curitiba Centro Cívico
+                    </div>
+
                 </div>
+
 
                 <div class="titulo-orcamento">
 
@@ -1260,191 +1345,240 @@ function gerarOrcamento() {
                         ORÇAMENTO DE HOSPEDAGEM
                     </h2>
 
-                    <p>
-                        ibis Styles Curitiba Centro Cívico
-                    </p>
-
                 </div>
 
             </div>
 
 
+            <!-- CONTEÚDO -->
+
             <div class="orcamento-conteudo">
 
-                <div class="bloco">
 
-                    <strong>
-                        Período da hospedagem
-                    </strong>
+                <!-- ESTADIA -->
+
+                <section class="estadia-box">
+
+                    <div class="estadia-titulo">
+                        ESTADIA
+                    </div>
+
 
                     <div class="datas-hospedagem">
 
-                        <div>
+                        <div class="data-box">
 
                             <small>
-                                Check-in
+                                CHECK-IN
                             </small>
 
-                            <span>
+                            <strong>
                                 ${formatarDataCompleta(checkin)}
-                            </span>
+                            </strong>
 
                         </div>
 
-                        <div>
+
+                        <div class="seta-data">
+                            →
+                        </div>
+
+
+                        <div class="data-box">
 
                             <small>
-                                Check-out
+                                CHECK-OUT
                             </small>
 
-                            <span>
+                            <strong>
                                 ${formatarDataCompleta(checkout)}
-                            </span>
+                            </strong>
 
                         </div>
 
                     </div>
 
-                </div>
+
+                    <div class="estadia-noites">
+
+                        <span>
+                            ESTADIA
+                        </span>
+
+                        <strong>
+                            ${noites}
+                            ${noites === 1 ? "NOITE" : "NOITES"}
+                        </strong>
+
+                    </div>
+
+                </section>
 
 
-                <div class="bloco">
+                <!-- ACOMODAÇÃO -->
 
-                    <strong>
-                        Hóspedes
-                    </strong>
-
-                    <span>
-                        ${adultos}
-                        adulto${adultos !== 1 ? "s" : ""}
-                        ${
-                            criancas > 0
-                                ? ` • ${criancas} criança${criancas !== 1 ? "s" : ""}`
-                                : ""
-                        }
-                    </span>
-
-                </div>
+                <section class="acomodacao-box">
 
 
-                <div class="bloco">
+                    ${
+                        fotoQuarto
+                            ? `
+                                <div class="foto-quarto">
 
-                    <strong>
-                        Acomodação
-                    </strong>
+                                    <img
+                                        src="${fotoQuarto}"
+                                        alt="${nomeQuarto}"
+                                    >
 
-                    <span>
-                        ${nomeQuarto}
-                    </span>
-
-                </div>
-
-
-                <div class="bloco">
-
-                    <strong>
-                        Tarifa
-                    </strong>
-
-                    <span>
-                        ${tarifa || "Não informado"}
-                    </span>
-
-                </div>
+                                </div>
+                            `
+                            : ""
+                    }
 
 
-                <div class="bloco">
+                    <div class="acomodacao-info">
 
-                    <strong>
-                        Café da manhã
-                    </strong>
-
-                    <span>
-                        ${cafe ? "Incluso" : "Não incluso"}
-                    </span>
-
-                </div>
+                        <div class="label-verde">
+                            ACOMODAÇÃO
+                        </div>
 
 
-                <div class="bloco">
+                        <h3>
+                            ${nomeQuarto}
+                        </h3>
 
-                    <strong>
-                        Número de noites
-                    </strong>
 
-                    <span>
-                        ${noites}
-                    </span>
+                        <div class="quartos-pill">
 
-                </div>
+                            🛏️
 
+                            ${quantidadeQuartos}
+
+                            ${
+                                quantidadeQuartos === 1
+                                    ? "quarto"
+                                    : "quartos"
+                            }
+
+                            ${
+                                tipoQuarto === "S2C"
+                                    ? "conjugados"
+                                    : ""
+                            }
+
+                        </div>
+
+
+                        <div class="linha-info"></div>
+
+
+                        <div class="hospedes-info">
+
+                            <span>
+                                HÓSPEDES
+                            </span>
+
+                            <strong>
+                                ${textoHospedes}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- CAFÉ DA MANHÃ -->
+
+                <section class="cafe-box">
+
+                    <div class="cafe-icone">
+                        ☕
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            CAFÉ DA MANHÃ
+                        </span>
+
+                        <strong>
+                            ${cafe ? "Incluído" : "Não incluído"}
+                        </strong>
+
+                    </div>
+
+                </section>
+
+
+                <!-- TARIFA -->
 
                 ${
-                    valorOriginal
+                    tarifa
                         ? `
-
-                            <div class="bloco">
-
-                                <strong>
-                                    Valor original
-                                </strong>
+                            <div class="tarifa-info">
 
                                 <span>
-                                    ${formatarMoeda(valorOriginalNumero)}
+                                    TARIFA
                                 </span>
 
-                            </div>
+                                <strong>
+                                    ${tarifa}
+                                    ${
+                                        promocional
+                                            ? " • PROMOCIONAL"
+                                            : ""
+                                    }
+                                </strong>
 
+                            </div>
                         `
                         : ""
                 }
 
 
-                <div class="valor-total">
+                <!-- TOTAL -->
 
-                    <span>
-                        Valor total da hospedagem
-                    </span>
+                <section class="total-box">
 
-                    <strong>
-                        ${formatarMoeda(valorFinal)}
-                    </strong>
+                    <div>
 
-                </div>
+                        <span>
+                            TOTAL DA HOSPEDAGEM
+                        </span>
+
+                        <strong>
+                            ${formatarMoeda(valorTotal)}
+                        </strong>
+
+                    </div>
 
 
-                <div class="bloco">
+                    <div class="pagamento-box">
 
-                    <strong>
-                        Pagamento
-                    </strong>
+                        ${textoPagamento}
 
-                    <span>
-                        ${
-                            pagamento === "antecipado"
-                                ? "Pagamento antecipado"
-                                : "A ser pago no hotel"
-                        }
-                    </span>
+                    </div>
 
-                </div>
+                </section>
 
+
+                <!-- RODAPÉ -->
 
                 <div class="rodape-orcamento">
-
-                    <p>
-                        Este orçamento está sujeito à disponibilidade no momento da reserva.
-                    </p>
 
                     <p>
                         ibis Styles Curitiba Centro Cívico
                     </p>
 
                     <p>
-                        R. Comendador Araújo, 730 — Batel — Curitiba/PR
+                        Orçamento sujeito à disponibilidade
                     </p>
 
                 </div>
+
 
             </div>
 
@@ -1453,18 +1587,24 @@ function gerarOrcamento() {
     `;
 
 
+    // ------------------------------------------
+    // MOSTRAR PREVIEW
+    // ------------------------------------------
+
     const previewArea =
-        document.getElementById("previewArea");
+        document.getElementById(
+            "previewArea"
+        );
 
 
     if (previewArea) {
+
         previewArea.style.display =
             "block";
+
     }
 
 }
-
-
 // ==========================================
 // LIMPAR FORMULÁRIO
 // ==========================================
