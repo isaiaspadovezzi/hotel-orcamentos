@@ -779,6 +779,34 @@ R. Comendador Araújo, 730 — Batel — Curitiba/PR
 
 const arquivoOrcamento =
     document.getElementById("arquivoOrcamento");
+const areaUpload =
+    document.getElementById("areaUpload");
+
+if (areaUpload && arquivoOrcamento) {
+
+    areaUpload.addEventListener(
+        "click",
+        function () {
+            arquivoOrcamento.click();
+        }
+    );
+
+    areaUpload.addEventListener(
+        "keydown",
+        function (evento) {
+
+            if (
+                evento.key === "Enter" ||
+                evento.key === " "
+            ) {
+                evento.preventDefault();
+                arquivoOrcamento.click();
+            }
+
+        }
+    );
+
+}
 
 const imagemSelecionada =
     document.getElementById("imagemSelecionada");
