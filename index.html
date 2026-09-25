@@ -36,27 +36,31 @@
         automaticamente os campos abaixo.
     </p>
 
-    <label for="arquivoOrcamento" class="upload-area">
+   <div
+    class="upload-area"
+    id="areaUpload"
+    role="button"
+    tabindex="0"
+>
 
-        <span class="upload-icone">📷</span>
+    <span class="upload-icone">📷</span>
 
-        <strong>
-            Selecionar print do orçamento
-        </strong>
+    <strong>
+        Selecionar print do orçamento
+    </strong>
 
-        <small>
-            PNG, JPG ou JPEG
-        </small>
+    <small>
+        PNG, JPG ou JPEG
+    </small>
 
-    </label>
+</div>
 
-    <input
-        type="file"
-        id="arquivoOrcamento"
-        accept="image/png,image/jpeg,image/jpg"
-        hidden
-    >
-
+<input
+    type="file"
+    id="arquivoOrcamento"
+    accept=".png,.jpg,.jpeg,image/png,image/jpeg"
+    style="display:none;"
+>
     <div id="imagemSelecionada" class="imagem-selecionada"></div>
 
     <button
