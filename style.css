@@ -2279,3 +2279,31 @@ body > footer p {
     font-size: 27px;
     line-height: 1.18;
 }
+/* =========================================================
+   AJUSTE DA ACOMODAÇÃO — MODELO FINAL
+   ========================================================= */
+
+.orcamento .acomodacao-box {
+    grid-template-columns: 355px minmax(0, 1fr) !important;
+    gap: 30px !important;
+    align-items: start !important;
+}
+
+.orcamento .foto-quarto {
+    width: 355px !important;
+    height: 285px !important;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.orcamento .foto-quarto img {
+    width: 355px !important;
+    height: 285px !important;
+    object-fit: cover;
+}
+
+.orcamento .acomodacao-info h3 {
+    font-size: 26px !important;
+    line-height: 1.15 !important;
+    margin-top: 10px;
+}
