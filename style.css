@@ -2242,6 +2242,14 @@ body > footer p {
 .orcamento .logo-hotel {
     gap: 18px;
 }
+.orcamento .orcamento-topo {
+    min-height: 145px !important;
+    padding: 22px 40px !important;
+}
+.orcamento .titulo-orcamento h2 {
+    font-size: 22px;
+    white-space: nowrap;
+}
 
 .orcamento .nome-hotel {
     font-size: 18px;
