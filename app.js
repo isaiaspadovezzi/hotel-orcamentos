@@ -1204,157 +1204,564 @@ function identificarValorOCR(texto) {
 
 
 // ==========================================
-// APLICAR RESULTADO DO OCR
+// APLICAR RESULTADO DO OCR - OPERA
 // ==========================================
 
 function aplicarResultadoOCR(texto) {
 
+    console.log("===== TEXTO OCR =====");
+    console.log(texto);
+
+
+    // ==========================================
+    // NORMALIZAR TEXTO
+    // ==========================================
+
     const textoLimpo =
-        normalizarTextoOCR(texto);
+        texto
+            .replace(/\r/g, "")
+            .replace(/[ \t]+/g, " ")
+            .trim();
 
 
-    console.log(
-        "===== TEXTO OCR ====="
-    );
+    // ==========================================
+    // QUARTO
+    // Exemplo:
+    // 1 - DBB - Quarto Superior com 1 cama casal
+    // ==========================================
 
-    console.log(textoLimpo);
-
-
-    const datas =
-        identificarDatasOCR(textoLimpo);
-
-    const hospedes =
-        identificarHospedesOCR(textoLimpo);
-
-    const quarto =
-        identificarQuartoOCR(textoLimpo);
-
-    const cafe =
-        identificarCafeOCR(textoLimpo);
-
-    const valor =
-        identificarValorOCR(textoLimpo);
+    let codigoQuarto = "";
+    let descricaoQuarto = "";
 
 
-    const campoCheckin =
-        document.getElementById("checkin");
-
-    const campoCheckout =
-        document.getElementById("checkout");
-
-    const campoAdultos =
-        document.getElementById("adultos");
-
-    const campoCriancas =
-        document.getElementById("criancas");
-
-    const campoQuarto =
-        document.getElementById("tipoQuarto");
-
-    const campoCafe =
-        document.getElementById("cafe");
-
-    const campoValorTotal =
-        document.getElementById("valorTotal");
+    const matchQuarto =
+        textoLimpo.match(
+            /\d+\s*-\s*([A-Z0-9]+)\s*-\s*(.+?)(?=\n|$)/i
+        );
 
 
-    if (
-        campoCheckin &&
-        datas.checkin
-    ) {
-        campoCheckin.value =
-            datas.checkin;
+    if (matchQuarto) {
+
+        codigoQuarto =
+            matchQuarto[1]
+                .trim()
+                .toUpperCase();
+
+
+        descricaoQuarto =
+            matchQuarto[2]
+                .trim();
+
     }
 
 
-    if (
-        campoCheckout &&
-        datas.checkout
-    ) {
-        campoCheckout.value =
-            datas.checkout;
+    // ==========================================
+    // TARIFA
+    // Exemplo:
+    // 1RB1 - TARIFA FLEXÍVEL - ACOMODAÇÃO E CAFÉ DA MANHÃ
+    // ==========================================
+
+    let tarifa = "";
+
+
+    const matchTarifa =
+        textoLimpo.match(
+            /[A-Z0-9]+\s*-\s*(TARIFA.+?)(?=\n|$)/i
+        );
+
+
+    if (matchTarifa) {
+
+        tarifa =
+            matchTarifa[1]
+                .trim();
+
     }
 
 
-    if (
-        campoAdultos &&
-        hospedes.adultos
-    ) {
-        campoAdultos.value =
-            hospedes.adultos;
-    }
+    // ==========================================
+    // DATAS DO OPERA
+    //
+    // Exemplo:
+    // Sexta-Feira 08 Jan 2027 - Domingo 17 Jan 2027
+    // ==========================================
+
+    let checkin = "";
+    let checkout = "";
+    let noites = "";
 
 
-    if (
-        campoCriancas &&
-        hospedes.criancas
-    ) {
-        campoCriancas.value =
-            hospedes.criancas;
-    }
+    const matchDatas =
+        textoLimpo.match(
+            /(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})\s*-\s*(?:[A-Za-zÀ-ÿ-]+\s+)?(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})/i
+        );
 
 
-    if (
-        campoQuarto &&
-        quarto
-    ) {
-        campoQuarto.value =
-            quarto;
-    }
+    if (matchDatas) {
+
+        checkin =
+            converterDataOpera(
+                matchDatas[1],
+                matchDatas[2],
+                matchDatas[3]
+            );
 
 
-    if (
-        campoCafe &&
-        cafe !== null
-    ) {
-        campoCafe.checked =
-            cafe;
-    }
-
-
-    if (
-        campoValorTotal &&
-        valor
-    ) {
-        campoValorTotal.value =
-            `R$ ${valor}`;
-    }
-
-
-    // Calcula automaticamente as noites.
-
-    const campoNoites =
-        document.getElementById("noites");
-
-    if (
-        campoNoites &&
-        datas.checkin &&
-        datas.checkout
-    ) {
-
-        campoNoites.value =
-            calcularNoites(
-                datas.checkin,
-                datas.checkout
+        checkout =
+            converterDataOpera(
+                matchDatas[4],
+                matchDatas[5],
+                matchDatas[6]
             );
 
     }
 
 
-    console.log(
-        "Dados extraídos:",
-        {
-            datas,
-            hospedes,
-            quarto,
-            cafe,
-            valor
+    // ==========================================
+    // NÚMERO DE NOITES
+    // Exemplo:
+    // (9 night(s))
+    // ==========================================
+
+    const matchNoites =
+        textoLimpo.match(
+            /\((\d+)\s*night/i
+        );
+
+
+    if (matchNoites) {
+
+        noites =
+            matchNoites[1];
+
+    }
+
+
+    // ==========================================
+    // HÓSPEDES
+    // Exemplo:
+    // 2 Adult / 0 Child
+    // ==========================================
+
+    let adultos = "";
+    let criancas = "";
+
+
+    const matchHospedes =
+        textoLimpo.match(
+            /(\d+)\s*Adult\s*\/\s*(\d+)\s*Child/i
+        );
+
+
+    if (matchHospedes) {
+
+        adultos =
+            matchHospedes[1];
+
+
+        criancas =
+            matchHospedes[2];
+
+    }
+
+
+    // ==========================================
+    // CAFÉ DA MANHÃ
+    // Exemplo:
+    // Breakfast
+    // Included
+    // ==========================================
+
+    const cafeIncluido =
+        /Breakfast[\s\S]{0,50}?Included/i.test(
+            textoLimpo
+        );
+
+
+    // ==========================================
+    // VALOR TOTAL
+    //
+    // Exemplo:
+    // Total Room
+    // 3285.45 BRL
+    // ==========================================
+
+    let valorTotal = "";
+
+
+    const matchValor =
+        textoLimpo.match(
+            /Total Room[\s\S]{0,150}?([\d.,]+)\s*BRL/i
+        );
+
+
+    if (matchValor) {
+
+        valorTotal =
+            formatarValorOpera(
+                matchValor[1]
+            );
+
+    }
+
+
+    // ==========================================
+    // PAGAMENTO
+    // ==========================================
+
+    let pagamento = "hotel";
+
+
+    if (
+        /To be paid at the hotel/i.test(
+            textoLimpo
+        )
+    ) {
+
+        pagamento = "hotel";
+
+    }
+
+
+    // ==========================================
+    // PREENCHER CAMPOS
+    // ==========================================
+
+    const campoCheckin =
+        document.getElementById("checkin");
+
+
+    const campoCheckout =
+        document.getElementById("checkout");
+
+
+    const campoNoites =
+        document.getElementById("noites");
+
+
+    const campoAdultos =
+        document.getElementById("adultos");
+
+
+    const campoCriancas =
+        document.getElementById("criancas");
+
+
+    const campoTipoQuarto =
+        document.getElementById("tipoQuarto");
+
+
+    const campoDescricaoQuarto =
+        document.getElementById("descricaoQuarto");
+
+
+    const campoTarifa =
+        document.getElementById("tarifa");
+
+
+    const campoCafe =
+        document.getElementById("cafe");
+
+
+    const campoValorTotal =
+        document.getElementById("valorTotal");
+
+
+    const campoPagamento =
+        document.getElementById("pagamento");
+
+
+    // CHECK-IN
+
+    if (
+        campoCheckin &&
+        checkin
+    ) {
+
+        campoCheckin.value =
+            checkin;
+
+    }
+
+
+    // CHECK-OUT
+
+    if (
+        campoCheckout &&
+        checkout
+    ) {
+
+        campoCheckout.value =
+            checkout;
+
+    }
+
+
+    // NOITES
+
+    if (
+        campoNoites &&
+        noites
+    ) {
+
+        campoNoites.value =
+            noites;
+
+    }
+
+
+    // ADULTOS
+
+    if (
+        campoAdultos &&
+        adultos !== ""
+    ) {
+
+        campoAdultos.value =
+            adultos;
+
+    }
+
+
+    // CRIANÇAS
+
+    if (
+        campoCriancas &&
+        criancas !== ""
+    ) {
+
+        campoCriancas.value =
+            criancas;
+
+    }
+
+
+    // CÓDIGO DO QUARTO
+
+    if (
+        campoTipoQuarto &&
+        codigoQuarto
+    ) {
+
+        campoTipoQuarto.value =
+            codigoQuarto;
+
+    }
+
+
+    // DESCRIÇÃO DO QUARTO
+
+    if (
+        campoDescricaoQuarto &&
+        descricaoQuarto
+    ) {
+
+        campoDescricaoQuarto.value =
+            descricaoQuarto;
+
+    }
+
+
+    // TARIFA
+
+    if (
+        campoTarifa &&
+        tarifa
+    ) {
+
+        campoTarifa.value =
+            tarifa;
+
+    }
+
+
+    // CAFÉ DA MANHÃ
+
+    if (campoCafe) {
+
+        campoCafe.checked =
+            cafeIncluido;
+
+    }
+
+
+    // VALOR TOTAL
+
+    if (
+        campoValorTotal &&
+        valorTotal
+    ) {
+
+        campoValorTotal.value =
+            valorTotal;
+
+    }
+
+
+    // PAGAMENTO
+
+    if (campoPagamento) {
+
+        campoPagamento.value =
+            pagamento;
+
+    }
+
+
+    // ==========================================
+    // ATUALIZAR CAMPOS
+    // ==========================================
+
+    [
+        campoCheckin,
+        campoCheckout,
+        campoNoites,
+        campoAdultos,
+        campoCriancas,
+        campoTipoQuarto,
+        campoDescricaoQuarto,
+        campoTarifa,
+        campoCafe,
+        campoValorTotal,
+        campoPagamento
+
+    ].forEach(
+        campo => {
+
+            if (!campo) {
+                return;
+            }
+
+
+            campo.dispatchEvent(
+                new Event(
+                    "input",
+                    {
+                        bubbles: true
+                    }
+                )
+            );
+
+
+            campo.dispatchEvent(
+                new Event(
+                    "change",
+                    {
+                        bubbles: true
+                    }
+                )
+            );
+
         }
+    );
+
+
+    console.log(
+        "===== DADOS EXTRAÍDOS DO OPERA ====="
+    );
+
+
+    console.log({
+
+        codigoQuarto,
+        descricaoQuarto,
+        tarifa,
+        checkin,
+        checkout,
+        noites,
+        adultos,
+        criancas,
+        cafeIncluido,
+        valorTotal,
+        pagamento
+
+    });
+
+}
+
+
+// ==========================================
+// CONVERTER DATA DO OPERA
+// ==========================================
+
+function converterDataOpera(
+    dia,
+    mes,
+    ano
+) {
+
+    const meses = {
+
+        jan: "01",
+        feb: "02",
+        mar: "03",
+        apr: "04",
+        may: "05",
+        jun: "06",
+        jul: "07",
+        aug: "08",
+        sep: "09",
+        oct: "10",
+        nov: "11",
+        dec: "12"
+
+    };
+
+
+    const numeroMes =
+        meses[
+            mes
+                .substring(0, 3)
+                .toLowerCase()
+        ];
+
+
+    if (!numeroMes) {
+        return "";
+    }
+
+
+    return (
+        `${ano}-${numeroMes}-${dia.padStart(2, "0")}`
     );
 
 }
 
 
+// ==========================================
+// FORMATAR VALOR DO OPERA
+// ==========================================
+
+function formatarValorOpera(valor) {
+
+    if (!valor) {
+        return "";
+    }
+
+
+    const numero =
+        parseFloat(
+            valor.replace(
+                /,/g,
+                ""
+            )
+        );
+
+
+    if (isNaN(numero)) {
+        return "";
+    }
+
+
+    return numero.toLocaleString(
+        "pt-BR",
+        {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }
+    );
+
+}
 // ==========================================
 // BOTÃO LER PRINT
 // ==========================================
