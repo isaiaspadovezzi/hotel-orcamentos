@@ -437,7 +437,111 @@ document.addEventListener(
 
     }
 );
+// ==========================================
+// PREPARAR IMAGEM PARA OCR
+// ==========================================
 
+function prepararImagemParaOCR(arquivo) {
+
+    return new Promise((resolve, reject) => {
+
+        const imagem = new Image();
+
+        imagem.onload = function () {
+
+            const escala = 4;
+
+            const canvas = document.createElement("canvas");
+
+            canvas.width = imagem.naturalWidth * escala;
+            canvas.height = imagem.naturalHeight * escala;
+
+            const ctx = canvas.getContext("2d");
+
+            // Fundo branco
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+            // Aumenta a imagem
+            ctx.drawImage(
+                imagem,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+            // Pega os pixels
+            const dados = ctx.getImageData(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+            const pixels = dados.data;
+
+            // Escala de cinza + contraste
+            for (
+                let i = 0;
+                i < pixels.length;
+                i += 4
+            ) {
+
+                const r = pixels[i];
+                const g = pixels[i + 1];
+                const b = pixels[i + 2];
+
+                let cinza =
+                    (0.299 * r) +
+                    (0.587 * g) +
+                    (0.114 * b);
+
+                // Aumenta o contraste
+                cinza =
+                    ((cinza - 128) * 1.8) + 128;
+
+                cinza = Math.max(
+                    0,
+                    Math.min(255, cinza)
+                );
+
+                pixels[i] = cinza;
+                pixels[i + 1] = cinza;
+                pixels[i + 2] = cinza;
+            }
+
+            ctx.putImageData(
+                dados,
+                0,
+                0
+            );
+
+            resolve(canvas);
+
+        };
+
+        imagem.onerror = function () {
+
+            reject(
+                new Error(
+                    "Não foi possível preparar a imagem para OCR."
+                )
+            );
+
+        };
+
+        imagem.src =
+            URL.createObjectURL(arquivo);
+
+    });
+
+}
 
 // ==========================================
 // LER ORÇAMENTO
@@ -492,10 +596,13 @@ if (btnLerOrcamento) {
                 }
 
 
-                const resultado =
-                    await Tesseract.recognize(
-                        arquivo,
-                        "eng+por",
+              const imagemPreparada =
+    await prepararImagemParaOCR(arquivo);
+
+const resultado =
+    await Tesseract.recognize(
+        imagemPreparada,
+        "eng+por",
                         {
 
                             logger:
@@ -726,7 +833,7 @@ function encontrarDatas(texto) {
 
 function identificarDatasOCR(texto) {
 
-    const resultado = {
+    = {
         checkin: "",
         checkout: ""
     };
