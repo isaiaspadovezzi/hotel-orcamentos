@@ -238,6 +238,179 @@ if (areaUpload && arquivoOrcamento) {
 // SELECIONAR PRINT
 // ==========================================
 
+// ==========================================
+// OCR — IMPORTAR ORÇAMENTO
+// ==========================================
+
+const arquivoOrcamento =
+    document.getElementById("arquivoOrcamento");
+
+const imagemSelecionada =
+    document.getElementById("imagemSelecionada");
+
+const btnLerOrcamento =
+    document.getElementById("btnLerOrcamento");
+
+const statusOcr =
+    document.getElementById("statusOcr");
+
+const areaUpload =
+    document.getElementById("areaUpload");
+
+
+// ==========================================
+// PROCESSAR IMAGEM
+// ==========================================
+
+function processarImagemOrcamento(arquivo) {
+
+    if (!arquivo) {
+        return;
+    }
+
+
+    if (!arquivo.type || !arquivo.type.startsWith("image/")) {
+
+        if (statusOcr) {
+            statusOcr.textContent =
+                "❌ O conteúdo colado não é uma imagem.";
+        }
+
+        return;
+    }
+
+
+    // Coloca o arquivo no input
+    try {
+
+        const transferencia =
+            new DataTransfer();
+
+        transferencia.items.add(arquivo);
+
+        arquivoOrcamento.files =
+            transferencia.files;
+
+    } catch (erro) {
+
+        console.warn(
+            "Não foi possível atualizar o input:",
+            erro
+        );
+
+    }
+
+
+    // Preview
+    const leitor =
+        new FileReader();
+
+
+    leitor.onload =
+        function (evento) {
+
+            if (imagemSelecionada) {
+
+                imagemSelecionada.innerHTML = `
+                    <img
+                        src="${evento.target.result}"
+                        alt="Print do orçamento"
+                        style="
+                            max-width:100%;
+                            height:auto;
+                            display:block;
+                            border-radius:12px;
+                        "
+                    >
+                `;
+
+                imagemSelecionada.style.display =
+                    "block";
+
+            }
+
+
+            if (btnLerOrcamento) {
+
+                btnLerOrcamento.disabled =
+                    false;
+
+            }
+
+
+            if (statusOcr) {
+
+                statusOcr.textContent =
+                    "✅ Print carregado. Clique em “Ler orçamento” ou use a leitura automática.";
+
+            }
+
+        };
+
+
+    leitor.onerror =
+        function () {
+
+            if (statusOcr) {
+
+                statusOcr.textContent =
+                    "❌ Não foi possível carregar o print.";
+
+            }
+
+        };
+
+
+    leitor.readAsDataURL(arquivo);
+
+}
+
+
+// ==========================================
+// CLICAR NA ÁREA DE UPLOAD
+// ==========================================
+
+if (areaUpload) {
+
+    areaUpload.addEventListener(
+        "click",
+        function () {
+
+            if (arquivoOrcamento) {
+                arquivoOrcamento.click();
+            }
+
+        }
+    );
+
+
+    areaUpload.addEventListener(
+        "keydown",
+        function (evento) {
+
+            if (
+                evento.key === "Enter" ||
+                evento.key === " "
+            ) {
+
+                evento.preventDefault();
+
+                if (arquivoOrcamento) {
+                    arquivoOrcamento.click();
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// SELECIONAR ARQUIVO
+// ==========================================
+
 if (arquivoOrcamento) {
 
     arquivoOrcamento.addEventListener(
@@ -245,91 +418,292 @@ if (arquivoOrcamento) {
         function () {
 
             const arquivo =
-                this.files && this.files[0];
+                this.files &&
+                this.files[0];
 
             if (!arquivo) {
                 return;
             }
 
-            if (
-                !arquivo.type ||
-                !arquivo.type.startsWith("image/")
-            ) {
-
-                if (statusOcr) {
-                    statusOcr.textContent =
-                        "❌ Selecione um arquivo de imagem.";
-                }
-
-                this.value = "";
-
-                return;
-            }
-
-
-            const leitor =
-                new FileReader();
-
-
-            leitor.onload =
-                function (evento) {
-
-                    if (imagemSelecionada) {
-
-                        imagemSelecionada.innerHTML = `
-                            <img
-                                src="${evento.target.result}"
-                                alt="Print do orçamento"
-                                style="
-                                    max-width:100%;
-                                    height:auto;
-                                    display:block;
-                                    border-radius:10px;
-                                "
-                            >
-                        `;
-
-                        imagemSelecionada.style.display =
-                            "block";
-
-                    }
-
-
-                    if (btnLerOrcamento) {
-                        btnLerOrcamento.disabled = false;
-                    }
-
-
-                    if (statusOcr) {
-
-                        statusOcr.textContent =
-                            "✅ Print carregado. Clique em “Ler orçamento”.";
-
-                    }
-
-                };
-
-
-            leitor.onerror =
-                function () {
-
-                    if (statusOcr) {
-
-                        statusOcr.textContent =
-                            "❌ Não foi possível carregar o print.";
-
-                    }
-
-                };
-
-
-            leitor.readAsDataURL(arquivo);
+            processarImagemOrcamento(
+                arquivo
+            );
 
         }
     );
 
 }
 
+
+// ==========================================
+// CTRL + V
+// ==========================================
+
+document.addEventListener(
+    "paste",
+    function (evento) {
+
+        const itens =
+            evento.clipboardData &&
+            evento.clipboardData.items;
+
+        if (!itens) {
+            return;
+        }
+
+
+        for (
+            let i = 0;
+            i < itens.length;
+            i++
+        ) {
+
+            const item = itens[i];
+
+
+            if (
+                item.kind === "file" &&
+                item.type.startsWith("image/")
+            ) {
+
+                const arquivo =
+                    item.getAsFile();
+
+
+                if (arquivo) {
+
+                    evento.preventDefault();
+
+                    processarImagemOrcamento(
+                        arquivo
+                    );
+
+                    if (statusOcr) {
+
+                        statusOcr.textContent =
+                            "📋 Print colado com Ctrl + V. Clique em “Ler orçamento automaticamente”.";
+
+                    }
+
+                }
+
+                return;
+            }
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// CARREGAR TESSERACT
+// ==========================================
+
+function carregarTesseract() {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            if (window.Tesseract) {
+
+                resolve();
+
+                return;
+            }
+
+
+            const script =
+                document.createElement(
+                    "script"
+                );
+
+
+            script.src =
+                "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+
+
+            script.onload =
+                resolve;
+
+
+            script.onerror =
+                reject;
+
+
+            document.head.appendChild(
+                script
+            );
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// LER ORÇAMENTO
+// ==========================================
+
+if (btnLerOrcamento) {
+
+    btnLerOrcamento.addEventListener(
+        "click",
+        async function () {
+
+            if (
+                !arquivoOrcamento ||
+                !arquivoOrcamento.files ||
+                !arquivoOrcamento.files[0]
+            ) {
+
+                alert(
+                    "Cole ou selecione o print do orçamento primeiro."
+                );
+
+                return;
+            }
+
+
+            const arquivo =
+                arquivoOrcamento.files[0];
+
+
+            try {
+
+                btnLerOrcamento.disabled =
+                    true;
+
+
+                if (statusOcr) {
+
+                    statusOcr.textContent =
+                        "⏳ Preparando leitura do orçamento...";
+
+                }
+
+
+                await carregarTesseract();
+
+
+                if (statusOcr) {
+
+                    statusOcr.textContent =
+                        "⏳ Lendo o orçamento...";
+
+                }
+
+
+                const resultado =
+                    await Tesseract.recognize(
+                        arquivo,
+                        "eng+por",
+                        {
+
+                            logger:
+                                function (info) {
+
+                                    if (
+                                        !statusOcr
+                                    ) {
+                                        return;
+                                    }
+
+
+                                    if (
+                                        info.status ===
+                                        "recognizing text"
+                                    ) {
+
+                                        const progresso =
+                                            Math.round(
+                                                (
+                                                    info.progress ||
+                                                    0
+                                                ) * 100
+                                            );
+
+
+                                        statusOcr.textContent =
+                                            `⏳ Lendo o orçamento... ${progresso}%`;
+
+                                    }
+
+                                }
+
+                        }
+                    );
+
+
+                const texto =
+                    resultado &&
+                    resultado.data
+                        ? resultado.data.text
+                        : "";
+
+
+                console.log(
+                    "===== TEXTO RECONHECIDO ====="
+                );
+
+                console.log(
+                    texto
+                );
+
+
+                if (!texto.trim()) {
+
+                    throw new Error(
+                        "Nenhum texto foi encontrado."
+                    );
+
+                }
+
+
+                aplicarResultadoOCR(
+                    texto
+                );
+
+
+                if (statusOcr) {
+
+                    statusOcr.textContent =
+                        "✅ Orçamento lido. Confira os dados antes de gerar.";
+
+                }
+
+
+            } catch (erro) {
+
+                console.error(
+                    "Erro completo no OCR:",
+                    erro
+                );
+
+
+                if (statusOcr) {
+
+                    statusOcr.textContent =
+                        "❌ Não foi possível ler o orçamento.";
+
+                }
+
+
+                alert(
+                    "Não foi possível ler o orçamento. Tente novamente com um print mais nítido."
+                );
+
+            } finally {
+
+                btnLerOrcamento.disabled =
+                    false;
+
+            }
+
+        }
+    );
+
+}
 
 // ==========================================
 // CARREGAR TESSERACT
