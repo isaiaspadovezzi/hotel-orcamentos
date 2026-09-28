@@ -1308,25 +1308,6 @@ if (
 
 }
 
-    // ==========================================
-    // NÚMERO DE NOITES
-    // Exemplo:
-    // (9 night(s))
-    // ==========================================
-
-    const matchNoites =
-        textoLimpo.match(
-            /\((\d+)\s*night/i
-        );
-
-
-    if (matchNoites) {
-
-        noites =
-            matchNoites[1];
-
-    }
-
 
     // ==========================================
     // HÓSPEDES
