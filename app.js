@@ -1176,13 +1176,9 @@ function aplicarResultadoOCR(texto) {
 
     }
 
-
-    // ==========================================
-    // DATAS DO OPERA
-    //
-    // Exemplo:
-    // Sexta-Feira 08 Jan 2027 - Domingo 17 Jan 2027
-    // ==========================================
+// ==========================================
+// DATAS DO OPERA — LEITURA ROBUSTA
+// ==========================================
 
 let checkin = "";
 let checkout = "";
@@ -1190,16 +1186,35 @@ let noites = "";
 
 
 // ==========================================
-// ENCONTRAR DATAS DO OPERA
+// NORMALIZAR TEXTO PARA DATAS
+// ==========================================
+
+const textoDatasOCR =
+    textoLimpo
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+
+// ==========================================
+// PADRÃO DE DATAS
+//
 // Aceita:
+//
 // 08 Jan 2027
 // 17 Jan 2027
+//
 // 08 January 2027
+// 17 January 2027
+//
+// 08 Janeiro 2027
 // 17 Janeiro 2027
+//
+// Também aceita quebra de linha
+// entre dia / mês / ano
 // ==========================================
 
 const padraoDataOpera =
-    /(\d{1,2})\s+(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?|Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\s+(\d{4})/gi;
+    /\b(\d{1,2})\s+(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?|Janeiro|Fevereiro|Mar(?:co|ço)|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\s+(\d{4})\b/gi;
 
 
 const datasEncontradas = [];
@@ -1209,7 +1224,7 @@ let resultadoData;
 
 while (
     (resultadoData =
-        padraoDataOpera.exec(textoLimpo)) !== null
+        padraoDataOpera.exec(textoDatasOCR)) !== null
 ) {
 
     const dataConvertida =
@@ -1220,11 +1235,74 @@ while (
         );
 
 
-    if (dataConvertida) {
+    if (
+        dataConvertida &&
+        !datasEncontradas.includes(dataConvertida)
+    ) {
 
         datasEncontradas.push(
             dataConvertida
         );
+
+    }
+
+}
+
+
+// ==========================================
+// SE O OCR NÃO RECONHECER "Jan",
+// TENTAR DATAS NUMÉRICAS
+//
+// Exemplo:
+// 08/01/2027
+// 17/01/2027
+// ==========================================
+
+if (
+    datasEncontradas.length < 2
+) {
+
+    const padraoNumerico =
+        /\b(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})\b/g;
+
+
+    let resultadoNumerico;
+
+
+    while (
+        (resultadoNumerico =
+            padraoNumerico.exec(textoDatasOCR)) !== null
+    ) {
+
+        let ano =
+            resultadoNumerico[3];
+
+
+        if (
+            ano.length === 2
+        ) {
+
+            ano =
+                "20" + ano;
+
+        }
+
+
+        const dataNumerica =
+            `${ano}-${resultadoNumerico[2].padStart(2, "0")}-${resultadoNumerico[1].padStart(2, "0")}`;
+
+
+        if (
+            !datasEncontradas.includes(
+                dataNumerica
+            )
+        ) {
+
+            datasEncontradas.push(
+                dataNumerica
+            );
+
+        }
 
     }
 
@@ -1265,11 +1343,13 @@ if (
 
 const matchNoites =
     textoLimpo.match(
-        /\((\d+)\s*night/i
+        /(?:\(|\s)(\d+)\s*night/i
     );
 
 
-if (matchNoites) {
+if (
+    matchNoites
+) {
 
     noites =
         matchNoites[1];
@@ -1278,9 +1358,8 @@ if (matchNoites) {
 
 
 // ==========================================
-// SEGURANÇA
-// Se o Opera fornecer apenas check-in
-// + número de noites, calcula o check-out.
+// SE NÃO ACHOU CHECK-OUT,
+// CALCULAR ATRAVÉS DAS NOITES
 // ==========================================
 
 if (
@@ -1297,616 +1376,46 @@ if (
 
     dataEntrada.setDate(
         dataEntrada.getDate() +
-        parseInt(noites, 10)
+        parseInt(
+            noites,
+            10
+        )
     );
 
 
     checkout =
-        dataEntrada
-            .toISOString()
-            .split("T")[0];
+        `${dataEntrada.getFullYear()}-${String(
+            dataEntrada.getMonth() + 1
+        ).padStart(2, "0")}-${String(
+            dataEntrada.getDate()
+        ).padStart(2, "0")}`;
 
 }
 
 
-    // ==========================================
-    // HÓSPEDES
-    // Exemplo:
-    // 2 Adult / 0 Child
-    // ==========================================
-
-    let adultos = "";
-    let criancas = "";
-
-
-    const matchHospedes =
-        textoLimpo.match(
-            /(\d+)\s*Adult\s*\/\s*(\d+)\s*Child/i
-        );
-
-
-    if (matchHospedes) {
-
-        adultos =
-            matchHospedes[1];
-
-
-        criancas =
-            matchHospedes[2];
-
-    }
-
-
-    // ==========================================
-    // CAFÉ DA MANHÃ
-    // Exemplo:
-    // Breakfast
-    // Included
-    // ==========================================
-
-    const cafeIncluido =
-        /Breakfast[\s\S]{0,50}?Included/i.test(
-            textoLimpo
-        );
-
-
-    // ==========================================
-    // VALOR TOTAL
-    //
-    // Exemplo:
-    // Total Room
-    // 3285.45 BRL
-    // ==========================================
-
-    let valorTotal = "";
-
-
-    const matchValor =
-        textoLimpo.match(
-            /Total Room[\s\S]{0,150}?([\d.,]+)\s*BRL/i
-        );
-
-
-    if (matchValor) {
-
-        valorTotal =
-            formatarValorOpera(
-                matchValor[1]
-            );
-
-    }
-
-
-    // ==========================================
-    // PAGAMENTO
-    // ==========================================
-
-    let pagamento = "hotel";
-
-
-    if (
-        /To be paid at the hotel/i.test(
-            textoLimpo
-        )
-    ) {
-
-        pagamento = "hotel";
-
-    }
-
-
-    // ==========================================
-    // PREENCHER CAMPOS
-    // ==========================================
-
-    const campoCheckin =
-        document.getElementById("checkin");
-
-
-    const campoCheckout =
-        document.getElementById("checkout");
-
-
-    const campoNoites =
-        document.getElementById("noites");
-
-
-    const campoAdultos =
-        document.getElementById("adultos");
-
-
-    const campoCriancas =
-        document.getElementById("criancas");
-
-
-    const campoTipoQuarto =
-        document.getElementById("tipoQuarto");
-
-
-    const campoDescricaoQuarto =
-        document.getElementById("descricaoQuarto");
-
-
-    const campoTarifa =
-        document.getElementById("tarifa");
-
-
-    const campoCafe =
-        document.getElementById("cafe");
-
-
-    const campoValorTotal =
-        document.getElementById("valorTotal");
-
-
-    const campoPagamento =
-        document.getElementById("pagamento");
-
-
-    // CHECK-IN
-
-    if (
-        campoCheckin &&
-        checkin
-    ) {
-
-        campoCheckin.value =
-            checkin;
-
-    }
-
-
-    // CHECK-OUT
-
-    if (
-        campoCheckout &&
-        checkout
-    ) {
-
-        campoCheckout.value =
-            checkout;
-
-    }
-
-
-    // NOITES
-
-    if (
-        campoNoites &&
-        noites
-    ) {
-
-        campoNoites.value =
-            noites;
-
-    }
-
-
-    // ADULTOS
-
-    if (
-        campoAdultos &&
-        adultos !== ""
-    ) {
-
-        campoAdultos.value =
-            adultos;
-
-    }
-
-
-    // CRIANÇAS
-
-    if (
-        campoCriancas &&
-        criancas !== ""
-    ) {
-
-        campoCriancas.value =
-            criancas;
-
-    }
-
-
-    // CÓDIGO DO QUARTO
-
-    if (
-        campoTipoQuarto &&
-        codigoQuarto
-    ) {
-
-        campoTipoQuarto.value =
-            codigoQuarto;
-
-    }
-
-
-    // DESCRIÇÃO DO QUARTO
-
-    if (
-        campoDescricaoQuarto &&
-        descricaoQuarto
-    ) {
-
-        campoDescricaoQuarto.value =
-            descricaoQuarto;
-
-    }
-
-
-    // TARIFA
-
-    if (
-        campoTarifa &&
-        tarifa
-    ) {
-
-        campoTarifa.value =
-            tarifa;
-
-    }
-
-
-    // CAFÉ DA MANHÃ
-
-    if (campoCafe) {
-
-        campoCafe.checked =
-            cafeIncluido;
-
-    }
-
-
-    // VALOR TOTAL
-
-    if (
-        campoValorTotal &&
-        valorTotal
-    ) {
-
-        campoValorTotal.value =
-            valorTotal;
-
-    }
-
-
-    // PAGAMENTO
-
-    if (campoPagamento) {
-
-        campoPagamento.value =
-            pagamento;
-
-    }
-
-
-    // ==========================================
-    // ATUALIZAR CAMPOS
-    // ==========================================
-
-    [
-        campoCheckin,
-        campoCheckout,
-        campoNoites,
-        campoAdultos,
-        campoCriancas,
-        campoTipoQuarto,
-        campoDescricaoQuarto,
-        campoTarifa,
-        campoCafe,
-        campoValorTotal,
-        campoPagamento
-
-    ].forEach(
-        campo => {
-
-            if (!campo) {
-                return;
-            }
-
-
-            campo.dispatchEvent(
-                new Event(
-                    "input",
-                    {
-                        bubbles: true
-                    }
-                )
-            );
-
-
-            campo.dispatchEvent(
-                new Event(
-                    "change",
-                    {
-                        bubbles: true
-                    }
-                )
-            );
-
-        }
-    );
-
-
-    console.log(
-        "===== DADOS EXTRAÍDOS DO OPERA ====="
-    );
-
-
-    console.log({
-
-        codigoQuarto,
-        descricaoQuarto,
-        tarifa,
-        checkin,
-        checkout,
-        noites,
-        adultos,
-        criancas,
-        cafeIncluido,
-        valorTotal,
-        pagamento
-
-    });
-
-}
-
-
 // ==========================================
-// CONVERTER DATA DO OPERA
+// DEBUG
 // ==========================================
 
-function converterDataOpera(
-    dia,
-    mes,
-    ano
-) {
-
-    const meses = {
-
-        // Inglês
-        jan: "01",
-        january: "01",
-
-        feb: "02",
-        february: "02",
-
-        mar: "03",
-        march: "03",
-
-        apr: "04",
-        april: "04",
-
-        may: "05",
-
-        jun: "06",
-        june: "06",
-
-        jul: "07",
-        july: "07",
-
-        aug: "08",
-        august: "08",
-
-        sep: "09",
-        september: "09",
-
-        oct: "10",
-        october: "10",
-
-        nov: "11",
-        november: "11",
-
-        dec: "12",
-        december: "12",
-
-
-        // Português
-        janeiro: "01",
-        fevereiro: "02",
-        março: "03",
-        marco: "03",
-        abril: "04",
-        maio: "05",
-        junho: "06",
-        julho: "07",
-        agosto: "08",
-        setembro: "09",
-        outubro: "10",
-        novembro: "11",
-        dezembro: "12"
-
-    };
-
-
-    const mesNormalizado =
-        mes
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(
-                /[\u0300-\u036f]/g,
-                ""
-            );
-
-
-    const numeroMes =
-        meses[mesNormalizado];
-
-
-    if (!numeroMes) {
-
-        return "";
-
-    }
-
-
-    return (
-        `${ano}-${numeroMes}-${dia.padStart(2, "0")}`
-    );
-
-}
-
-
-// ==========================================
-// FORMATAR VALOR DO OPERA
-// ==========================================
-
-function formatarValorOpera(valor) {
-
-    if (!valor) {
-        return "";
-    }
-
-
-    const numero =
-        parseFloat(
-            valor.replace(
-                /,/g,
-                ""
-            )
-        );
-
-
-    if (isNaN(numero)) {
-        return "";
-    }
-
-
-    return numero.toLocaleString(
-        "pt-BR",
-        {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }
-    );
-
-}
-
-// ==========================================
-// GERAR ORÇAMENTO
-// ==========================================
-
-function gerarOrcamento() {
-
-    const checkin =
-        document.getElementById("checkin").value;
-
-    const checkout =
-        document.getElementById("checkout").value;
-
-    const adultos =
-        parseInt(
-            document.getElementById("adultos").value
-        ) || 0;
-
-    const criancas =
-        parseInt(
-            document.getElementById("criancas").value
-        ) || 0;
-
-    const tipoQuarto =
-        document.getElementById("tipoQuarto").value.trim();
-
-    const descricaoQuarto =
-        document.getElementById("descricaoQuarto").value.trim();
-
-    const tarifa =
-        document.getElementById("tarifa").value.trim();
-
-    const cafe =
-        document.getElementById("cafe").checked;
-
-    const promocional =
-        document.getElementById("promo").checked;
-
-    const valorOriginal =
-        document.getElementById("valorOriginal").value;
-
-    const valorTotalCampo =
-        document.getElementById("valorTotal").value;
-
-    const pagamento =
-        document.getElementById("pagamento").value;
-
-
-    // ------------------------------------------
-    // VALIDAÇÕES
-    // ------------------------------------------
-
-    if (!checkin || !checkout) {
-
-        alert(
-            "Informe o check-in e o check-out."
-        );
-
-        return;
-    }
-
-
-    const noites =
-        calcularNoites(
-            checkin,
-            checkout
-        );
-
-
-    if (noites <= 0) {
-
-        alert(
-            "O check-out deve ser posterior ao check-in."
-        );
-
-        return;
-    }
-
-
-    // ------------------------------------------
-    // DADOS DO QUARTO
-    // ------------------------------------------
-
-    const dadosQuarto =
-        QUARTOS[tipoQuarto];
-
-
-    const nomeQuarto =
-        descricaoQuarto ||
-        (
-            dadosQuarto
-                ? dadosQuarto.nome
-                : "Acomodação não informada"
-        );
-
-
-    const fotoQuarto =
-        dadosQuarto &&
-        dadosQuarto.foto
-            ? dadosQuarto.foto
-            : "";
-
-
-    const quantidadeQuartos =
-        dadosQuarto &&
-        dadosQuarto.quantidadeQuartos
-            ? dadosQuarto.quantidadeQuartos
-            : 1;
-
-
-    // ------------------------------------------
-    // VALORES
-    // ------------------------------------------
-
-    const valorOriginalNumero =
-        converterValor(
-            valorOriginal
-        );
-
-
-    const valorTotal =
-        converterValor(
-            valorTotalCampo
-        );
-
-
+console.log(
+    "📅 DATAS ENCONTRADAS PELO OCR:",
+    datasEncontradas
+);
+
+console.log(
+    "📅 CHECK-IN:",
+    checkin
+);
+
+console.log(
+    "📅 CHECK-OUT:",
+    checkout
+);
+
+console.log(
+    "🌙 NOITES:",
+    noites
+);
     // ------------------------------------------
     // HÓSPEDES
     // ------------------------------------------
