@@ -1184,36 +1184,129 @@ function aplicarResultadoOCR(texto) {
     // Sexta-Feira 08 Jan 2027 - Domingo 17 Jan 2027
     // ==========================================
 
-    let checkin = "";
-    let checkout = "";
-    let noites = "";
+let checkin = "";
+let checkout = "";
+let noites = "";
 
 
-    const matchDatas =
-        textoLimpo.match(
-            /(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})\s*-\s*(?:[A-Za-zÀ-ÿ-]+\s+)?(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})/i
+// ==========================================
+// ENCONTRAR DATAS DO OPERA
+// Aceita:
+// 08 Jan 2027
+// 17 Jan 2027
+// 08 January 2027
+// 17 Janeiro 2027
+// ==========================================
+
+const padraoDataOpera =
+    /(\d{1,2})\s+(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?|Janeiro|Fevereiro|Março|Abril|Maio|Junho|Julho|Agosto|Setembro|Outubro|Novembro|Dezembro)\s+(\d{4})/gi;
+
+
+const datasEncontradas = [];
+
+let resultadoData;
+
+
+while (
+    (resultadoData =
+        padraoDataOpera.exec(textoLimpo)) !== null
+) {
+
+    const dataConvertida =
+        converterDataOpera(
+            resultadoData[1],
+            resultadoData[2],
+            resultadoData[3]
         );
 
 
-    if (matchDatas) {
+    if (dataConvertida) {
 
-        checkin =
-            converterDataOpera(
-                matchDatas[1],
-                matchDatas[2],
-                matchDatas[3]
-            );
-
-
-        checkout =
-            converterDataOpera(
-                matchDatas[4],
-                matchDatas[5],
-                matchDatas[6]
-            );
+        datasEncontradas.push(
+            dataConvertida
+        );
 
     }
 
+}
+
+
+// ==========================================
+// CHECK-IN
+// ==========================================
+
+if (
+    datasEncontradas.length >= 1
+) {
+
+    checkin =
+        datasEncontradas[0];
+
+}
+
+
+// ==========================================
+// CHECK-OUT
+// ==========================================
+
+if (
+    datasEncontradas.length >= 2
+) {
+
+    checkout =
+        datasEncontradas[1];
+
+}
+
+
+// ==========================================
+// NOITES
+// ==========================================
+
+const matchNoites =
+    textoLimpo.match(
+        /\((\d+)\s*night/i
+    );
+
+
+if (matchNoites) {
+
+    noites =
+        matchNoites[1];
+
+}
+
+
+// ==========================================
+// SEGURANÇA
+// Se o Opera fornecer apenas check-in
+// + número de noites, calcula o check-out.
+// ==========================================
+
+if (
+    checkin &&
+    !checkout &&
+    noites
+) {
+
+    const dataEntrada =
+        new Date(
+            `${checkin}T12:00:00`
+        );
+
+
+    dataEntrada.setDate(
+        dataEntrada.getDate() +
+        parseInt(noites, 10)
+    );
+
+
+    checkout =
+        dataEntrada
+            .toISOString()
+            .split("T")[0];
+
+}
 
     // ==========================================
     // NÚMERO DE NOITES
@@ -1590,32 +1683,79 @@ function converterDataOpera(
 
     const meses = {
 
+        // Inglês
         jan: "01",
+        january: "01",
+
         feb: "02",
+        february: "02",
+
         mar: "03",
+        march: "03",
+
         apr: "04",
+        april: "04",
+
         may: "05",
+
         jun: "06",
+        june: "06",
+
         jul: "07",
+        july: "07",
+
         aug: "08",
+        august: "08",
+
         sep: "09",
+        september: "09",
+
         oct: "10",
+        october: "10",
+
         nov: "11",
-        dec: "12"
+        november: "11",
+
+        dec: "12",
+        december: "12",
+
+
+        // Português
+        janeiro: "01",
+        fevereiro: "02",
+        março: "03",
+        marco: "03",
+        abril: "04",
+        maio: "05",
+        junho: "06",
+        julho: "07",
+        agosto: "08",
+        setembro: "09",
+        outubro: "10",
+        novembro: "11",
+        dezembro: "12"
 
     };
 
 
+    const mesNormalizado =
+        mes
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(
+                /[\u0300-\u036f]/g,
+                ""
+            );
+
+
     const numeroMes =
-        meses[
-            mes
-                .substring(0, 3)
-                .toLowerCase()
-        ];
+        meses[mesNormalizado];
 
 
     if (!numeroMes) {
+
         return "";
+
     }
 
 
