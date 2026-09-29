@@ -1158,29 +1158,188 @@ function converterDataOpera(dia, mes, ano) {
 }
 
 function extrairDatasOCR(texto) {
+
     const resultado = [];
+
     const textoNormalizado = String(texto || "")
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
 
-    // Opera: 08 Jan 2027 / 17 January 2027 / 08 Janeiro 2027
-    const meses = "Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch|co)?|Apr(?:il)?|May|Jun(?:e|ho)?|Jul(?:y|ho)?|Aug(?:ust|osto)?|Sep(?:tember|tembro)?|Oct(?:ober|ubro)?|Nov(?:ember|embro)?|Dec(?:ember|embro)?";
-    const padraoTexto = new RegExp(`(?:^|[^0-9])(\\d{1,2})\\s+(${meses})\\s+(\\d{4})(?=[^0-9]|$)`, "gi");
+    console.log("📅 Texto analisado para datas:");
+    console.log(textoNormalizado);
 
-    let m;
-    while ((m = padraoTexto.exec(textoNormalizado)) !== null) {
-        const data = converterDataOpera(m[1], m[2], m[3]);
-        if (data && !resultado.includes(data)) resultado.push(data);
+    // =====================================================
+    // MESES ACEITOS PELO OCR
+    // =====================================================
+    //
+    // O Opera pode aparecer como:
+    //
+    // Jan / January
+    // Feb / February
+    // Mar / March
+    // Apr / April
+    // May
+    // Jun / June
+    // Jul / July
+    // Aug / August
+    // Set / Sep / September
+    // Oct / October
+    // Nov / November
+    // Dec / December
+    //
+    // IMPORTANTE:
+    // O OCR do seu Opera está lendo "Set".
+    // =====================================================
+
+    const meses = {
+        jan: "01",
+        january: "01",
+        janeiro: "01",
+
+        feb: "02",
+        february: "02",
+        fevereiro: "02",
+
+        mar: "03",
+        march: "03",
+        marco: "03",
+        março: "03",
+
+        apr: "04",
+        april: "04",
+        abril: "04",
+
+        may: "05",
+        maio: "05",
+
+        jun: "06",
+        june: "06",
+        junho: "06",
+
+        jul: "07",
+        july: "07",
+        julho: "07",
+
+        aug: "08",
+        august: "08",
+        agosto: "08",
+
+        // IMPORTANTE: "Set" é como o OCR está lendo
+        set: "09",
+        sep: "09",
+        september: "09",
+        setembro: "09",
+
+        oct: "10",
+        october: "10",
+        outubro: "10",
+
+        nov: "11",
+        november: "11",
+        novembro: "11",
+
+        dec: "12",
+        december: "12",
+        dezembro: "12"
+    };
+
+
+    // =====================================================
+    // DATA COM MÊS POR EXTENSO/ABREVIADO
+    // Exemplos:
+    //
+    // 28 Set 2026
+    // 29 Set 2026
+    // 08 Jan 2027
+    // 17 Jan 2027
+    // =====================================================
+
+    const padraoTexto =
+        /(?:^|[^0-9])(\d{1,2})\s+([A-Za-zÀ-ÿ]{3,10})\s+(\d{4})(?=[^0-9]|$)/gi;
+
+    let match;
+
+    while ((match = padraoTexto.exec(textoNormalizado)) !== null) {
+
+        const dia = match[1];
+        const mesTexto = match[2]
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+
+        const ano = match[3];
+
+        const numeroMes = meses[mesTexto];
+
+        if (!numeroMes) {
+            console.log(
+                "⚠️ Mês não reconhecido:",
+                mesTexto
+            );
+            continue;
+        }
+
+        const data =
+            `${ano}-${numeroMes}-${String(dia).padStart(2, "0")}`;
+
+        if (!resultado.includes(data)) {
+
+            resultado.push(data);
+
+            console.log(
+                "📅 Data encontrada:",
+                match[0],
+                "→",
+                data
+            );
+        }
     }
 
-    // Também aceita 08/01/2027 ou 08-01-2027.
-    const padraoNumerico = /(?:^|[^0-9])(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})(?=[^0-9]|$)/g;
-    while ((m = padraoNumerico.exec(textoNormalizado)) !== null) {
-        let ano = m[3];
-        if (ano.length === 2) ano = `20${ano}`;
-        const data = `${ano}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}`;
-        if (!resultado.includes(data)) resultado.push(data);
+
+    // =====================================================
+    // DATA NUMÉRICA
+    // Exemplos:
+    //
+    // 28/09/2026
+    // 29-09-2026
+    // =====================================================
+
+    const padraoNumerico =
+        /(?:^|[^0-9])(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})(?=[^0-9]|$)/g;
+
+    while ((match = padraoNumerico.exec(textoNormalizado)) !== null) {
+
+        let ano = match[3];
+
+        if (ano.length === 2) {
+            ano = `20${ano}`;
+        }
+
+        const dia = String(match[1]).padStart(2, "0");
+        const mes = String(match[2]).padStart(2, "0");
+
+        const data = `${ano}-${mes}-${dia}`;
+
+        if (!resultado.includes(data)) {
+
+            resultado.push(data);
+
+            console.log(
+                "📅 Data numérica encontrada:",
+                match[0],
+                "→",
+                data
+            );
+        }
     }
+
+
+    console.log(
+        "📅 RESULTADO FINAL DAS DATAS:",
+        resultado
+    );
 
     return resultado;
 }
