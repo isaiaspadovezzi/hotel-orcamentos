@@ -1664,13 +1664,34 @@ function gerarOrcamento() {
                     </div>
                 </section>
 
-                <section class="cafe-box">
-                    <div class="cafe-icone">☕</div>
-                    <div>
-                        <span>CAFÉ DA MANHÃ</span>
-                        <strong>${cafe ? "Incluído" : "Não incluído"}</strong>
-                    </div>
-                </section>
+              <section class="servicos-box">
+
+    <div class="servico-item">
+        <div class="servico-icone">☕</div>
+        <div>
+            <span>CAFÉ DA MANHÃ</span>
+            <strong>${cafe ? "Incluído" : "Não incluído"}</strong>
+        </div>
+    </div>
+
+    <div class="servico-item">
+        <div class="servico-icone">🚗</div>
+        <div>
+            <span>ESTACIONAMENTO</span>
+            <strong>R$ 30,00 / diária</strong>
+        </div>
+    </div>
+
+    <div class="servico-item">
+        <div class="servico-icone">🐶</div>
+        <div>
+            <span>PET</span>
+            <strong>R$ 78,75 / diária</strong>
+            <small>Necessária carteira de vacinação atualizada.</small>
+        </div>
+    </div>
+
+</section>
 
                <div class="validade-info">
     <span>VALIDADE DA COTAÇÃO</span>
