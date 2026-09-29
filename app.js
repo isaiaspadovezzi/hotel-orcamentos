@@ -599,65 +599,416 @@ if (btnLerOrcamento) {
                 }
 
 
-                const imagemPreparada =
-                    await prepararImagemParaOCR(arquivo);
+              // ==========================================
+// OCR — LEITURA PRINCIPAL
+// ==========================================
 
-                const resultado =
-                    await Tesseract.recognize(
-                        imagemPreparada,
-                        "por+eng",
-                        {
-
-                            logger:
-                                function (info) {
-
-                                    if (
-                                        !statusOcr
-                                    ) {
-                                        return;
-                                    }
+const imagemPreparada =
+    await prepararImagemParaOCR(arquivo);
 
 
-                                    if (
-                                        info.status ===
-                                        "recognizing text"
-                                    ) {
+const resultado =
+    await Tesseract.recognize(
+        imagemPreparada,
+        "eng+por",
+        {
 
-                                        const progresso =
-                                            Math.round(
-                                                (
-                                                    info.progress ||
-                                                    0
-                                                ) * 100
-                                            );
+            logger: function (info) {
+
+                if (
+                    statusOcr &&
+                    info.status === "recognizing text"
+                ) {
+
+                    const progresso =
+                        Math.round(
+                            (info.progress || 0) * 100
+                        );
+
+                    statusOcr.textContent =
+                        `⏳ Lendo o orçamento... ${progresso}%`;
+
+                }
+
+            },
+
+            tessedit_pageseg_mode: 6,
+
+            preserve_interword_spaces: 1
+
+        }
+    );
 
 
-                                        statusOcr.textContent =
-                                            `⏳ Lendo o orçamento... ${progresso}%`;
-
-                                    }
-
-                                }
-
-                        }
-                    );
+let texto =
+    resultado &&
+    resultado.data
+        ? resultado.data.text
+        : "";
 
 
-                const texto =
-                    resultado &&
-                    resultado.data
-                        ? resultado.data.text
-                        : "";
+console.log(
+    "=========================================="
+);
+
+console.log(
+    "TEXTO OCR — PRIMEIRA LEITURA"
+);
+
+console.log(
+    texto
+);
+
+console.log(
+    "=========================================="
+);
 
 
-                console.log(
-                    "===== TEXTO RECONHECIDO ====="
-                );
+// ==========================================
+// SEGUNDA LEITURA
+// USA A IMAGEM ORIGINAL
+//
+// Isso é importante porque o tratamento
+// em preto e branco pode fazer o OCR perder
+// números pequenos do Opera.
+// ==========================================
 
-                console.log(
-                    texto
-                );
+if (
+    !texto ||
+    !/\b\d{4}\b/.test(texto) ||
+    !/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)/i.test(texto)
+) {
 
+    if (statusOcr) {
+
+        statusOcr.textContent =
+            "⏳ Reforçando a leitura das datas...";
+
+    }
+
+
+    const resultadoOriginal =
+        await Tesseract.recognize(
+            arquivo,
+            "eng+por",
+            {
+
+                logger: function (info) {
+
+                    if (
+                        statusOcr &&
+                        info.status === "recognizing text"
+                    ) {
+
+                        const progresso =
+                            Math.round(
+                                (info.progress || 0) * 100
+                            );
+
+                        statusOcr.textContent =
+                            `⏳ Segunda leitura... ${progresso}%`;
+
+                    }
+
+                },
+
+                tessedit_pageseg_mode: 11,
+
+                preserve_interword_spaces: 1
+
+            }
+        );
+
+
+    const textoOriginal =
+        resultadoOriginal &&
+        resultadoOriginal.data
+            ? resultadoOriginal.data.text
+            : "";
+
+
+    console.log(
+        "=========================================="
+    );
+
+    console.log(
+        "TEXTO OCR — SEGUNDA LEITURA"
+    );
+
+    console.log(
+        textoOriginal
+    );
+
+    console.log(
+        "=========================================="
+    );
+
+
+    if (textoOriginal.trim()) {
+
+        texto +=
+            "\n" +
+            textoOriginal;
+
+    }
+
+}
+
+
+// ==========================================
+// TERCEIRA TENTATIVA
+//
+// Alguns prints do Opera fazem o OCR separar:
+//
+// 08
+// Jan
+// 2027
+//
+// ou:
+//
+// 08 Jan
+// 2027
+//
+// Por isso reconstruímos as datas
+// a partir do texto inteiro.
+// ==========================================
+
+function localizarDatasOpera(textoOCR) {
+
+    const datas = [];
+
+    if (!textoOCR) {
+        return datas;
+    }
+
+
+    let textoData =
+        String(textoOCR)
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/\r/g, " ")
+            .replace(/\n/g, " ")
+            .replace(/\s+/g, " ");
+
+
+    // Corrige erros comuns do OCR
+    textoData =
+        textoData
+            .replace(/2O2([0-9])/gi, "202$1")
+            .replace(/20O([0-9])/gi, "20$1")
+            .replace(/O([0-9]{3})/gi, "0$1");
+
+
+    const meses = {
+
+        jan: "01",
+        january: "01",
+        janeiro: "01",
+
+        feb: "02",
+        february: "02",
+        fevereiro: "02",
+
+        mar: "03",
+        march: "03",
+        marco: "03",
+
+        apr: "04",
+        april: "04",
+        abril: "04",
+
+        may: "05",
+        maio: "05",
+
+        jun: "06",
+        june: "06",
+        junho: "06",
+
+        jul: "07",
+        july: "07",
+        julho: "07",
+
+        aug: "08",
+        august: "08",
+        agosto: "08",
+
+        sep: "09",
+        september: "09",
+        setembro: "09",
+
+        oct: "10",
+        october: "10",
+        outubro: "10",
+
+        nov: "11",
+        november: "11",
+        novembro: "11",
+
+        dec: "12",
+        december: "12",
+        dezembro: "12"
+
+    };
+
+
+    // ==========================================
+    // 08 Jan 2027
+    // ==========================================
+
+    const padrao =
+        /\b(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})\b/gi;
+
+
+    let match;
+
+
+    while (
+        (match = padrao.exec(textoData)) !== null
+    ) {
+
+        const dia =
+            String(match[1]).padStart(2, "0");
+
+
+        const mesTexto =
+            match[2]
+                .toLowerCase()
+                .trim();
+
+
+        const mes =
+            meses[mesTexto] ||
+            meses[mesTexto.substring(0, 3)];
+
+
+        const ano =
+            match[3];
+
+
+        if (
+            mes &&
+            Number(dia) >= 1 &&
+            Number(dia) <= 31
+        ) {
+
+            const data =
+                `${ano}-${mes}-${dia}`;
+
+
+            if (
+                !datas.includes(data)
+            ) {
+
+                datas.push(data);
+
+            }
+
+        }
+
+    }
+
+
+    // ==========================================
+    // 08/01/2027
+    // ==========================================
+
+    const numerico =
+        /\b(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})\b/g;
+
+
+    while (
+        (match = numerico.exec(textoData)) !== null
+    ) {
+
+        let ano =
+            match[3];
+
+
+        if (ano.length === 2) {
+
+            ano =
+                "20" + ano;
+
+        }
+
+
+        const dia =
+            String(match[1]).padStart(2, "0");
+
+
+        const mes =
+            String(match[2]).padStart(2, "0");
+
+
+        if (
+            Number(mes) <= 12 &&
+            Number(dia) <= 31
+        ) {
+
+            const data =
+                `${ano}-${mes}-${dia}`;
+
+
+            if (
+                !datas.includes(data)
+            ) {
+
+                datas.push(data);
+
+            }
+
+        }
+
+    }
+
+
+    console.log(
+        "📅 DATAS EXTRAÍDAS:",
+        datas
+    );
+
+
+    return datas;
+
+}
+
+
+// ==========================================
+// ENCONTRAR AS DATAS
+// ==========================================
+
+const datasOpera =
+    localizarDatasOpera(texto);
+
+
+// ==========================================
+// SE ENCONTROU DATAS, FORÇA NO TEXTO
+//
+// Isso garante que aplicarResultadoOCR()
+// receba as datas mesmo que o OCR tenha
+// separado a informação.
+// ==========================================
+
+if (
+    datasOpera.length >= 2
+) {
+
+    console.log(
+        "✅ CHECK-IN DETECTADO:",
+        datasOpera[0]
+    );
+
+    console.log(
+        "✅ CHECK-OUT DETECTADO:",
+        datasOpera[1]
+    );
+
+
+    texto +=
+        `\nDATA_CHECKIN: ${datasOpera[0]}` +
+        `\nDATA_CHECKOUT: ${datasOpera[1]}`;
+
+}
 
                 if (!texto.trim()) {
 
