@@ -1405,10 +1405,18 @@ function aplicarResultadoOCR(texto) {
         /(?:^|\n)\s*\d+\s*-\s*([A-Z0-9]+)\s*-\s*(.+?)(?=\n|$)/i
     );
 
-    if (matchQuarto) {
-        codigoQuarto = matchQuarto[1].trim().toUpperCase();
-        descricaoQuarto = matchQuarto[2].trim();
-    }
+  if (matchQuarto) {
+
+    codigoQuarto = matchQuarto[1]
+        .trim()
+        .toUpperCase();
+
+    descricaoQuarto = matchQuarto[2]
+        .trim()
+        // Remove o preço no final da descrição
+        .replace(/\s+\d[\d.,]*\s*BRL\s*$/i, "")
+        .trim();
+}
 
     // Fallback para OCR que juntou tudo em uma linha.
     if (!codigoQuarto) {
