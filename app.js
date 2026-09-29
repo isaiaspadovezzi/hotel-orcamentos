@@ -2331,4 +2331,877 @@ function baixarImagemOrcamento(blob) {
 console.log(
     "✅ Gerador de Orçamentos carregado corretamente."
 );
+// ==========================================================
+// CORREÇÃO DEFINITIVA — DATAS DO OPERA
+// ==========================================================
+
+(function () {
+
+    console.log("📅 Correção especial de datas do Opera carregada.");
+
+    function converterMesOpera(mes) {
+
+        const meses = {
+            jan: "01",
+            january: "01",
+            janeiro: "01",
+
+            feb: "02",
+            february: "02",
+            fevereiro: "02",
+
+            mar: "03",
+            march: "03",
+            marco: "03",
+            março: "03",
+
+            apr: "04",
+            april: "04",
+            abril: "04",
+
+            may: "05",
+            maio: "05",
+
+            jun: "06",
+            june: "06",
+            junho: "06",
+
+            jul: "07",
+            july: "07",
+            julho: "07",
+
+            aug: "08",
+            august: "08",
+            agosto: "08",
+
+            sep: "09",
+            september: "09",
+            setembro: "09",
+
+            oct: "10",
+            october: "10",
+            outubro: "10",
+
+            nov: "11",
+            november: "11",
+            novembro: "11",
+
+            dec: "12",
+            december: "12",
+            dezembro: "12"
+        };
+
+        const texto =
+            String(mes || "")
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "");
+
+        return (
+            meses[texto] ||
+            meses[texto.substring(0, 3)] ||
+            ""
+        );
+    }
+
+
+    function extrairDatasOperaEspecial(texto) {
+
+        if (!texto) {
+            return [];
+        }
+
+        let textoLimpo =
+            String(texto)
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/\r/g, " ")
+                .replace(/\n/g, " ")
+                .replace(/\s+/g, " ");
+
+
+        console.log(
+            "📅 Texto usado para procurar datas:",
+            textoLimpo
+        );
+
+
+        const datas = [];
+
+
+        // --------------------------------------------------
+        // FORMATO:
+        //
+        // 08 Jan 2027
+        // 17 Jan 2027
+        // --------------------------------------------------
+
+        const regexMes =
+            /(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/gi;
+
+
+        let resultado;
+
+
+        while (
+            (resultado =
+                regexMes.exec(textoLimpo)) !== null
+        ) {
+
+            const dia =
+                parseInt(
+                    resultado[1],
+                    10
+                );
+
+
+            const mes =
+                converterMesOpera(
+                    resultado[2]
+                );
+
+
+            const ano =
+                resultado[3];
+
+
+            if (
+                mes &&
+                dia >= 1 &&
+                dia <= 31
+            ) {
+
+                const data =
+                    `${ano}-${mes}-${String(dia).padStart(2, "0")}`;
+
+
+                if (
+                    !datas.includes(data)
+                ) {
+
+                    datas.push(data);
+
+                }
+
+            }
+
+        }
+
+
+        // --------------------------------------------------
+        // FORMATO:
+        //
+        // 08/01/2027
+        // 17/01/2027
+        // --------------------------------------------------
+
+        const regexNumerica =
+            /(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/g;
+
+
+        while (
+            (resultado =
+                regexNumerica.exec(textoLimpo)) !== null
+        ) {
+
+            const dia =
+                parseInt(
+                    resultado[1],
+                    10
+                );
+
+            const mes =
+                parseInt(
+                    resultado[2],
+                    10
+                );
+
+            const ano =
+                resultado[3];
+
+
+            if (
+                dia >= 1 &&
+                dia <= 31 &&
+                mes >= 1 &&
+                mes <= 12
+            ) {
+
+                const data =
+                    `${ano}-${String(mes).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
+
+
+                if (
+                    !datas.includes(data)
+                ) {
+
+                    datas.push(data);
+
+                }
+
+            }
+
+        }
+
+
+        console.log(
+            "📅 Datas encontradas:",
+            datas
+        );
+
+
+        return datas;
+
+    }
+
+
+    function prepararImagemDatas(arquivo) {
+
+        return new Promise(
+            function (resolve, reject) {
+
+                const imagem =
+                    new Image();
+
+
+                imagem.onload =
+                    function () {
+
+                        /*
+                         * Não vamos cortar uma região fixa.
+                         * Vamos aumentar a imagem inteira,
+                         * porque dependendo do tamanho do
+                         * print o Opera pode colocar as datas
+                         * em posições diferentes.
+                         */
+
+                        const escala = 5;
+
+
+                        const canvas =
+                            document.createElement(
+                                "canvas"
+                            );
+
+
+                        canvas.width =
+                            imagem.naturalWidth *
+                            escala;
+
+
+                        canvas.height =
+                            imagem.naturalHeight *
+                            escala;
+
+
+                        const ctx =
+                            canvas.getContext(
+                                "2d"
+                            );
+
+
+                        ctx.fillStyle =
+                            "#ffffff";
+
+
+                        ctx.fillRect(
+                            0,
+                            0,
+                            canvas.width,
+                            canvas.height
+                        );
+
+
+                        ctx.drawImage(
+                            imagem,
+                            0,
+                            0,
+                            canvas.width,
+                            canvas.height
+                        );
+
+
+                        /*
+                         * Escala de cinza e contraste
+                         */
+
+                        const dados =
+                            ctx.getImageData(
+                                0,
+                                0,
+                                canvas.width,
+                                canvas.height
+                            );
+
+
+                        const pixels =
+                            dados.data;
+
+
+                        for (
+                            let i = 0;
+                            i < pixels.length;
+                            i += 4
+                        ) {
+
+                            const r =
+                                pixels[i];
+
+                            const g =
+                                pixels[i + 1];
+
+                            const b =
+                                pixels[i + 2];
+
+
+                            let cinza =
+                                (
+                                    0.299 * r +
+                                    0.587 * g +
+                                    0.114 * b
+                                );
+
+
+                            cinza =
+                                (
+                                    (cinza - 128) *
+                                    2.5
+                                ) + 128;
+
+
+                            cinza =
+                                Math.max(
+                                    0,
+                                    Math.min(
+                                        255,
+                                        cinza
+                                    )
+                                );
+
+
+                            pixels[i] =
+                                cinza;
+
+                            pixels[i + 1] =
+                                cinza;
+
+                            pixels[i + 2] =
+                                cinza;
+
+                        }
+
+
+                        ctx.putImageData(
+                            dados,
+                            0,
+                            0
+                        );
+
+
+                        resolve(
+                            canvas
+                        );
+
+                    };
+
+
+                imagem.onerror =
+                    function () {
+
+                        reject(
+                            new Error(
+                                "Erro ao preparar imagem."
+                            )
+                        );
+
+                    };
+
+
+                imagem.src =
+                    URL.createObjectURL(
+                        arquivo
+                    );
+
+            }
+        );
+
+    }
+
+
+    async function tentarLerDatas() {
+
+        const arquivo =
+            document.getElementById(
+                "arquivoOrcamento"
+            );
+
+
+        const campoCheckin =
+            document.getElementById(
+                "checkin"
+            );
+
+
+        const campoCheckout =
+            document.getElementById(
+                "checkout"
+            );
+
+
+        const campoNoites =
+            document.getElementById(
+                "noites"
+            );
+
+
+        const status =
+            document.getElementById(
+                "statusOcr"
+            );
+
+
+        if (
+            !arquivo ||
+            !arquivo.files ||
+            !arquivo.files[0]
+        ) {
+
+            console.log(
+                "📅 Nenhum arquivo encontrado para leitura das datas."
+            );
+
+            return;
+
+        }
+
+
+        const imagem =
+            arquivo.files[0];
+
+
+        try {
+
+            if (status) {
+
+                status.textContent =
+                    "⏳ Procurando as datas do Opera...";
+
+            }
+
+
+            /*
+             * Garante que o Tesseract esteja carregado.
+             */
+
+            if (
+                typeof Tesseract ===
+                "undefined"
+            ) {
+
+                if (
+                    typeof carregarTesseract ===
+                    "function"
+                ) {
+
+                    await carregarTesseract();
+
+                }
+
+            }
+
+
+            if (
+                typeof Tesseract ===
+                "undefined"
+            ) {
+
+                console.error(
+                    "Tesseract não está disponível."
+                );
+
+                return;
+
+            }
+
+
+            const imagemPreparada =
+                await prepararImagemDatas(
+                    imagem
+                );
+
+
+            /*
+             * PSM 11:
+             * leitura esparsa.
+             *
+             * É melhor para telas do Opera
+             * porque não obriga o OCR a entender
+             * a página como um documento inteiro.
+             */
+
+            const resultado =
+                await Tesseract.recognize(
+                    imagemPreparada,
+                    "eng",
+                    {
+
+                        tessedit_pageseg_mode: 11,
+
+                        preserve_interword_spaces: 1
+
+                    }
+                );
+
+
+            const texto =
+                resultado &&
+                resultado.data
+                    ? resultado.data.text
+                    : "";
+
+
+            console.log(
+                "======================================"
+            );
+
+            console.log(
+                "📅 OCR ESPECIAL DAS DATAS"
+            );
+
+            console.log(
+                texto
+            );
+
+            console.log(
+                "======================================"
+            );
+
+
+            let datas =
+                extrairDatasOperaEspecial(
+                    texto
+                );
+
+
+            /*
+             * Segunda tentativa usando português.
+             */
+
+            if (
+                datas.length < 2
+            ) {
+
+                const resultadoPt =
+                    await Tesseract.recognize(
+                        imagemPreparada,
+                        "por",
+                        {
+
+                            tessedit_pageseg_mode: 11,
+
+                            preserve_interword_spaces: 1
+
+                        }
+                    );
+
+
+                const textoPt =
+                    resultadoPt &&
+                    resultadoPt.data
+                        ? resultadoPt.data.text
+                        : "";
+
+
+                console.log(
+                    "📅 OCR ESPECIAL PT:",
+                    textoPt
+                );
+
+
+                const datasPt =
+                    extrairDatasOperaEspecial(
+                        textoPt
+                    );
+
+
+                datas =
+                    [
+                        ...new Set(
+                            [
+                                ...datas,
+                                ...datasPt
+                            ]
+                        )
+                    ];
+
+            }
+
+
+            /*
+             * SE ENCONTROU AS DUAS DATAS
+             */
+
+            if (
+                datas.length >= 2
+            ) {
+
+                const checkin =
+                    datas[0];
+
+                const checkout =
+                    datas[1];
+
+
+                console.log(
+                    "✅ CHECK-IN FINAL:",
+                    checkin
+                );
+
+
+                console.log(
+                    "✅ CHECK-OUT FINAL:",
+                    checkout
+                );
+
+
+                /*
+                 * Preenche diretamente os inputs.
+                 */
+
+                if (
+                    campoCheckin
+                ) {
+
+                    campoCheckin.value =
+                        checkin;
+
+
+                    campoCheckin.dispatchEvent(
+                        new Event(
+                            "input",
+                            {
+                                bubbles: true
+                            }
+                        )
+                    );
+
+
+                    campoCheckin.dispatchEvent(
+                        new Event(
+                            "change",
+                            {
+                                bubbles: true
+                            }
+                        )
+                    );
+
+                }
+
+
+                if (
+                    campoCheckout
+                ) {
+
+                    campoCheckout.value =
+                        checkout;
+
+
+                    campoCheckout.dispatchEvent(
+                        new Event(
+                            "input",
+                            {
+                                bubbles: true
+                            }
+                        )
+                    );
+
+
+                    campoCheckout.dispatchEvent(
+                        new Event(
+                            "change",
+                            {
+                                bubbles: true
+                            }
+                        )
+                    );
+
+                }
+
+
+                /*
+                 * Calcula noites.
+                 */
+
+                const entrada =
+                    new Date(
+                        `${checkin}T12:00:00`
+                    );
+
+
+                const saida =
+                    new Date(
+                        `${checkout}T12:00:00`
+                    );
+
+
+                const noites =
+                    Math.round(
+                        (
+                            saida -
+                            entrada
+                        ) /
+                        (
+                            1000 *
+                            60 *
+                            60 *
+                            24
+                        )
+                    );
+
+
+                if (
+                    campoNoites &&
+                    noites > 0
+                ) {
+
+                    campoNoites.value =
+                        noites;
+
+
+                    campoNoites.dispatchEvent(
+                        new Event(
+                            "input",
+                            {
+                                bubbles: true
+                            }
+                        )
+                    );
+
+
+                    campoNoites.dispatchEvent(
+                        new Event(
+                            "change",
+                            {
+                                bubbles: true
+                            }
+                        )
+                    );
+
+                }
+
+
+                if (status) {
+
+                    status.textContent =
+                        `✅ Datas encontradas: ${checkin.split("-").reverse().join("/")} → ${checkout.split("-").reverse().join("/")}`;
+
+                }
+
+
+                return true;
+
+            }
+
+
+            console.warn(
+                "⚠️ OCR não encontrou duas datas.",
+                datas
+            );
+
+
+            if (status) {
+
+                status.textContent =
+                    "⚠️ Não consegui identificar as duas datas no print.";
+
+            }
+
+
+            return false;
+
+
+        } catch (erro) {
+
+            console.error(
+                "Erro na leitura especial das datas:",
+                erro
+            );
+
+
+            return false;
+
+        }
+
+    }
+
+
+    /*
+     * Observa o botão existente.
+     *
+     * Não substitui o botão.
+     * Apenas espera o OCR principal terminar
+     * e então faz a leitura específica das datas.
+     */
+
+    document.addEventListener(
+        "click",
+        function (evento) {
+
+            const alvo =
+                evento.target;
+
+
+            if (
+                !alvo ||
+                alvo.id !==
+                "btnLerOrcamento"
+            ) {
+
+                return;
+
+            }
+
+
+            setTimeout(
+                function () {
+
+                    const checkin =
+                        document.getElementById(
+                            "checkin"
+                        );
+
+
+                    const checkout =
+                        document.getElementById(
+                            "checkout"
+                        );
+
+
+                    /*
+                     * Só executa a correção
+                     * se o OCR principal deixou
+                     * alguma das datas vazia.
+                     */
+
+                    if (
+                        !checkin ||
+                        !checkout ||
+                        !checkin.value ||
+                        !checkout.value
+                    ) {
+
+                        tentarLerDatas();
+
+                    }
+
+                },
+                3000
+            );
+
+        },
+        false
+    );
+
+
+})();
                         
