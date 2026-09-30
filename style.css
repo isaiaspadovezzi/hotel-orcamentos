@@ -2396,3 +2396,27 @@ body > footer p {
     margin-top: 5px;
     max-width: 230px;
 }
+/* ==========================================
+   VALIDADE DA COTAÇÃO
+========================================== */
+
+.validade-info {
+    padding: 16px 0 5px;
+}
+
+.validade-info span {
+    display: block;
+    color: #777777;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    margin-bottom: 5px;
+}
+
+.validade-info strong {
+    display: block;
+    color: #888888;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1.4;
+}
