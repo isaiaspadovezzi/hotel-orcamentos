@@ -1699,6 +1699,16 @@ function gerarOrcamento() {
     </div>
 
 </section>
+<div class="validade-info">
+
+    <span>VALIDADE DA COTAÇÃO</span>
+
+    <strong>
+        Esta cotação é válida por 3 horas após o envio e está sujeita à disponibilidade.
+        Após esse período, valores e condições poderão ser alterados.
+    </strong>
+
+</div>
 
                <div class="validade-info">
     <span>VALIDADE DA COTAÇÃO</span>
