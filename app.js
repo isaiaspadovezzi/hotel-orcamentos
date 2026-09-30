@@ -1652,26 +1652,33 @@ function gerarOrcamento() {
                     <div class="acomodacao-info">
                         <div class="label-verde">ACOMODAÇÃO</div>
                         <h3>${nomeQuarto}</h3>
-                        <div class="quartos-pill">
-                            🛏️ ${quantidadeQuartos} ${quantidadeQuartos === 1 ? "quarto" : "quartos"}
-                            ${tipoQuarto === "S2C" ? "conjugados" : ""}
-                        </div>
-                        <div class="linha-info"></div>
-                        <div class="hospedes-info">
-                            <span>HÓSPEDES</span>
-                            <strong>${textoHospedes}</strong>
-                        </div>
+                      <div class="info-reserva">
+
+    <div class="info-reserva-item">
+        <span>HÓSPEDES</span>
+        <strong>👤 ${textoHospedes}</strong>
+    </div>
+
+    <div class="info-reserva-item">
+        <span>QUARTOS</span>
+        <strong>
+            🛏️ ${quantidadeQuartos}
+            ${quantidadeQuartos === 1 ? "quarto" : "quartos"}
+        </strong>
+    </div>
+
+    <div class="info-reserva-item">
+        <span>CAFÉ DA MANHÃ</span>
+        <strong>☕ ${cafe ? "Incluído" : "Não incluído"}</strong>
+    </div>
+
+</div>
                     </div>
                 </section>
 
               <section class="servicos-box">
 
-    <div class="servico-item">
-        <div class="servico-icone">☕</div>
-        <div>
-            <span>CAFÉ DA MANHÃ</span>
-            <strong>${cafe ? "Incluído" : "Não incluído"}</strong>
-        </div>
+ 
     </div>
 
     <div class="servico-item">
