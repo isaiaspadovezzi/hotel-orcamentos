@@ -2420,3 +2420,97 @@ body > footer p {
     font-weight: 400;
     line-height: 1.4;
 }
+/* =========================================================
+   SERVIÇOS EXTRAS — FORMULÁRIO
+   ========================================================= */
+
+.servicos-opcoes {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 15px;
+
+}
+
+
+.servico-check {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 18px;
+
+    background: #fafbfa;
+
+    border: 1px solid #dfe4df;
+
+    border-radius: 14px;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s,
+        background 0.2s;
+
+}
+
+
+.servico-check:hover {
+
+    background: #f3faef;
+
+    border-color: #a9cf9c;
+
+}
+
+
+.servico-check input {
+
+    width: 20px;
+
+    height: 20px;
+
+    accent-color: #4c9d2a;
+
+}
+
+
+.servico-check strong {
+
+    display: block;
+
+    color: #333;
+
+    font-size: 14px;
+
+}
+
+
+.servico-check small {
+
+    display: block;
+
+    margin-top: 5px;
+
+    color: #777;
+
+    font-size: 12px;
+
+}
+
+
+@media (max-width: 600px) {
+
+    .servicos-opcoes {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
