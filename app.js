@@ -1561,8 +1561,8 @@ function aplicarResultadoOCR(texto) {
 
     // Gera a prévia automaticamente somente se os dados essenciais estiverem completos.
     if (checkin && checkout && codigoQuarto && valorTotal) {
-        gerarOrcamento();
-    }
+    gerarOrcamento();
+}
 }
 
 
@@ -1570,180 +1570,596 @@ function aplicarResultadoOCR(texto) {
 // GERAR ORÇAMENTO
 // ==========================================
 
-function gerarOrcamento() {
-    const checkin = document.getElementById("checkin")?.value || "";
-    const checkout = document.getElementById("checkout")?.value || "";
-    const adultos = parseInt(document.getElementById("adultos")?.value, 10) || 0;
-    const criancas = parseInt(document.getElementById("criancas")?.value, 10) || 0;
-    const tipoQuarto = (document.getElementById("tipoQuarto")?.value || "").trim().toUpperCase();
-    const descricaoQuarto = (document.getElementById("descricaoQuarto")?.value || "").trim();
-    const tarifa = (document.getElementById("tarifa")?.value || "").trim();
-    const cafe = !!document.getElementById("cafe")?.checked;
-    const promocional = !!document.getElementById("promo")?.checked;
-    const estacionamento =
-    document.getElementById("estacionamento").checked;
+// ==========================================
+// GERAR ORÇAMENTO
+// ==========================================
 
-const pet =
-    document.getElementById("pet").checked;
-    const valorTotal = converterValor(document.getElementById("valorTotal")?.value || "");
-    const pagamento = document.getElementById("pagamento")?.value || "hotel";
+function gerarOrcamento() {
+
+    const checkin =
+        document.getElementById("checkin")?.value || "";
+
+    const checkout =
+        document.getElementById("checkout")?.value || "";
+
+    const adultos =
+        parseInt(
+            document.getElementById("adultos")?.value,
+            10
+        ) || 0;
+
+    const criancas =
+        parseInt(
+            document.getElementById("criancas")?.value,
+            10
+        ) || 0;
+
+    const tipoQuarto =
+        (
+            document.getElementById("tipoQuarto")?.value || ""
+        )
+        .trim()
+        .toUpperCase();
+
+    const descricaoQuarto =
+        (
+            document.getElementById("descricaoQuarto")?.value || ""
+        )
+        .trim();
+
+    const tarifa =
+        (
+            document.getElementById("tarifa")?.value || ""
+        )
+        .trim();
+
+    const cafe =
+        !!document.getElementById("cafe")?.checked;
+
+    const promocional =
+        !!document.getElementById("promo")?.checked;
+
+    const estacionamento =
+        !!document.getElementById("estacionamento")?.checked;
+
+    const pet =
+        !!document.getElementById("pet")?.checked;
+
+    const valorTotal =
+        converterValor(
+            document.getElementById("valorTotal")?.value || ""
+        );
+
+    const pagamento =
+        document.getElementById("pagamento")?.value || "hotel";
+
+
+    // ==========================================
+    // VALIDAÇÕES
+    // ==========================================
 
     if (!checkin || !checkout) {
-        alert("Informe o check-in e o check-out.");
+
+        alert(
+            "Informe o check-in e o check-out."
+        );
+
         return;
     }
 
-    const noites = calcularNoites(checkin, checkout);
+
+    const noites =
+        calcularNoites(
+            checkin,
+            checkout
+        );
+
+
     if (noites <= 0) {
-        alert("O check-out deve ser posterior ao check-in.");
+
+        alert(
+            "O check-out deve ser posterior ao check-in."
+        );
+
         return;
     }
 
-    const dadosQuarto = QUARTOS[tipoQuarto] || null;
-    const nomeQuarto = descricaoQuarto || (dadosQuarto ? dadosQuarto.nome : "Acomodação não informada");
-    const fotoQuarto = dadosQuarto?.foto || "";
-    const quantidadeQuartos = dadosQuarto?.quantidadeQuartos || 1;
+
+    // ==========================================
+    // DADOS DO QUARTO
+    // ==========================================
+
+    const dadosQuarto =
+        QUARTOS[tipoQuarto] || null;
+
+
+    const nomeQuarto =
+        descricaoQuarto ||
+        (
+            dadosQuarto
+                ? dadosQuarto.nome
+                : "Acomodação não informada"
+        );
+
+
+    const fotoQuarto =
+        dadosQuarto?.foto || "";
+
+
+    const quantidadeQuartos =
+        dadosQuarto?.quantidadeQuartos || 1;
+
+
+    // ==========================================
+    // HÓSPEDES
+    // ==========================================
 
     let textoHospedes = "";
-    if (adultos > 0) textoHospedes = `${adultos} adulto${adultos !== 1 ? "s" : ""}`;
-    if (criancas > 0) textoHospedes += `${textoHospedes ? " • " : ""}${criancas} criança${criancas !== 1 ? "s" : ""}`;
-    if (!textoHospedes) textoHospedes = "Não informado";
 
-    const textoPagamento = pagamento === "antecipado"
-        ? "Pagamento antecipado"
-        : "Pagamento no hotel";
 
-    const preview = document.getElementById("orcamentoPreview");
-    if (!preview) return;
+    if (adultos > 0) {
+
+        textoHospedes =
+            `${adultos} adulto${adultos !== 1 ? "s" : ""}`;
+
+    }
+
+
+    if (criancas > 0) {
+
+        textoHospedes +=
+            `${textoHospedes ? " • " : ""}${criancas} criança${criancas !== 1 ? "s" : ""}`;
+
+    }
+
+
+    if (!textoHospedes) {
+
+        textoHospedes =
+            "Não informado";
+
+    }
+
+
+    // ==========================================
+    // PAGAMENTO
+    // ==========================================
+
+    const textoPagamento =
+        pagamento === "antecipado"
+            ? "Pagamento antecipado"
+            : "Pagamento no hotel";
+
+
+    // ==========================================
+    // PREVIEW
+    // ==========================================
+
+    const preview =
+        document.getElementById("orcamentoPreview");
+
+
+    if (!preview) {
+        return;
+    }
+
 
     preview.innerHTML = `
+
         <div class="orcamento">
+
+
+            <!-- ================================= -->
+            <!-- CABEÇALHO -->
+            <!-- ================================= -->
+
             <div class="orcamento-topo">
+
                 <div class="logo-hotel">
-                    <img src="img/logo.png" alt="ibis Styles Curitiba Centro Cívico">
-                    <div class="nome-hotel">Curitiba Centro Cívico</div>
+
+                    <img
+                        src="img/logo.png"
+                        alt="ibis Styles Curitiba Centro Cívico"
+                    >
+
+                    <div class="nome-hotel">
+                        Curitiba Centro Cívico
+                    </div>
+
                 </div>
+
+
                 <div class="titulo-orcamento">
-                    <h2>ORÇAMENTO DE HOSPEDAGEM</h2>
+
+                    <h2>
+                        ORÇAMENTO DE HOSPEDAGEM
+                    </h2>
+
                 </div>
+
             </div>
+
 
             <div class="orcamento-conteudo">
+
+
+                <!-- ================================= -->
+                <!-- ESTADIA -->
+                <!-- ================================= -->
+
                 <section class="estadia-box">
-                    <div class="estadia-titulo">ESTADIA</div>
+
+                    <div class="estadia-titulo">
+                        ESTADIA
+                    </div>
+
+
                     <div class="datas-hospedagem">
+
                         <div class="data-box">
-                            <small>CHECK-IN</small>
-                            <strong>${formatarDataCompleta(checkin)}</strong>
+
+                            <small>
+                                CHECK-IN
+                            </small>
+
+                            <strong>
+                                ${formatarDataCompleta(checkin)}
+                            </strong>
+
                         </div>
-                        <div class="seta-data">→</div>
+
+
+                        <div class="seta-data">
+                            →
+                        </div>
+
+
                         <div class="data-box">
-                            <small>CHECK-OUT</small>
-                            <strong>${formatarDataCompleta(checkout)}</strong>
+
+                            <small>
+                                CHECK-OUT
+                            </small>
+
+                            <strong>
+                                ${formatarDataCompleta(checkout)}
+                            </strong>
+
                         </div>
+
                     </div>
+
+
                     <div class="estadia-noites">
-                        <span>ESTADIA</span>
-                        <strong>${noites} ${noites === 1 ? "NOITE" : "NOITES"}</strong>
+
+                        <span>
+                            ESTADIA
+                        </span>
+
+                        <strong>
+                            ${noites}
+                            ${noites === 1 ? "NOITE" : "NOITES"}
+                        </strong>
+
                     </div>
+
                 </section>
+
+
+                <!-- ================================= -->
+                <!-- ACOMODAÇÃO -->
+                <!-- ================================= -->
 
                 <section class="acomodacao-box">
-                    ${fotoQuarto ? `
-                        <div class="foto-quarto">
-                            <img src="${fotoQuarto}" alt="${nomeQuarto}">
-                        </div>
-                    ` : ""}
+
+
+                    ${
+                        fotoQuarto
+                            ? `
+                                <div class="foto-quarto">
+
+                                    <img
+                                        src="${fotoQuarto}"
+                                        alt="${nomeQuarto}"
+                                    >
+
+                                </div>
+                            `
+                            : ""
+                    }
+
+
                     <div class="acomodacao-info">
-                        <div class="label-verde">ACOMODAÇÃO</div>
-                        <h3>${nomeQuarto}</h3>
-                      <div class="info-reserva">
 
-    <div class="info-reserva-item">
-        <span>HÓSPEDES</span>
-        <strong>👤 ${textoHospedes}</strong>
-    </div>
+                        <div class="label-verde">
+                            ACOMODAÇÃO
+                        </div>
 
-    <div class="info-reserva-item">
-        <span>QUARTOS</span>
-        <strong>
-            🛏️ ${quantidadeQuartos}
-            ${quantidadeQuartos === 1 ? "quarto" : "quartos"}
-        </strong>
-    </div>
 
-    <div class="info-reserva-item">
-        <span>CAFÉ DA MANHÃ</span>
-        <strong>☕ ${cafe ? "Incluído" : "Não incluído"}</strong>
-    </div>
+                        <h3>
+                            ${nomeQuarto}
+                        </h3>
 
-</div>
+
+                        <div class="info-reserva">
+
+
+                            <div class="info-reserva-item">
+
+                                <span>
+                                    HÓSPEDES
+                                </span>
+
+                                <strong>
+                                    👤 ${textoHospedes}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="info-reserva-item">
+
+                                <span>
+                                    QUARTOS
+                                </span>
+
+                                <strong>
+                                    🛏️ ${quantidadeQuartos}
+                                    ${quantidadeQuartos === 1 ? "quarto" : "quartos"}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="info-reserva-item">
+
+                                <span>
+                                    CAFÉ DA MANHÃ
+                                </span>
+
+                                <strong>
+                                    ☕ ${cafe ? "Incluído" : "Não incluído"}
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
                     </div>
+
                 </section>
 
-              <section class="servicos-box">
 
- 
-    </div>
+                <!-- ================================= -->
+                <!-- TARIFA -->
+                <!-- ================================= -->
 
-    <div class="servico-item">
-        <div class="servico-icone">🚗</div>
-        <div>
-            <span>ESTACIONAMENTO</span>
-            <strong>R$ 30,00 / diária</strong>
-        </div>
-    </div>
+                ${
+                    tarifa
+                        ? `
+                            <div class="tarifa-info">
 
-    <div class="servico-item">
-        <div class="servico-icone">🐶</div>
-        <div>
-            <span>PET</span>
-            <strong>R$ 78,75 / diária</strong>
-            <small>Necessária carteira de vacinação atualizada.</small>
-        </div>
-    </div>
+                                <span>
+                                    TARIFA
+                                </span>
 
-</section>
-<div class="validade-info">
+                                <strong>
+                                    ${tarifa}
+                                    ${promocional ? " • PROMOCIONAL" : ""}
+                                </strong>
 
-    <span>VALIDADE DA COTAÇÃO</span>
+                            </div>
+                        `
+                        : ""
+                }
 
-    <strong>
-        Esta cotação é válida por 3 horas após o envio e está sujeita à disponibilidade.
-        Após esse período, valores e condições poderão ser alterados.
-    </strong>
 
-</div>
+                <!-- ================================= -->
+                <!-- SERVIÇOS EXTRAS -->
+                <!-- ================================= -->
 
-               <div class="validade-info">
-    <span>VALIDADE DA COTAÇÃO</span>
-    <strong>
-        Esta cotação é válida por 3 horas após o envio e está sujeita à disponibilidade.
-        Após esse período, valores e condições poderão ser alterados.
-    </strong>
-</div>
+                ${
+                    (estacionamento || pet || !cafe)
+                        ? `
+
+                            <section class="servicos-orcamento">
+
+                                <div class="servicos-titulo">
+                                    SERVIÇOS EXTRAS
+                                </div>
+
+
+                                <div class="servicos-grid">
+
+
+                                    ${
+                                        estacionamento
+                                            ? `
+
+                                                <div class="servico-card">
+
+                                                    <div class="servico-icone">
+                                                        🚗
+                                                    </div>
+
+                                                    <div class="servico-conteudo">
+
+                                                        <strong>
+                                                            ESTACIONAMENTO
+                                                        </strong>
+
+                                                        <span>
+                                                            R$ 30,00 / diária
+                                                        </span>
+
+                                                    </div>
+
+                                                </div>
+
+                                            `
+                                            : ""
+                                    }
+
+
+                                    ${
+                                        pet
+                                            ? `
+
+                                                <div class="servico-card">
+
+                                                    <div class="servico-icone">
+                                                        🐶
+                                                    </div>
+
+                                                    <div class="servico-conteudo">
+
+                                                        <strong>
+                                                            PET
+                                                        </strong>
+
+                                                        <span>
+                                                            R$ 78,75 / diária
+                                                        </span>
+
+                                                        <small>
+                                                            Necessária carteira de vacinação atualizada.
+                                                        </small>
+
+                                                    </div>
+
+                                                </div>
+
+                                            `
+                                            : ""
+                                    }
+
+
+                                    ${
+                                        !cafe
+                                            ? `
+
+                                                <div class="servico-card">
+
+                                                    <div class="servico-icone">
+                                                        ☕
+                                                    </div>
+
+                                                    <div class="servico-conteudo">
+
+                                                        <strong>
+                                                            CAFÉ DA MANHÃ
+                                                        </strong>
+
+                                                        <span>
+                                                            R$ 53,00 / pessoa
+                                                        </span>
+
+                                                        <small>
+                                                            Pago à parte
+                                                        </small>
+
+                                                    </div>
+
+                                                </div>
+
+                                            `
+                                            : ""
+                                    }
+
+
+                                </div>
+
+                            </section>
+
+                        `
+                        : ""
+                }
+
+
+                <!-- ================================= -->
+                <!-- VALIDADE -->
+                <!-- ================================= -->
+
+                <div class="validade-info">
+
+                    <span>
+                        VALIDADE DA COTAÇÃO
+                    </span>
+
+                    <strong>
+                        Esta cotação é válida por 3 horas após o envio e está sujeita à disponibilidade.
+                        Após esse período, valores e condições poderão ser alterados.
+                    </strong>
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- TOTAL -->
+                <!-- ================================= -->
 
                 <section class="total-box">
+
                     <div>
-                        <span>TOTAL DA HOSPEDAGEM</span>
-                        <strong>${formatarMoeda(valorTotal)}</strong>
+
+                        <span>
+                            TOTAL DA HOSPEDAGEM
+                        </span>
+
+                        <strong>
+                            ${formatarMoeda(valorTotal)}
+                        </strong>
+
                     </div>
-                    <div class="pagamento-box">${textoPagamento}</div>
+
+
+                    <div class="pagamento-box">
+                        ${textoPagamento}
+                    </div>
+
                 </section>
 
+
+                <!-- ================================= -->
+                <!-- RODAPÉ -->
+                <!-- ================================= -->
+
                 <div class="rodape-orcamento">
-                    <p>ibis Styles Curitiba Centro Cívico</p>
-                    <p>Orçamento sujeito à disponibilidade</p>
+
+                    <p>
+                        ibis Styles Curitiba Centro Cívico
+                    </p>
+
+                    <p>
+                        Orçamento sujeito à disponibilidade
+                    </p>
+
                 </div>
+
+
             </div>
+
         </div>
+
     `;
 
-    const previewArea = document.getElementById("previewArea");
-    if (previewArea) previewArea.style.display = "block";
+
+    // ==========================================
+    // MOSTRAR PREVIEW
+    // ==========================================
+
+    const previewArea =
+        document.getElementById("previewArea");
+
+
+    if (previewArea) {
+
+        previewArea.style.display =
+            "block";
+
+    }
+
 }
-
-
 // ==========================================
 // SUBMIT DO FORMULÁRIO
 // ==========================================
