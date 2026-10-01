@@ -1580,6 +1580,11 @@ function gerarOrcamento() {
     const tarifa = (document.getElementById("tarifa")?.value || "").trim();
     const cafe = !!document.getElementById("cafe")?.checked;
     const promocional = !!document.getElementById("promo")?.checked;
+    const estacionamento =
+    document.getElementById("estacionamento").checked;
+
+const pet =
+    document.getElementById("pet").checked;
     const valorTotal = converterValor(document.getElementById("valorTotal")?.value || "");
     const pagamento = document.getElementById("pagamento")?.value || "hotel";
 
