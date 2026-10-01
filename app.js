@@ -1576,6 +1576,10 @@ function aplicarResultadoOCR(texto) {
 
 function gerarOrcamento() {
 
+    // ==========================================
+    // DADOS DA HOSPEDAGEM
+    // ==========================================
+
     const checkin =
         document.getElementById("checkin")?.value || "";
 
@@ -1594,6 +1598,11 @@ function gerarOrcamento() {
             10
         ) || 0;
 
+
+    // ==========================================
+    // QUARTO
+    // ==========================================
+
     const tipoQuarto =
         (
             document.getElementById("tipoQuarto")?.value || ""
@@ -1607,6 +1616,11 @@ function gerarOrcamento() {
         )
         .trim();
 
+
+    // ==========================================
+    // TARIFA / CAFÉ
+    // ==========================================
+
     const tarifa =
         (
             document.getElementById("tarifa")?.value || ""
@@ -1616,14 +1630,27 @@ function gerarOrcamento() {
     const cafe =
         !!document.getElementById("cafe")?.checked;
 
-    const promocional =
-        !!document.getElementById("promo")?.checked;
+
+    // ==========================================
+    // SERVIÇOS EXTRAS
+    // ==========================================
 
     const estacionamento =
         !!document.getElementById("estacionamento")?.checked;
 
     const pet =
         !!document.getElementById("pet")?.checked;
+
+    const almoco =
+        !!document.getElementById("almoco")?.checked;
+
+    const bar =
+        !!document.getElementById("bar")?.checked;
+
+
+    // ==========================================
+    // VALORES
+    // ==========================================
 
     const valorTotal =
         converterValor(
@@ -1632,6 +1659,9 @@ function gerarOrcamento() {
 
     const pagamento =
         document.getElementById("pagamento")?.value || "hotel";
+
+    const associado =
+        !!document.getElementById("associado")?.checked;
 
 
     // ==========================================
@@ -1736,7 +1766,9 @@ function gerarOrcamento() {
     // ==========================================
 
     const preview =
-        document.getElementById("orcamentoPreview");
+        document.getElementById(
+            "orcamentoPreview"
+        );
 
 
     if (!preview) {
@@ -1744,14 +1776,47 @@ function gerarOrcamento() {
     }
 
 
+    // ==========================================
+    // COMODIDADES FIXAS
+    // ==========================================
+
+    const comodidadesQuarto = [
+
+        "❄️ Ar-condicionado frio e quente",
+        "📺 TV Smart",
+        "📡 TV a cabo",
+        "💨 Secador de cabelo",
+        "🧊 Frigobar",
+        "🖥️ Escrivaninha"
+
+    ];
+
+
+    // ==========================================
+    // GERAR LISTA DE COMODIDADES
+    // ==========================================
+
+    const listaComodidades =
+        comodidadesQuarto
+            .map(
+                item =>
+                    `<li>${item}</li>`
+            )
+            .join("");
+
+
+    // ==========================================
+    // GERAR ORÇAMENTO
+    // ==========================================
+
     preview.innerHTML = `
 
         <div class="orcamento">
 
 
-            <!-- ================================= -->
-            <!-- CABEÇALHO -->
-            <!-- ================================= -->
+            <!-- ==================================
+                 CABEÇALHO
+                 ================================== -->
 
             <div class="orcamento-topo">
 
@@ -1780,12 +1845,13 @@ function gerarOrcamento() {
             </div>
 
 
+
             <div class="orcamento-conteudo">
 
 
-                <!-- ================================= -->
-                <!-- ESTADIA -->
-                <!-- ================================= -->
+                <!-- ==================================
+                     DATAS
+                     ================================== -->
 
                 <section class="estadia-box">
 
@@ -1829,86 +1895,139 @@ function gerarOrcamento() {
                     </div>
 
 
-                    <div class="estadia-noites">
+                    <!-- INFORMAÇÕES RESUMIDAS -->
 
-                        <span>
-                            ESTADIA
-                        </span>
+                    <div class="informacoes-estadia">
 
-                        <strong>
-                            ${noites}
-                            ${noites === 1 ? "NOITE" : "NOITES"}
-                        </strong>
+
+                        <div class="card-info-estadia">
+
+                            <div class="card-info-icone">
+                                🌙
+                            </div>
+
+                            <div class="card-info-conteudo">
+
+                                <span>
+                                    ESTADIA
+                                </span>
+
+                                <strong>
+                                    ${noites}
+                                    ${noites === 1 ? "NOITE" : "NOITES"}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="card-info-estadia">
+
+                            <div class="card-info-icone">
+                                👤
+                            </div>
+
+                            <div class="card-info-conteudo">
+
+                                <span>
+                                    HÓSPEDES
+                                </span>
+
+                                <strong>
+                                    ${textoHospedes}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="card-info-estadia">
+
+                            <div class="card-info-icone">
+                                🛏️
+                            </div>
+
+                            <div class="card-info-conteudo">
+
+                                <span>
+                                    QUARTOS
+                                </span>
+
+                                <strong>
+                                    ${quantidadeQuartos}
+                                    ${quantidadeQuartos === 1 ? "quarto" : "quartos"}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="card-info-estadia">
+
+                            <div class="card-info-icone">
+                                ☕
+                            </div>
+
+                            <div class="card-info-conteudo">
+
+                                <span>
+                                    CAFÉ DA MANHÃ
+                                </span>
+
+                                <strong>
+                                    ${cafe ? "Incluído" : "Não incluído"}
+                                </strong>
+
+                                <small>
+                                    6h30 às 10h00
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="card-info-estadia card-info-horarios">
+
+                            <div class="card-info-icone">
+                                🕐
+                            </div>
+
+                            <div class="card-info-conteudo">
+
+                                <span>
+                                    HORÁRIOS
+                                </span>
+
+                                <strong>
+                                    15:00 → 12:00
+                                </strong>
+
+                                <small>
+                                    Check-in → Check-out
+                                </small>
+
+                            </div>
+
+                        </div>
+
 
                     </div>
 
                 </section>
-                <section class="horarios-box">
-
-    <div class="horarios-titulo">
-        HORÁRIOS DA HOSPEDAGEM
-    </div>
-
-    <div class="horarios-principais">
-
-        <div class="horario-item">
-
-            <span class="horario-label">
-                CHECK-IN
-            </span>
-
-            <strong class="horario-destaque">
-                15:00
-            </strong>
-
-            <small>
-                A partir das 15h
-            </small>
-
-        </div>
 
 
-        <div class="horario-separador"></div>
 
-
-        <div class="horario-item">
-
-            <span class="horario-label">
-                CHECK-OUT
-            </span>
-
-            <strong class="horario-destaque">
-                12:00
-            </strong>
-
-            <small>
-                Até às 12h
-            </small>
-
-        </div>
-
-    </div>
-
-
-    <div class="horarios-observacao">
-
-        <strong>
-            Early check-in e late check-out
-        </strong>
-
-        <span>
-            sujeitos à disponibilidade no dia e não podem ser reservados antecipadamente.
-            Poderá haver cobrança de taxa adicional.
-        </span>
-
-    </div>
-
-</section>
-
-
-                <!-- ================================= -->
-                <!-- ACOMODAÇÃO -->
-                <!-- ================================= -->
+                <!-- ==================================
+                     ACOMODAÇÃO
+                     ================================== -->
 
                 <section class="acomodacao-box">
 
@@ -1916,6 +2035,7 @@ function gerarOrcamento() {
                     ${
                         fotoQuarto
                             ? `
+
                                 <div class="foto-quarto">
 
                                     <img
@@ -1924,12 +2044,15 @@ function gerarOrcamento() {
                                     >
 
                                 </div>
+
                             `
                             : ""
                     }
 
 
+
                     <div class="acomodacao-info">
+
 
                         <div class="label-verde">
                             ACOMODAÇÃO
@@ -1941,63 +2064,29 @@ function gerarOrcamento() {
                         </h3>
 
 
-                        <div class="info-reserva">
+                        <div class="comodidades-quarto">
 
-
-                            <div class="info-reserva-item">
-
-                                <span>
-                                    HÓSPEDES
-                                </span>
-
-                                <strong>
-                                    👤 ${textoHospedes}
-                                </strong>
-
-                            </div>
-
-
-                            <div class="info-reserva-item">
-
-                                <span>
-                                    QUARTOS
-                                </span>
-
-                                <strong>
-                                    🛏️ ${quantidadeQuartos}
-                                    ${quantidadeQuartos === 1 ? "quarto" : "quartos"}
-                                </strong>
-
-                            </div>
-
-
-                            <div class="info-reserva-item">
-
-                                <span>
-                                    CAFÉ DA MANHÃ
-                                </span>
-
-                                <strong>
-                                    ☕ ${cafe ? "Incluído" : "Não incluído"}
-                                </strong>
-
-                            </div>
-
+                            <ul>
+                                ${listaComodidades}
+                            </ul>
 
                         </div>
+
 
                     </div>
 
                 </section>
 
 
-                <!-- ================================= -->
-                <!-- TARIFA -->
-                <!-- ================================= -->
+
+                <!-- ==================================
+                     TARIFA
+                     ================================== -->
 
                 ${
                     tarifa
                         ? `
+
                             <div class="tarifa-info">
 
                                 <span>
@@ -2006,24 +2095,32 @@ function gerarOrcamento() {
 
                                 <strong>
                                     ${tarifa}
-                                    ${promocional ? " • PROMOCIONAL" : ""}
                                 </strong>
 
                             </div>
+
                         `
                         : ""
                 }
 
 
-                <!-- ================================= -->
-                <!-- SERVIÇOS EXTRAS -->
-                <!-- ================================= -->
+
+                <!-- ==================================
+                     SERVIÇOS EXTRAS
+                     ================================== -->
 
                 ${
-                    (estacionamento || pet || !cafe)
+                    (
+                        estacionamento ||
+                        pet ||
+                        almoco ||
+                        bar ||
+                        !cafe
+                    )
                         ? `
 
                             <section class="servicos-orcamento">
+
 
                                 <div class="servicos-titulo">
                                     SERVIÇOS EXTRAS
@@ -2053,6 +2150,10 @@ function gerarOrcamento() {
                                                             R$ 30,00 / diária
                                                         </span>
 
+                                                        <small>
+                                                            24 horas
+                                                        </small>
+
                                                     </div>
 
                                                 </div>
@@ -2060,6 +2161,7 @@ function gerarOrcamento() {
                                             `
                                             : ""
                                     }
+
 
 
                                     ${
@@ -2095,6 +2197,71 @@ function gerarOrcamento() {
                                     }
 
 
+
+                                    ${
+                                        almoco
+                                            ? `
+
+                                                <div class="servico-card">
+
+                                                    <div class="servico-icone">
+                                                        🍽️
+                                                    </div>
+
+                                                    <div class="servico-conteudo">
+
+                                                        <strong>
+                                                            ALMOÇO
+                                                        </strong>
+
+                                                        <span>
+                                                            A partir de R$ 25,90
+                                                        </span>
+
+                                                        <small>
+                                                            Seg. a sex. • 11h30 às 13h30
+                                                        </small>
+
+                                                    </div>
+
+                                                </div>
+
+                                            `
+                                            : ""
+                                    }
+
+
+
+                                    ${
+                                        bar
+                                            ? `
+
+                                                <div class="servico-card">
+
+                                                    <div class="servico-icone">
+                                                        🍸
+                                                    </div>
+
+                                                    <div class="servico-conteudo">
+
+                                                        <strong>
+                                                            BAR
+                                                        </strong>
+
+                                                        <span>
+                                                            Atendimento 24 horas
+                                                        </span>
+
+                                                    </div>
+
+                                                </div>
+
+                                            `
+                                            : ""
+                                    }
+
+
+
                                     ${
                                         !cafe
                                             ? `
@@ -2116,7 +2283,7 @@ function gerarOrcamento() {
                                                         </span>
 
                                                         <small>
-                                                            Pago à parte
+                                                            6h30 às 10h00 • Pago à parte
                                                         </small>
 
                                                     </div>
@@ -2137,53 +2304,250 @@ function gerarOrcamento() {
                 }
 
 
-                <!-- ================================= -->
-                <!-- VALIDADE -->
-                <!-- ================================= -->
 
-                <div class="validade-info">
+                <!-- ==================================
+                     INFORMAÇÕES EXTRAS
+                     ================================== -->
 
-                    <span>
-                        VALIDADE DA COTAÇÃO
-                    </span>
-
-                    <strong>
-                        Esta cotação é válida por 3 horas após o envio e está sujeita à disponibilidade.
-                        Após esse período, valores e condições poderão ser alterados.
-                    </strong>
-
-                </div>
+                <div class="informacoes-importantes">
 
 
-                <!-- ================================= -->
-                <!-- TOTAL -->
-                <!-- ================================= -->
-
-                <section class="total-box">
-
-                    <div>
+                    <div class="informacao-extra">
 
                         <span>
-                            TOTAL DA HOSPEDAGEM
+                            EARLY CHECK-IN / LATE CHECK-OUT
                         </span>
 
                         <strong>
-                            ${formatarMoeda(valorTotal)}
+                            Sujeitos à disponibilidade no dia e não podem ser reservados antecipadamente.
+                            Poderá haver cobrança de taxa adicional.
                         </strong>
 
                     </div>
 
 
-                    <div class="pagamento-box">
-                        ${textoPagamento}
+                    <div class="informacao-extra">
+
+                        <span>
+                            CANCELAMENTO
+                        </span>
+
+                        <strong>
+                            Cancelamento sem custo.
+                        </strong>
+
                     </div>
+
+
+                    <div class="informacao-extra">
+
+                        <span>
+                            VALIDADE DA COTAÇÃO
+                        </span>
+
+                        <strong>
+                            Esta cotação é válida por 3 horas após o envio e está sujeita à disponibilidade.
+                            Após esse período, valores e condições poderão ser alterados.
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ==================================
+                     VALORES
+                     ================================== -->
+
+                <section class="valores-orcamento">
+
+
+                    <div class="card-valor-orcamento">
+
+                        <div class="card-valor-icone">
+                            💰
+                        </div>
+
+                        <div>
+
+                            <span>
+                                VALOR TOTAL
+                            </span>
+
+                            <strong>
+                                ${formatarMoeda(valorTotal)}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="card-valor-orcamento">
+
+                        <div class="card-valor-icone">
+                            💳
+                        </div>
+
+                        <div>
+
+                            <span>
+                                PAGAMENTO
+                            </span>
+
+                            <strong>
+                                ${textoPagamento}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    ${
+                        associado
+                            ? `
+
+                                <div class="card-valor-orcamento card-desconto">
+
+                                    <div class="card-valor-icone">
+                                        🏷️
+                                    </div>
+
+                                    <div>
+
+                                        <span>
+                                            DESCONTO
+                                        </span>
+
+                                        <strong>
+                                            Associado incluído
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+                            `
+                            : ""
+                    }
+
 
                 </section>
 
 
-                <!-- ================================= -->
-                <!-- RODAPÉ -->
-                <!-- ================================= -->
+
+                <!-- ==================================
+                     ENDEREÇO + MAPA
+                     ================================== -->
+
+                <section class="localizacao-hotel">
+
+
+                    <div class="endereco-hotel">
+
+                        <span>
+                            IBIS STYLES CURITIBA CENTRO CÍVICO
+                        </span>
+
+                        <strong>
+                            Rua Mateus Leme, 358
+                        </strong>
+
+                        <small>
+                            Centro Cívico • Curitiba – PR • Brasil
+                        </small>
+
+                    </div>
+
+
+                    <div class="mapa-hotel">
+
+                        <div class="mapa-placeholder">
+
+                            <span>
+                                📍
+                            </span>
+
+                            <strong>
+                                ibis Styles Curitiba
+                            </strong>
+
+                            <small>
+                                Centro Cívico
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- ==================================
+                     PONTOS DE INTERESSE
+                     ================================== -->
+
+                <div class="pontos-localizacao">
+
+                    <div>
+                        Shopping Mueller
+                        <strong>40 m</strong>
+                    </div>
+
+                    <div>
+                        Passeio Público
+                        <strong>300 m</strong>
+                    </div>
+
+                    <div>
+                        Largo da Ordem
+                        <strong>400 m</strong>
+                    </div>
+
+                    <div>
+                        Estádio Couto Pereira
+                        <strong>1,6 km</strong>
+                    </div>
+
+                    <div>
+                        Rodoviária
+                        <strong>2,5 km</strong>
+                    </div>
+
+                    <div>
+                        Jardim Botânico
+                        <strong>3,6 km</strong>
+                    </div>
+
+                    <div>
+                        Parque Barigui
+                        <strong>4 km</strong>
+                    </div>
+
+                    <div>
+                        Ópera de Arame / Pedreira
+                        <strong>5 km</strong>
+                    </div>
+
+                    <div>
+                        Aeroporto
+                        <strong>17 km</strong>
+                    </div>
+
+                </div>
+
+
+
+                <!-- ==================================
+                     RODAPÉ
+                     ================================== -->
 
                 <div class="rodape-orcamento">
 
@@ -2210,7 +2574,9 @@ function gerarOrcamento() {
     // ==========================================
 
     const previewArea =
-        document.getElementById("previewArea");
+        document.getElementById(
+            "previewArea"
+        );
 
 
     if (previewArea) {
