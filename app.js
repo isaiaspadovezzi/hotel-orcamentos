@@ -1843,6 +1843,67 @@ function gerarOrcamento() {
                     </div>
 
                 </section>
+                <section class="horarios-box">
+
+    <div class="horarios-titulo">
+        HORÁRIOS DA HOSPEDAGEM
+    </div>
+
+    <div class="horarios-principais">
+
+        <div class="horario-item">
+
+            <span class="horario-label">
+                CHECK-IN
+            </span>
+
+            <strong class="horario-destaque">
+                15:00
+            </strong>
+
+            <small>
+                A partir das 15h
+            </small>
+
+        </div>
+
+
+        <div class="horario-separador"></div>
+
+
+        <div class="horario-item">
+
+            <span class="horario-label">
+                CHECK-OUT
+            </span>
+
+            <strong class="horario-destaque">
+                12:00
+            </strong>
+
+            <small>
+                Até às 12h
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="horarios-observacao">
+
+        <strong>
+            Early check-in e late check-out
+        </strong>
+
+        <span>
+            sujeitos à disponibilidade no dia e não podem ser reservados antecipadamente.
+            Poderá haver cobrança de taxa adicional.
+        </span>
+
+    </div>
+
+</section>
 
 
                 <!-- ================================= -->
