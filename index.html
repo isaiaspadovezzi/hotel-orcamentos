@@ -192,26 +192,54 @@
 
         </section>
        
+<!-- VALORES -->
+<section class="card">
 
-        <!-- VALORES -->
-        <section class="card">
+    <h3>Valores</h3>
 
-            <h3>Valores</h3>
+    <div class="grid">
 
+        <div class="campo">
+            <label for="valorTotal">Valor total</label>
 
-                <div class="campo">
-                    <label for="valorTotal">Valor total</label>
+            <input
+                type="text"
+                id="valorTotal"
+                placeholder="R$ 0,00"
+            >
+        </div>
 
-                    <input
-                        type="text"
-                        id="valorTotal"
-                        placeholder="R$ 0,00"
-                    >
-                </div>
+        <div class="campo">
+            <label for="pagamento">Forma de pagamento</label>
 
-         
+            <select id="pagamento">
 
-        </section>
+                <option value="hotel">
+                    A ser pago no hotel
+                </option>
+
+                <option value="antecipado">
+                    Pagamento antecipado
+                </option>
+
+            </select>
+        </div>
+
+    </div>
+
+    <div class="linha-opcoes">
+
+        <label class="check">
+            <input
+                type="checkbox"
+                id="associado"
+            >
+            Desconto de associado incluído
+        </label>
+
+    </div>
+
+</section>
 <!-- SERVIÇOS EXTRAS -->
 <section class="card">
 
