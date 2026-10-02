@@ -3170,3 +3170,186 @@ body > footer p {
     margin-top: 18px !important;
     padding-top: 15px !important;
 }
+/* =========================================================
+   AJUSTE FINAL — ORGANIZAÇÃO DO ORÇAMENTO
+   ========================================================= */
+
+
+/* =========================================================
+   1. CARDS DA ESTADIA — TODOS NA MESMA LINHA
+   ========================================================= */
+
+.orcamento .estadia-info-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 10px !important;
+}
+
+.orcamento .estadia-info-card {
+    min-height: 54px !important;
+    box-sizing: border-box !important;
+}
+
+.orcamento .estadia-info-card strong {
+    font-size: 12px !important;
+}
+
+
+/* =========================================================
+   2. SERVIÇOS EXTRAS
+   ========================================================= */
+
+.orcamento .servicos-box {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 12px !important;
+
+    margin-top: 12px !important;
+    padding-top: 30px !important;
+
+    position: relative !important;
+}
+
+.orcamento .servicos-box::before {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+
+    margin: 0 !important;
+
+    content: "SERVIÇOS EXTRAS" !important;
+
+    color: #777 !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    letter-spacing: 1px !important;
+}
+
+.orcamento .servico-box-item {
+    width: auto !important;
+    min-height: 70px !important;
+    box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   3. INFORMAÇÕES EXTRAS
+   ========================================================= */
+
+.orcamento .informacoes-extras {
+    margin-top: 16px !important;
+    padding: 14px 16px !important;
+}
+
+.orcamento .informacoes-extras > div {
+    display: block !important;
+    margin-bottom: 6px !important;
+}
+
+.orcamento .informacoes-extras span {
+    display: inline !important;
+    margin-right: 5px !important;
+}
+
+.orcamento .informacoes-extras strong {
+    display: inline !important;
+}
+
+
+/* =========================================================
+   4. VALORES
+   ========================================================= */
+
+.orcamento .valores-orcamento {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 12px !important;
+}
+
+.orcamento .card-valor-orcamento {
+    min-height: 72px !important;
+}
+
+
+/* =========================================================
+   5. ENDEREÇO + MAPA
+   ========================================================= */
+
+.orcamento .localizacao-hotel {
+    grid-template-columns: 1fr 300px !important;
+    gap: 20px !important;
+
+    margin-top: 20px !important;
+    padding-top: 18px !important;
+
+    align-items: stretch !important;
+}
+
+.orcamento .endereco-hotel {
+    padding: 5px 0 !important;
+}
+
+.orcamento .endereco-hotel span {
+    display: block !important;
+    margin-bottom: 5px !important;
+}
+
+.orcamento .endereco-hotel strong {
+    display: block !important;
+    font-size: 16px !important;
+}
+
+.orcamento .endereco-hotel small {
+    display: block !important;
+}
+
+
+/* =========================================================
+   6. MAPA
+   ========================================================= */
+
+.orcamento .mapa-hotel {
+    width: 300px !important;
+    height: 125px !important;
+
+    margin: 0 !important;
+}
+
+.orcamento .mapa-placeholder {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+
+/* =========================================================
+   7. PONTOS DE LOCALIZAÇÃO
+   ========================================================= */
+
+.orcamento .pontos-localizacao {
+    grid-template-columns: repeat(3, 1fr) !important;
+
+    margin-top: 10px !important;
+    padding: 10px 0 !important;
+
+    gap: 5px 18px !important;
+}
+
+.orcamento .pontos-localizacao div {
+    font-size: 9px !important;
+    line-height: 1.35 !important;
+}
+
+
+/* =========================================================
+   8. REMOVER QUALQUER ESPAÇO EXCESSIVO
+   ========================================================= */
+
+.orcamento .orcamento-conteudo {
+    padding-bottom: 0 !important;
+}
+
+.orcamento .localizacao-hotel + .pontos-localizacao {
+    margin-bottom: 0 !important;
+}
+
+.orcamento .rodape-orcamento {
+    margin-top: 12px !important;
+}
