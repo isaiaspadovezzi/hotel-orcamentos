@@ -2883,3 +2883,290 @@ body > footer p {
     font-size: 8.5px !important;
     color: #888 !important;
 }
+/* =========================================================
+   ORÇAMENTO — AJUSTE VISUAL FINAL
+   ========================================================= */
+
+.orcamento {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333;
+}
+
+/* =========================================================
+   ESTADIA
+   ========================================================= */
+
+.orcamento .estadia-box {
+    padding: 28px 30px !important;
+    margin-bottom: 26px !important;
+    border-radius: 18px !important;
+}
+
+.orcamento .estadia-titulo {
+    margin-bottom: 18px !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    letter-spacing: 1.5px !important;
+    color: #4c9d2a !important;
+}
+
+.orcamento .datas-hospedagem {
+    align-items: center !important;
+}
+
+.orcamento .data-box {
+    padding: 20px 22px !important;
+    border-radius: 14px !important;
+}
+
+.orcamento .data-box small {
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    letter-spacing: 1px !important;
+}
+
+.orcamento .data-box strong {
+    font-size: 23px !important;
+    line-height: 1.2 !important;
+}
+
+/* Remove a linha antiga "ESTADIA 1 NOITE" */
+.orcamento .estadia-noites {
+    display: none !important;
+}
+
+
+/* =========================================================
+   INFORMAÇÕES DA ESTADIA
+   ========================================================= */
+
+.orcamento .estadia-info-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 12px !important;
+    margin-top: 14px !important;
+}
+
+.orcamento .estadia-info-card {
+    padding: 13px 15px !important;
+    background: #fff !important;
+    border: 1px solid #dfe5dc !important;
+    border-radius: 12px !important;
+}
+
+.orcamento .estadia-info-card span {
+    display: block !important;
+    margin-bottom: 4px !important;
+    color: #777 !important;
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    letter-spacing: .7px !important;
+}
+
+.orcamento .estadia-info-card strong {
+    display: block !important;
+    color: #333 !important;
+    font-size: 13px !important;
+}
+
+
+/* =========================================================
+   ACOMODAÇÃO
+   ========================================================= */
+
+.orcamento .acomodacao-box {
+    margin-bottom: 25px !important;
+    padding-bottom: 25px !important;
+    border-bottom: 1px solid #e5e5e5 !important;
+}
+
+.orcamento .acomodacao-info {
+    padding-top: 3px !important;
+}
+
+.orcamento .acomodacao-info .label-verde {
+    font-size: 10px !important;
+    letter-spacing: 1.2px !important;
+}
+
+.orcamento .acomodacao-info h3 {
+    margin: 8px 0 18px !important;
+    font-size: 25px !important;
+    line-height: 1.18 !important;
+}
+
+.orcamento .info-reserva {
+    padding: 14px 0 !important;
+    border-top: 1px solid #eeeeee !important;
+    border-bottom: 1px solid #eeeeee !important;
+}
+
+
+/* =========================================================
+   SERVIÇOS EXTRAS
+   ========================================================= */
+
+.orcamento .servicos-box {
+    margin-top: 10px !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+.orcamento .servicos-box::before {
+    content: "SERVIÇOS EXTRAS";
+    display: block;
+    margin-bottom: 12px;
+    color: #777;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.orcamento .servicos-box {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 12px !important;
+}
+
+.orcamento .servico-box-item {
+    min-height: 75px !important;
+    padding: 13px !important;
+    background: #fafbfa !important;
+    border: 1px solid #dfe4df !important;
+    border-radius: 13px !important;
+    gap: 10px !important;
+}
+
+.orcamento .servico-icone {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    border-radius: 10px !important;
+    font-size: 20px !important;
+}
+
+.orcamento .servico-box-item span {
+    font-size: 8px !important;
+    margin-bottom: 3px !important;
+}
+
+.orcamento .servico-box-item strong {
+    font-size: 12px !important;
+}
+
+.orcamento .servico-box-item small {
+    font-size: 8px !important;
+    margin-top: 3px !important;
+}
+
+
+/* =========================================================
+   INFORMAÇÕES EXTRAS
+   ========================================================= */
+
+.orcamento .informacoes-extras {
+    margin-top: 18px !important;
+    padding: 15px 18px !important;
+    background: #fafafa !important;
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 12px !important;
+}
+
+.orcamento .informacoes-extras > div {
+    margin-bottom: 7px !important;
+}
+
+.orcamento .informacoes-extras > div:last-child {
+    margin-bottom: 0 !important;
+}
+
+.orcamento .informacoes-extras span {
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    color: #777 !important;
+    letter-spacing: .5px !important;
+}
+
+.orcamento .informacoes-extras strong {
+    font-size: 10px !important;
+    color: #444 !important;
+    font-weight: 600 !important;
+}
+
+
+/* =========================================================
+   VALORES
+   ========================================================= */
+
+.orcamento .valores-orcamento {
+    display: grid !important;
+    grid-template-columns: 1.2fr 1fr 1fr !important;
+    gap: 12px !important;
+    margin-top: 18px !important;
+}
+
+.orcamento .card-valor-orcamento {
+    min-height: 76px !important;
+    padding: 15px !important;
+    background: #fff !important;
+    border: 1px solid #dfe4df !important;
+    border-radius: 13px !important;
+    box-sizing: border-box !important;
+}
+
+.orcamento .card-valor-orcamento span {
+    font-size: 9px !important;
+    letter-spacing: .7px !important;
+}
+
+.orcamento .card-valor-orcamento strong {
+    font-size: 14px !important;
+}
+
+.orcamento .card-valor-orcamento:first-child strong {
+    font-size: 20px !important;
+    color: #4c9d2a !important;
+}
+
+
+/* =========================================================
+   ENDEREÇO + MAPA
+   ========================================================= */
+
+.orcamento .localizacao-hotel {
+    margin-top: 22px !important;
+    padding-top: 18px !important;
+}
+
+.orcamento .endereco-hotel strong {
+    font-size: 16px !important;
+}
+
+.orcamento .mapa-hotel {
+    height: 135px !important;
+    border-radius: 13px !important;
+}
+
+
+/* =========================================================
+   PONTOS DE LOCALIZAÇÃO
+   ========================================================= */
+
+.orcamento .pontos-localizacao {
+    margin-top: 10px !important;
+    padding: 11px 0 !important;
+}
+
+.orcamento .pontos-localizacao div {
+    font-size: 9px !important;
+}
+
+
+/* =========================================================
+   RODAPÉ
+   ========================================================= */
+
+.orcamento .rodape-orcamento {
+    margin-top: 18px !important;
+    padding-top: 15px !important;
+}
