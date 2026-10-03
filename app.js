@@ -451,7 +451,7 @@ function prepararImagemParaOCR(arquivo) {
 
         imagem.onload = function () {
 
-            const escala = 4;
+            const escala = 2;
 
             const canvas = document.createElement("canvas");
 
@@ -1048,9 +1048,12 @@ if (
                 }
 
 
-                alert(
-                    "Não foi possível ler o orçamento. O sistema foi corrigido; tente novamente."
-                );
+              alert(
+    "Erro no OCR: " +
+    (erro && erro.message
+        ? erro.message
+        : erro)
+);
 
             } finally {
 
