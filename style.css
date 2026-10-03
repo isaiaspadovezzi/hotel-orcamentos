@@ -3786,3 +3786,127 @@ body > footer p {
     font-size: 25px !important;
     font-weight: 400 !important;
 }
+/* =========================================================
+   AJUSTE FINAL DAS DATAS
+   ========================================================= */
+
+
+/* DATA + HORÁRIO */
+
+.orcamento .data-principal {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: center !important;
+
+    width: 100% !important;
+}
+
+
+/* DATA */
+
+.orcamento .data-principal strong {
+    color: #292929 !important;
+
+    font-size: 23px !important;
+    font-weight: 800 !important;
+
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* =========================================================
+   BLOCO DO HORÁRIO
+   ========================================================= */
+
+.orcamento .horario-data {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+
+    margin-left: 22px !important;
+    padding-left: 18px !important;
+
+    border-left: 1px solid #d5d5d5 !important;
+
+    min-width: 70px !important;
+}
+
+
+/* "A partir de" / "Até as" */
+
+.orcamento .horario-label {
+    display: block !important;
+
+    margin-bottom: 2px !important;
+
+    color: #888 !important;
+
+    font-size: 8px !important;
+    font-weight: 500 !important;
+
+    line-height: 1 !important;
+}
+
+
+/* HORÁRIO */
+
+.orcamento .horario-valor {
+    display: block !important;
+
+    color: #4c9d2a !important;
+
+    font-size: 15px !important;
+    font-weight: 800 !important;
+
+    line-height: 1.2 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* =========================================================
+   DIA DA SEMANA
+   ========================================================= */
+
+.orcamento .dia-semana {
+    margin-top: 6px !important;
+
+    color: #888 !important;
+
+    font-size: 13px !important;
+    font-weight: 500 !important;
+
+    line-height: 1.2 !important;
+
+    text-transform: lowercase !important;
+}
+
+
+/* =========================================================
+   CARTÃO DA DATA
+   ========================================================= */
+
+.orcamento .data-box {
+    height: 92px !important;
+
+    padding: 15px 22px !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* CHECK-IN / CHECK-OUT */
+
+.orcamento .data-box > small {
+    margin-bottom: 6px !important;
+
+    color: #777 !important;
+
+    font-size: 9px !important;
+    font-weight: 800 !important;
+
+    letter-spacing: 1px !important;
+}
