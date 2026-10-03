@@ -4268,3 +4268,131 @@ body > footer p {
 
     font-weight: 400 !important;
 }
+/* =========================================================
+   AJUSTE FINAL — DATAS
+   ========================================================= */
+
+/* Remove a barra antiga */
+.orcamento .horario-data {
+    border-left: none !important;
+
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+
+    min-width: 105px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+}
+
+
+/* Uma única barra divisória */
+.orcamento .divisor-data {
+    width: 1px !important;
+    height: 48px !important;
+
+    margin: 0 22px !important;
+
+    background: #d6d6d6 !important;
+
+    flex-shrink: 0 !important;
+}
+
+
+/* Bloco da data */
+.orcamento .data-principal {
+    display: flex !important;
+    flex-direction: column !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    min-width: 175px !important;
+
+    text-align: center !important;
+}
+
+
+/* Data */
+.orcamento .data-principal strong {
+    font-size: 25px !important;
+    font-weight: 800 !important;
+
+    color: #292929 !important;
+
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* Dia da semana */
+.orcamento .data-principal .dia-semana {
+    margin-top: 6px !important;
+
+    font-size: 16px !important;
+    font-weight: 500 !important;
+
+    color: #888 !important;
+
+    line-height: 1 !important;
+
+    text-align: center !important;
+}
+
+
+/* Bloco do horário */
+.orcamento .horario-data {
+    min-width: 100px !important;
+
+    text-align: left !important;
+}
+
+
+/* A partir de / Até as */
+.orcamento .horario-label {
+    width: 100% !important;
+
+    margin-bottom: 3px !important;
+
+    font-size: 11px !important;
+    font-weight: 500 !important;
+
+    color: #888 !important;
+
+    text-align: left !important;
+}
+
+
+/* Horário */
+.orcamento .horario-valor {
+    font-size: 24px !important;
+    font-weight: 800 !important;
+
+    color: #4c9d2a !important;
+
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* Etiqueta */
+.orcamento .tipo-data {
+    margin-bottom: 8px !important;
+
+    padding: 4px 10px !important;
+
+    font-size: 9px !important;
+
+    border-radius: 5px !important;
+}
+
+
+/* Centraliza o conteúdo inteiro do cartão */
+.orcamento .data-conteudo {
+    justify-content: center !important;
+    align-items: center !important;
+}
