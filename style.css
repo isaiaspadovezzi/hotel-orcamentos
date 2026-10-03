@@ -3652,3 +3652,137 @@ body > footer p {
     font-size: 27px !important;
     font-weight: 400 !important;
 }
+/* =========================================================
+   DATAS — CHECK-IN / CHECK-OUT
+   ========================================================= */
+
+.orcamento .datas-hospedagem {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 55px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 0 !important;
+}
+
+
+/* CARTÃO DA DATA */
+
+.orcamento .data-box {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+
+    min-width: 0 !important;
+    height: 92px !important;
+
+    padding: 15px 20px !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* TÍTULO CHECK-IN / CHECK-OUT */
+
+.orcamento .data-box > small {
+    margin-bottom: 6px !important;
+
+    color: #777 !important;
+
+    font-size: 9px !important;
+    font-weight: 800 !important;
+
+    letter-spacing: 1px !important;
+}
+
+
+/* DATA + HORÁRIO */
+
+.orcamento .data-principal {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: center !important;
+
+    width: 100% !important;
+}
+
+
+/* DATA */
+
+.orcamento .data-principal strong {
+    color: #292929 !important;
+
+    font-size: 23px !important;
+    font-weight: 800 !important;
+
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* BLOCO DO HORÁRIO */
+
+.orcamento .horario-data {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+
+    margin-left: 18px !important;
+
+    text-align: left !important;
+}
+
+
+/* "A partir de" / "Até as" */
+
+.orcamento .horario-label {
+    display: block !important;
+
+    color: #888 !important;
+
+    font-size: 8px !important;
+    font-weight: 500 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* HORÁRIO */
+
+.orcamento .horario-valor {
+    display: block !important;
+
+    color: #4c9d2a !important;
+
+    font-size: 13px !important;
+    font-weight: 800 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* DIA DA SEMANA */
+
+.orcamento .dia-semana {
+    margin-top: 5px !important;
+
+    color: #8a8a8a !important;
+
+    font-size: 10px !important;
+    font-weight: 500 !important;
+
+    text-transform: lowercase !important;
+}
+
+
+/* SETA */
+
+.orcamento .seta-data {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    color: #4c9d2a !important;
+
+    font-size: 25px !important;
+    font-weight: 400 !important;
+}
