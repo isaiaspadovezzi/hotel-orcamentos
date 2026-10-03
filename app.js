@@ -1837,17 +1837,51 @@ function gerarOrcamento() {
 
                     <div class="datas-hospedagem">
 
-                        <div class="data-box">
+                     <div class="data-box">
 
-                            <small>
-                                CHECK-IN
-                            </small>
+    <small>CHECK-IN</small>
 
-                            <strong>
-                                ${formatarDataCompleta(checkin)}
-                            </strong>
+    <div class="data-principal">
+        <strong>
+            ${formatarDataCompleta(checkin).split(" — ")[0]}
+        </strong>
 
-                        </div>
+        <span class="horario-data">
+            15:00
+        </span>
+    </div>
+
+    <div class="dia-semana">
+        ${formatarDataCompleta(checkin).split(" — ")[1]}
+    </div>
+
+</div>
+
+
+<div class="seta-data">
+    →
+</div>
+
+
+<div class="data-box">
+
+    <small>CHECK-OUT</small>
+
+    <div class="data-principal">
+        <strong>
+            ${formatarDataCompleta(checkout).split(" — ")[0]}
+        </strong>
+
+        <span class="horario-data">
+            12:00
+        </span>
+    </div>
+
+    <div class="dia-semana">
+        ${formatarDataCompleta(checkout).split(" — ")[1]}
+    </div>
+
+</div>
 
 
                         <div class="seta-data">
