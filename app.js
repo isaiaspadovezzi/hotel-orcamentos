@@ -1996,31 +1996,6 @@ function gerarOrcamento() {
                 </section>
 
 
-
-                <!-- =====================================
-                     TARIFA
-                     ===================================== -->
-
-                ${
-                    tarifa
-                        ? `
-                            <div class="tarifa-info">
-
-                                <span>
-                                    TARIFA
-                                </span>
-
-                                <strong>
-                                    ${tarifa}
-                                </strong>
-
-                            </div>
-                          `
-                        : ""
-                }
-
-
-
                 <!-- =====================================
                      SERVIÇOS EXTRAS
                      ===================================== -->
