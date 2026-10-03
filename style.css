@@ -4745,3 +4745,258 @@ body > footer p {
         grid-template-columns: 150px minmax(0, 1fr) !important;
     }
 }
+/* =========================================================
+   DATAS — NOVO DESIGN PROFISSIONAL
+   ========================================================= */
+
+.orcamento .datas-hospedagem {
+    display: grid !important;
+
+    grid-template-columns: minmax(0, 1fr) 48px minmax(0, 1fr) !important;
+
+    align-items: center !important;
+
+    width: 100% !important;
+
+    gap: 0 !important;
+}
+
+
+/* =========================================================
+   CARD DA DATA
+   ========================================================= */
+
+.orcamento .data-box {
+    height: 105px !important;
+
+    padding: 12px 20px !important;
+
+    box-sizing: border-box !important;
+
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    justify-content: center !important;
+
+    background: #ffffff !important;
+
+    border: 1px solid #d9dfd7 !important;
+
+    border-radius: 13px !important;
+
+    box-shadow: 0 1px 3px rgba(0,0,0,.03) !important;
+}
+
+
+/* =========================================================
+   ETIQUETA CHECK-IN / CHECK-OUT
+   ========================================================= */
+
+.orcamento .tipo-data {
+    display: inline-flex !important;
+
+    align-items: center !important;
+
+    width: fit-content !important;
+
+    margin: 0 auto 9px 0 !important;
+
+    padding: 4px 10px !important;
+
+    background: #edf7e9 !important;
+
+    border-radius: 5px !important;
+
+    color: #4c9d2a !important;
+
+    font-size: 8px !important;
+
+    font-weight: 800 !important;
+
+    letter-spacing: 1px !important;
+
+    line-height: 1 !important;
+}
+
+
+/* =========================================================
+   ÁREA DATA + HORÁRIO
+   ========================================================= */
+
+.orcamento .data-conteudo {
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    width: 100% !important;
+
+    min-height: 55px !important;
+}
+
+
+/* =========================================================
+   BLOCO DA DATA
+   ========================================================= */
+
+.orcamento .data-principal {
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    min-width: 185px !important;
+
+    text-align: center !important;
+}
+
+
+/* DATA */
+
+.orcamento .data-principal strong {
+    color: #292929 !important;
+
+    font-size: 25px !important;
+
+    font-weight: 800 !important;
+
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* DIA DA SEMANA */
+
+.orcamento .data-principal .dia-semana {
+    display: block !important;
+
+    margin-top: 6px !important;
+
+    color: #858585 !important;
+
+    font-size: 15px !important;
+
+    font-weight: 500 !important;
+
+    line-height: 1 !important;
+
+    text-transform: lowercase !important;
+
+    text-align: center !important;
+}
+
+
+/* =========================================================
+   DIVISOR
+   ========================================================= */
+
+.orcamento .divisor-data {
+    width: 1px !important;
+
+    height: 48px !important;
+
+    margin: 0 18px !important;
+
+    background: #d8d8d8 !important;
+
+    flex-shrink: 0 !important;
+}
+
+
+/* =========================================================
+   BLOCO DO HORÁRIO
+   ========================================================= */
+
+.orcamento .horario-data {
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    min-width: 88px !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    border: none !important;
+
+    text-align: center !important;
+}
+
+
+/* A PARTIR DE / ATÉ AS */
+
+.orcamento .horario-label {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 0 4px 0 !important;
+
+    color: #858585 !important;
+
+    font-size: 9px !important;
+
+    font-weight: 600 !important;
+
+    line-height: 1 !important;
+
+    letter-spacing: .3px !important;
+
+    text-align: center !important;
+}
+
+
+/* HORÁRIO */
+
+.orcamento .horario-valor {
+    display: block !important;
+
+    color: #4c9d2a !important;
+
+    font-size: 23px !important;
+
+    font-weight: 800 !important;
+
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* =========================================================
+   SETA
+   ========================================================= */
+
+.orcamento .seta-data {
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    color: #4c9d2a !important;
+
+    font-size: 25px !important;
+
+    font-weight: 400 !important;
+}
+
+
+/* =========================================================
+   REMOVE ESTILOS ANTIGOS QUE PODEM INTERFERIR
+   ========================================================= */
+
+.orcamento .data-box > small {
+    display: none !important;
+}
