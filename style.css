@@ -3910,3 +3910,147 @@ body > footer p {
 
     letter-spacing: 1px !important;
 }
+/* =========================================================
+   DATAS — CENTRALIZAÇÃO E HIERARQUIA FINAL
+   ========================================================= */
+
+.orcamento .data-box {
+    height: 92px !important;
+
+    padding: 12px 22px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+}
+
+
+/* CHECK-IN / CHECK-OUT */
+
+.orcamento .data-box > small {
+    margin-bottom: 5px !important;
+
+    color: #777 !important;
+
+    font-size: 10px !important;
+    font-weight: 800 !important;
+
+    letter-spacing: 1px !important;
+}
+
+
+/* DATA + HORÁRIO */
+
+.orcamento .data-principal {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 100% !important;
+
+    gap: 0 !important;
+}
+
+
+/* DATA */
+
+.orcamento .data-principal strong {
+    color: #292929 !important;
+
+    font-size: 25px !important;
+    font-weight: 800 !important;
+
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* =========================================================
+   HORÁRIO
+   ========================================================= */
+
+.orcamento .horario-data {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+
+    margin-left: 22px !important;
+    padding-left: 20px !important;
+
+    min-width: 105px !important;
+
+    border-left: 1px solid #d5d5d5 !important;
+
+    text-align: left !important;
+}
+
+
+/* A PARTIR DE / ATÉ AS */
+
+.orcamento .horario-label {
+    display: block !important;
+
+    margin-bottom: 3px !important;
+
+    color: #888 !important;
+
+    font-size: 11px !important;
+    font-weight: 500 !important;
+
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* HORÁRIO — MESMO DESTAQUE DA DATA */
+
+.orcamento .horario-valor {
+    display: block !important;
+
+    color: #4c9d2a !important;
+
+    font-size: 23px !important;
+    font-weight: 800 !important;
+
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* =========================================================
+   DIA DA SEMANA
+   ========================================================= */
+
+.orcamento .dia-semana {
+    margin-top: 6px !important;
+
+    color: #888 !important;
+
+    font-size: 13px !important;
+    font-weight: 500 !important;
+
+    line-height: 1.2 !important;
+
+    text-transform: lowercase !important;
+
+    text-align: center !important;
+}
+
+
+/* =========================================================
+   SETA
+   ========================================================= */
+
+.orcamento .seta-data {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    color: #4c9d2a !important;
+
+    font-size: 28px !important;
+}
