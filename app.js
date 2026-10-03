@@ -1528,7 +1528,7 @@ function aplicarResultadoOCR(texto) {
     [
         campoCheckin, campoCheckout, campoNoites,
         campoAdultos, campoCriancas, campoTipoQuarto,
-        campoDescricaoQuarto, campoTarifa, campoCafe,
+        campoDescricaoQuarto, campoCafe,
         campoValorTotal, campoPagamento
     ].forEach(campo => {
         if (!campo) return;
@@ -1540,7 +1540,6 @@ function aplicarResultadoOCR(texto) {
     console.log({
         codigoQuarto,
         descricaoQuarto,
-        tarifa,
         datasEncontradas,
         checkin,
         checkout,
