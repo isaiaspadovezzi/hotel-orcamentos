@@ -1975,19 +1975,6 @@ function gerarOrcamento() {
                         </div>
 
 
-                        <div class="estadia-info-card">
-
-                            <span>
-                                HORÁRIOS
-                            </span>
-
-                            <strong>
-                                🕐 15:00 → 12:00
-                            </strong>
-
-                        </div>
-
-                    </div>
 
                 </section>
 
