@@ -1835,35 +1835,43 @@ function gerarOrcamento() {
                     </div>
 
 
-                   <div class="datas-hospedagem">
+                  <div class="datas-hospedagem">
 
     <!-- CHECK-IN -->
     <div class="data-box">
 
-        <small>CHECK-IN</small>
-
-        <div class="data-principal">
-
-            <strong>
-                ${formatarDataCompleta(checkin).split(" — ")[0]}
-            </strong>
-
-         <div class="horario-data">
-
-    <span class="horario-label">
-        A partir de
-    </span>
-
-    <span class="horario-valor">
-        🕐 15:00
-    </span>
-
-</div>
-
+        <div class="tipo-data">
+            CHECK-IN
         </div>
 
-        <div class="dia-semana">
-            ${formatarDataCompleta(checkin).split(" — ")[1]}
+        <div class="data-conteudo">
+
+            <div class="data-principal">
+
+                <strong>
+                    ${formatarDataCompleta(checkin).split(" — ")[0]}
+                </strong>
+
+                <div class="dia-semana">
+                    ${formatarDataCompleta(checkin).split(" — ")[1]}
+                </div>
+
+            </div>
+
+            <div class="divisor-data"></div>
+
+            <div class="horario-data">
+
+                <span class="horario-label">
+                    A partir de
+                </span>
+
+                <span class="horario-valor">
+                    🕐 15:00
+                </span>
+
+            </div>
+
         </div>
 
     </div>
@@ -1878,36 +1886,43 @@ function gerarOrcamento() {
     <!-- CHECK-OUT -->
     <div class="data-box">
 
-        <small>CHECK-OUT</small>
-
-        <div class="data-principal">
-
-            <strong>
-                ${formatarDataCompleta(checkout).split(" — ")[0]}
-            </strong>
-
-          <div class="horario-data">
-
-    <span class="horario-label">
-        Até as
-    </span>
-
-    <span class="horario-valor">
-        🕐 12:00
-    </span>
-
-</div>
-
+        <div class="tipo-data">
+            CHECK-OUT
         </div>
 
-        <div class="dia-semana">
-            ${formatarDataCompleta(checkout).split(" — ")[1]}
+        <div class="data-conteudo">
+
+            <div class="data-principal">
+
+                <strong>
+                    ${formatarDataCompleta(checkout).split(" — ")[0]}
+                </strong>
+
+                <div class="dia-semana">
+                    ${formatarDataCompleta(checkout).split(" — ")[1]}
+                </div>
+
+            </div>
+
+            <div class="divisor-data"></div>
+
+            <div class="horario-data">
+
+                <span class="horario-label">
+                    Até as
+                </span>
+
+                <span class="horario-valor">
+                    🕐 12:00
+                </span>
+
+            </div>
+
         </div>
 
     </div>
 
 </div>
-
                     <div class="estadia-info-grid">
 
                         <div class="estadia-info-card">
