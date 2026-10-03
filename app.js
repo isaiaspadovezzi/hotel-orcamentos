@@ -1848,17 +1848,17 @@ function gerarOrcamento() {
                 ${formatarDataCompleta(checkin).split(" — ")[0]}
             </strong>
 
-            <div class="horario-data">
+         <div class="horario-data">
 
-                <span class="horario-label">
-                    A partir de
-                </span>
+    <span class="horario-label">
+        A partir de
+    </span>
 
-                <span class="horario-valor">
-                    🕐 15:00
-                </span>
+    <span class="horario-valor">
+        🕐 15:00
+    </span>
 
-            </div>
+</div>
 
         </div>
 
@@ -1886,17 +1886,17 @@ function gerarOrcamento() {
                 ${formatarDataCompleta(checkout).split(" — ")[0]}
             </strong>
 
-            <div class="horario-data">
+          <div class="horario-data">
 
-                <span class="horario-label">
-                    Até as
-                </span>
+    <span class="horario-label">
+        Até as
+    </span>
 
-                <span class="horario-valor">
-                    🕐 12:00
-                </span>
+    <span class="horario-valor">
+        🕐 12:00
+    </span>
 
-            </div>
+</div>
 
         </div>
 
