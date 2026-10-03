@@ -1429,14 +1429,6 @@ function aplicarResultadoOCR(texto) {
         }
     }
 
-    // ------------------------------
-    // TARIFA
-    // ------------------------------
-    let tarifa = "";
-    const matchTarifa = textoLimpo.match(
-        /[A-Z0-9]+\s*-\s*(TARIFA[^\n]*?)(?=\n|\s+Sexta|\s+Segunda|\s+Terça|\s+Quarta|\s+Quinta|\s+Sábado|\s+Domingo|$)/i
-    );
-    if (matchTarifa) tarifa = matchTarifa[1].trim();
 
     // ------------------------------
     // DATAS
@@ -1515,7 +1507,6 @@ function aplicarResultadoOCR(texto) {
     const campoCriancas = document.getElementById("criancas");
     const campoTipoQuarto = document.getElementById("tipoQuarto");
     const campoDescricaoQuarto = document.getElementById("descricaoQuarto");
-    const campoTarifa = document.getElementById("tarifa");
     const campoCafe = document.getElementById("cafe");
     const campoValorTotal = document.getElementById("valorTotal");
     const campoPagamento = document.getElementById("pagamento");
@@ -1527,7 +1518,6 @@ function aplicarResultadoOCR(texto) {
     if (campoCriancas) campoCriancas.value = criancas;
     if (campoTipoQuarto) campoTipoQuarto.value = codigoQuarto;
     if (campoDescricaoQuarto) campoDescricaoQuarto.value = descricaoQuarto;
-    if (campoTarifa) campoTarifa.value = tarifa;
     if (campoCafe) campoCafe.checked = cafeIncluido;
     if (campoValorTotal) campoValorTotal.value = valorTotal;
     if (campoPagamento) campoPagamento.value = pagamento;
@@ -1590,9 +1580,6 @@ function gerarOrcamento() {
         (document.getElementById("descricaoQuarto")?.value || "")
             .trim();
 
-    const tarifa =
-        (document.getElementById("tarifa")?.value || "")
-            .trim();
 
     const cafe =
         !!document.getElementById("cafe")?.checked;
@@ -2394,8 +2381,7 @@ function copiarOrcamento() {
     const cafe =
         document.getElementById("cafe").checked;
 
-    const tarifa =
-        document.getElementById("tarifa").value.trim();
+
 
     const valorTotal =
         converterValor(
@@ -2446,8 +2432,6 @@ ${nomeQuarto}
 ☕ Café da manhã:
 ${cafe ? "Incluso" : "Não incluso"}
 
-💳 Tarifa:
-${tarifa || "Não informado"}
 
 🌙 Noites:
 ${noites}
