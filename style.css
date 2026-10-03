@@ -3564,3 +3564,91 @@ body > footer p {
 
     white-space: nowrap !important;
 }
+/* =========================================================
+   DATAS — DATA + HORÁRIO + DIA DA SEMANA
+   ========================================================= */
+
+.orcamento .data-box {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+
+    padding: 18px 22px !important;
+}
+
+
+/* CHECK-IN / CHECK-OUT */
+
+.orcamento .data-box > small {
+    display: block !important;
+
+    margin-bottom: 7px !important;
+
+    color: #777 !important;
+
+    font-size: 10px !important;
+    font-weight: 800 !important;
+
+    letter-spacing: 1px !important;
+}
+
+
+/* DATA + HORÁRIO */
+
+.orcamento .data-principal {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    width: 100% !important;
+}
+
+
+/* DATA */
+
+.orcamento .data-principal strong {
+    color: #292929 !important;
+
+    font-size: 25px !important;
+    font-weight: 800 !important;
+
+    line-height: 1.1 !important;
+}
+
+
+/* HORÁRIO */
+
+.orcamento .horario-data {
+    margin-left: 15px !important;
+
+    color: #4a9f2c !important;
+
+    font-size: 15px !important;
+    font-weight: 800 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* DIA DA SEMANA */
+
+.orcamento .dia-semana {
+    margin-top: 5px !important;
+
+    color: #888 !important;
+
+    font-size: 12px !important;
+    font-weight: 500 !important;
+
+    text-transform: lowercase !important;
+}
+
+
+/* SETA */
+
+.orcamento .seta-data {
+    color: #4a9f2c !important;
+
+    font-size: 27px !important;
+    font-weight: 400 !important;
+}
