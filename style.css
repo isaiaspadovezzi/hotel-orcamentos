@@ -4396,3 +4396,352 @@ body > footer p {
     justify-content: center !important;
     align-items: center !important;
 }
+/* =========================================================
+   AJUSTE VISUAL — VERSÃO FINAL DO ORÇAMENTO
+   ========================================================= */
+
+
+/* =========================================================
+   1. SERVIÇOS EXTRAS
+   ========================================================= */
+
+/* 5 cartões na mesma linha */
+.orcamento .servicos-box {
+    display: grid !important;
+
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+
+    gap: 10px !important;
+
+    width: 100% !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* Cartão */
+.orcamento .servico-box-item {
+    min-width: 0 !important;
+
+    min-height: 72px !important;
+
+    padding: 11px 10px !important;
+
+    box-sizing: border-box !important;
+
+    border-radius: 12px !important;
+}
+
+
+/* Ícone */
+.orcamento .servico-icone {
+    width: 34px !important;
+    height: 34px !important;
+
+    min-width: 34px !important;
+
+    border-radius: 9px !important;
+
+    font-size: 17px !important;
+}
+
+
+/* Título */
+.orcamento .servico-box-item span {
+    font-size: 7.5px !important;
+
+    letter-spacing: .7px !important;
+}
+
+
+/* Valor */
+.orcamento .servico-box-item strong {
+    font-size: 10.5px !important;
+
+    line-height: 1.15 !important;
+}
+
+
+/* Informação menor */
+.orcamento .servico-box-item small {
+    display: block !important;
+
+    margin-top: 3px !important;
+
+    font-size: 7px !important;
+
+    line-height: 1.15 !important;
+}
+
+
+/* =========================================================
+   2. INFORMAÇÕES EXTRAS
+   ========================================================= */
+
+.orcamento .informacoes-extras {
+    display: grid !important;
+
+    grid-template-columns: 1fr !important;
+
+    gap: 7px !important;
+
+    margin-top: 14px !important;
+
+    padding: 13px 16px !important;
+
+    background: #fafafa !important;
+
+    border: 1px solid #e1e5df !important;
+
+    border-radius: 12px !important;
+
+    box-sizing: border-box !important;
+}
+
+
+.orcamento .informacoes-extras > div {
+    display: grid !important;
+
+    grid-template-columns: 175px minmax(0, 1fr) !important;
+
+    align-items: center !important;
+
+    margin: 0 !important;
+
+    min-height: 18px !important;
+}
+
+
+.orcamento .informacoes-extras span {
+    display: block !important;
+
+    margin: 0 !important;
+
+    color: #777 !important;
+
+    font-size: 8px !important;
+
+    font-weight: 800 !important;
+
+    letter-spacing: .7px !important;
+}
+
+
+.orcamento .informacoes-extras strong {
+    display: block !important;
+
+    color: #444 !important;
+
+    font-size: 9px !important;
+
+    font-weight: 500 !important;
+
+    line-height: 1.3 !important;
+}
+
+
+/* =========================================================
+   3. VALORES
+   ========================================================= */
+
+.orcamento .valores-orcamento {
+    display: grid !important;
+
+    grid-template-columns: 1.2fr 1fr 1fr !important;
+
+    gap: 12px !important;
+
+    width: 100% !important;
+
+    margin-top: 16px !important;
+}
+
+
+.orcamento .card-valor-orcamento {
+    display: flex !important;
+
+    align-items: center !important;
+
+    min-height: 76px !important;
+
+    padding: 13px 16px !important;
+
+    box-sizing: border-box !important;
+
+    border: 1px solid #dfe4df !important;
+
+    border-radius: 13px !important;
+
+    background: #ffffff !important;
+}
+
+
+/* Ícone do valor */
+.orcamento .card-valor-icone {
+    width: 34px !important;
+
+    min-width: 34px !important;
+
+    margin-right: 9px !important;
+
+    font-size: 18px !important;
+}
+
+
+/* Label */
+.orcamento .card-valor-orcamento span {
+    display: block !important;
+
+    margin-bottom: 3px !important;
+
+    color: #777 !important;
+
+    font-size: 8px !important;
+
+    font-weight: 700 !important;
+
+    letter-spacing: .5px !important;
+}
+
+
+/* Valor / informação */
+.orcamento .card-valor-orcamento strong {
+    display: block !important;
+
+    color: #333 !important;
+
+    font-size: 13px !important;
+
+    line-height: 1.2 !important;
+}
+
+
+/* Valor total — destaque */
+.orcamento .card-valor-orcamento:first-child strong {
+    color: #4c9d2a !important;
+
+    font-size: 21px !important;
+
+    font-weight: 800 !important;
+}
+
+
+/* =========================================================
+   4. LOCALIZAÇÃO
+   ========================================================= */
+
+.orcamento .localizacao-hotel {
+    margin-top: 18px !important;
+
+    padding-top: 15px !important;
+
+    gap: 18px !important;
+}
+
+
+.orcamento .mapa-hotel {
+    width: 300px !important;
+
+    height: 120px !important;
+
+    border-radius: 13px !important;
+}
+
+
+/* Endereço */
+.orcamento .endereco-hotel span {
+    margin-bottom: 4px !important;
+
+    font-size: 9px !important;
+}
+
+
+.orcamento .endereco-hotel strong {
+    font-size: 16px !important;
+
+    line-height: 1.2 !important;
+}
+
+
+.orcamento .endereco-hotel small {
+    margin-top: 4px !important;
+
+    font-size: 10px !important;
+}
+
+
+/* =========================================================
+   5. PONTOS DE LOCALIZAÇÃO
+   ========================================================= */
+
+.orcamento .pontos-localizacao {
+    margin-top: 8px !important;
+
+    padding: 9px 0 !important;
+
+    gap: 4px 18px !important;
+}
+
+
+.orcamento .pontos-localizacao div {
+    font-size: 8px !important;
+
+    line-height: 1.3 !important;
+}
+
+
+.orcamento .pontos-localizacao strong {
+    font-size: 8px !important;
+}
+
+
+/* =========================================================
+   6. REDUZIR ESPAÇAMENTOS EXCESSIVOS
+   ========================================================= */
+
+.orcamento .acomodacao-box {
+    margin-bottom: 18px !important;
+
+    padding-bottom: 18px !important;
+}
+
+
+.orcamento .servicos-box {
+    margin-top: 8px !important;
+}
+
+
+.orcamento .rodape-orcamento {
+    margin-top: 10px !important;
+
+    padding-top: 10px !important;
+}
+
+
+/* =========================================================
+   7. QUANDO HOUVER 5 SERVIÇOS
+   ========================================================= */
+
+.orcamento .servicos-box .servico-box-item:nth-child(5) {
+    display: flex !important;
+}
+
+
+/* =========================================================
+   8. RESPONSIVIDADE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .orcamento .servicos-box {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .orcamento .valores-orcamento {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    .orcamento .informacoes-extras > div {
+        grid-template-columns: 150px minmax(0, 1fr) !important;
+    }
+}
