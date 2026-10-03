@@ -4054,3 +4054,217 @@ body > footer p {
 
     font-size: 28px !important;
 }
+/* =========================================================
+   DATAS — DESIGN FINAL
+   ========================================================= */
+
+.orcamento .datas-hospedagem {
+    display: grid !important;
+
+    grid-template-columns: minmax(0, 1fr) 55px minmax(0, 1fr) !important;
+
+    align-items: center !important;
+
+    width: 100% !important;
+}
+
+
+/* =========================================================
+   CARTÃO
+   ========================================================= */
+
+.orcamento .data-box {
+    height: 96px !important;
+
+    padding: 13px 20px !important;
+
+    box-sizing: border-box !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+
+    background: #ffffff !important;
+
+    border: 1px solid #dcdcdc !important;
+
+    border-radius: 14px !important;
+}
+
+
+/* =========================================================
+   ETIQUETA CHECK-IN / CHECK-OUT
+   ========================================================= */
+
+.orcamento .tipo-data {
+    display: inline-flex !important;
+    align-items: center !important;
+
+    width: fit-content !important;
+
+    margin-bottom: 9px !important;
+    padding: 4px 9px !important;
+
+    background: #eef7e9 !important;
+
+    border-radius: 5px !important;
+
+    color: #4c9d2a !important;
+
+    font-size: 9px !important;
+    font-weight: 800 !important;
+
+    letter-spacing: 1px !important;
+}
+
+
+/* =========================================================
+   CONTEÚDO DATA + HORÁRIO
+   ========================================================= */
+
+.orcamento .data-conteudo {
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 100% !important;
+}
+
+
+/* =========================================================
+   DATA
+   ========================================================= */
+
+.orcamento .data-principal {
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    justify-content: center !important;
+    align-items: flex-start !important;
+
+    min-width: 170px !important;
+}
+
+
+/* DATA GRANDE */
+
+.orcamento .data-principal strong {
+    color: #292929 !important;
+
+    font-size: 25px !important;
+
+    font-weight: 800 !important;
+
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* DIA DA SEMANA */
+
+.orcamento .data-principal .dia-semana {
+    display: block !important;
+
+    margin-top: 5px !important;
+
+    color: #858585 !important;
+
+    font-size: 16px !important;
+
+    font-weight: 500 !important;
+
+    line-height: 1 !important;
+
+    text-transform: lowercase !important;
+}
+
+
+/* =========================================================
+   BARRA DIVISÓRIA
+   ========================================================= */
+
+.orcamento .divisor-data {
+    width: 1px !important;
+
+    height: 43px !important;
+
+    margin: 0 20px !important;
+
+    background: #d7d7d7 !important;
+
+    flex-shrink: 0 !important;
+}
+
+
+/* =========================================================
+   HORÁRIO
+   ========================================================= */
+
+.orcamento .horario-data {
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    align-items: flex-start !important;
+
+    justify-content: center !important;
+
+    min-width: 100px !important;
+}
+
+
+/* A PARTIR DE / ATÉ AS */
+
+.orcamento .horario-label {
+    display: block !important;
+
+    margin-bottom: 3px !important;
+
+    color: #858585 !important;
+
+    font-size: 11px !important;
+
+    font-weight: 500 !important;
+
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* HORÁRIO */
+
+.orcamento .horario-valor {
+    display: block !important;
+
+    color: #4c9d2a !important;
+
+    font-size: 24px !important;
+
+    font-weight: 800 !important;
+
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* =========================================================
+   SETA CENTRAL
+   ========================================================= */
+
+.orcamento .seta-data {
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    color: #4c9d2a !important;
+
+    font-size: 27px !important;
+
+    font-weight: 400 !important;
+}
