@@ -1525,12 +1525,18 @@ function aplicarResultadoOCR(texto) {
     if (campoValorTotal) campoValorTotal.value = valorTotal;
     if (campoPagamento) campoPagamento.value = pagamento;
 
-    [
-        campoCheckin, campoCheckout, campoNoites,
-        campoAdultos, campoCriancas, campoTipoQuarto,
-        campoDescricaoQuarto, campoCafe,
-        campoValorTotal, campoPagamento
-    ].forEach(campo => {
+[
+    campoCheckin,
+    campoCheckout,
+    campoNoites,
+    campoAdultos,
+    campoCriancas,
+    campoTipoQuarto,
+    campoDescricaoQuarto,
+    campoCafe,
+    campoValorTotal,
+    campoPagamento
+].forEach(campo => {
         if (!campo) return;
         campo.dispatchEvent(new Event("input", { bubbles: true }));
         campo.dispatchEvent(new Event("change", { bubbles: true }));
