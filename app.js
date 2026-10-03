@@ -1843,7 +1843,7 @@ function gerarOrcamento() {
                     </div>
 
 
-                  <div class="datas-hospedagem">
+                 <div class="datas-hospedagem">
 
     <!-- CHECK-IN -->
     <div class="data-box">
@@ -1871,7 +1871,7 @@ function gerarOrcamento() {
             <div class="horario-data">
 
                 <span class="horario-label">
-                    A partir de
+                    A PARTIR DE
                 </span>
 
                 <span class="horario-valor">
@@ -1917,7 +1917,7 @@ function gerarOrcamento() {
             <div class="horario-data">
 
                 <span class="horario-label">
-                    Até as
+                    ATÉ AS
                 </span>
 
                 <span class="horario-valor">
