@@ -5445,3 +5445,266 @@ body > footer p {
 .orcamento small {
     font-size: 8px !important;
 }
+/* =========================================================
+   AUMENTO REAL DA LEGIBILIDADE
+   USANDO AS CLASSES ATUAIS DO ORÇAMENTO
+   ========================================================= */
+
+
+/* =========================================================
+   1. HÓSPEDES / QUARTOS / CAFÉ DA MANHÃ
+   ========================================================= */
+
+.orcamento .info-reserva {
+    gap: 12px !important;
+}
+
+
+.orcamento .info-reserva-item {
+    min-height: 62px !important;
+
+    padding: 11px 15px !important;
+
+    box-sizing: border-box !important;
+
+    border-radius: 11px !important;
+}
+
+
+/* Título */
+.orcamento .info-reserva-item span {
+    display: block !important;
+
+    margin-bottom: 6px !important;
+
+    font-size: 10px !important;
+
+    line-height: 1.1 !important;
+
+    font-weight: 800 !important;
+
+    letter-spacing: .8px !important;
+
+    color: #777 !important;
+}
+
+
+/* Informação */
+.orcamento .info-reserva-item strong {
+    display: block !important;
+
+    font-size: 14px !important;
+
+    line-height: 1.2 !important;
+
+    font-weight: 600 !important;
+
+    color: #333 !important;
+}
+
+
+/* =========================================================
+   2. SERVIÇOS EXTRAS
+   ========================================================= */
+
+.orcamento .servicos-grid {
+    gap: 12px !important;
+}
+
+
+/* Cartão */
+.orcamento .servico-card {
+    min-height: 78px !important;
+
+    padding: 12px 14px !important;
+
+    box-sizing: border-box !important;
+
+    border-radius: 12px !important;
+}
+
+
+/* Conteúdo */
+.orcamento .servico-conteudo {
+    min-width: 0 !important;
+}
+
+
+/* Nome do serviço */
+.orcamento .servico-conteudo strong {
+    display: block !important;
+
+    margin-bottom: 4px !important;
+
+    font-size: 10px !important;
+
+    line-height: 1.1 !important;
+
+    font-weight: 800 !important;
+
+    letter-spacing: .7px !important;
+
+    color: #666 !important;
+}
+
+
+/* Preço / informação principal */
+.orcamento .servico-conteudo span {
+    display: block !important;
+
+    font-size: 12px !important;
+
+    line-height: 1.2 !important;
+
+    font-weight: 700 !important;
+
+    color: #333 !important;
+}
+
+
+/* Informação secundária */
+.orcamento .servico-conteudo small {
+    display: block !important;
+
+    margin-top: 4px !important;
+
+    font-size: 8.5px !important;
+
+    line-height: 1.25 !important;
+
+    color: #888 !important;
+}
+
+
+/* Ícone */
+.orcamento .servico-icone {
+    width: 38px !important;
+
+    height: 38px !important;
+
+    min-width: 38px !important;
+
+    font-size: 19px !important;
+
+    border-radius: 10px !important;
+}
+
+
+/* =========================================================
+   3. INFORMAÇÕES EXTRAS
+   ========================================================= */
+
+.orcamento .info-reserva-extra,
+.orcamento .informacoes-extras,
+.orcamento .validade-info {
+    font-size: 10px !important;
+
+    line-height: 1.4 !important;
+}
+
+
+/* Títulos */
+.orcamento .validade-info span {
+    font-size: 9px !important;
+
+    font-weight: 800 !important;
+
+    letter-spacing: .7px !important;
+}
+
+
+/* Texto */
+.orcamento .validade-info strong {
+    font-size: 10px !important;
+
+    line-height: 1.4 !important;
+
+    font-weight: 500 !important;
+}
+
+
+/* =========================================================
+   4. VALORES
+   ========================================================= */
+
+.orcamento .total-box span {
+    font-size: 10px !important;
+
+    letter-spacing: .7px !important;
+}
+
+
+.orcamento .total-box strong {
+    font-size: 27px !important;
+}
+
+
+.orcamento .pagamento-box {
+    font-size: 14px !important;
+}
+
+
+/* =========================================================
+   5. ACOMODAÇÃO — COMODIDADES
+   ========================================================= */
+
+.orcamento .acomodacao-info {
+    font-size: 14px !important;
+}
+
+
+/* Se as comodidades estiverem em lista */
+.orcamento .acomodacao-info li {
+    font-size: 14px !important;
+
+    line-height: 1.45 !important;
+}
+
+
+/* =========================================================
+   6. ENDEREÇO
+   ========================================================= */
+
+.orcamento .endereco-hotel {
+    font-size: 11px !important;
+}
+
+
+.orcamento .endereco-hotel strong {
+    font-size: 16px !important;
+}
+
+
+.orcamento .endereco-hotel small {
+    font-size: 11px !important;
+}
+
+
+/* =========================================================
+   7. PONTOS DE REFERÊNCIA
+   ========================================================= */
+
+.orcamento .pontos-localizacao {
+    font-size: 9px !important;
+}
+
+
+.orcamento .pontos-localizacao div {
+    font-size: 9px !important;
+
+    line-height: 1.45 !important;
+}
+
+
+.orcamento .pontos-localizacao strong {
+    font-size: 9px !important;
+}
+
+
+/* =========================================================
+   8. RODAPÉ
+   ========================================================= */
+
+.orcamento .rodape-orcamento p {
+    font-size: 9px !important;
+}
