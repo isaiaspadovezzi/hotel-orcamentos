@@ -5000,3 +5000,174 @@ body > footer p {
 .orcamento .data-box > small {
     display: none !important;
 }
+/* =========================================================
+   DESTAQUE DOS CARDS DE CHECK-IN / CHECK-OUT
+   ========================================================= */
+
+.orcamento .data-box {
+    height: 116px !important;
+
+    padding: 13px 20px !important;
+
+    background: #ffffff !important;
+
+    border: 1.5px solid #cfdcc9 !important;
+
+    border-radius: 15px !important;
+
+    box-shadow:
+        0 3px 10px rgba(60, 90, 50, 0.08),
+        0 1px 2px rgba(0, 0, 0, 0.04) !important;
+
+    position: relative !important;
+
+    transition: none !important;
+}
+
+
+/* Linha verde discreta no topo */
+.orcamento .data-box::before {
+    content: "" !important;
+
+    position: absolute !important;
+
+    top: 0 !important;
+    left: 18px !important;
+    right: 18px !important;
+
+    height: 3px !important;
+
+    background: #4c9d2a !important;
+
+    border-radius: 0 0 4px 4px !important;
+}
+
+
+/* =========================================================
+   ETIQUETA
+   ========================================================= */
+
+.orcamento .tipo-data {
+    margin-top: 1px !important;
+    margin-bottom: 8px !important;
+
+    padding: 5px 11px !important;
+
+    background: #edf7e9 !important;
+
+    border-radius: 5px !important;
+
+    color: #4c9d2a !important;
+
+    font-size: 9px !important;
+
+    font-weight: 800 !important;
+
+    letter-spacing: 1px !important;
+}
+
+
+/* =========================================================
+   CONTEÚDO
+   ========================================================= */
+
+.orcamento .data-conteudo {
+    min-height: 58px !important;
+
+    justify-content: center !important;
+
+    align-items: center !important;
+}
+
+
+/* =========================================================
+   DATA
+   ========================================================= */
+
+.orcamento .data-principal {
+    min-width: 195px !important;
+
+    padding-right: 4px !important;
+}
+
+
+.orcamento .data-principal strong {
+    font-size: 27px !important;
+
+    font-weight: 800 !important;
+
+    letter-spacing: -0.4px !important;
+
+    color: #272727 !important;
+}
+
+
+/* Dia da semana */
+.orcamento .data-principal .dia-semana {
+    margin-top: 7px !important;
+
+    font-size: 17px !important;
+
+    font-weight: 500 !important;
+
+    color: #777 !important;
+}
+
+
+/* =========================================================
+   DIVISOR
+   ========================================================= */
+
+.orcamento .divisor-data {
+    height: 52px !important;
+
+    margin: 0 20px !important;
+
+    background: #d3d9d1 !important;
+}
+
+
+/* =========================================================
+   HORÁRIO
+   ========================================================= */
+
+.orcamento .horario-data {
+    min-width: 95px !important;
+}
+
+
+.orcamento .horario-label {
+    margin-bottom: 4px !important;
+
+    font-size: 10px !important;
+
+    font-weight: 600 !important;
+
+    color: #777 !important;
+
+    letter-spacing: .2px !important;
+}
+
+
+.orcamento .horario-valor {
+    font-size: 25px !important;
+
+    font-weight: 800 !important;
+
+    color: #4c9d2a !important;
+
+    letter-spacing: -0.3px !important;
+}
+
+
+/* =========================================================
+   SETA ENTRE OS CARDS
+   ========================================================= */
+
+.orcamento .seta-data {
+    font-size: 27px !important;
+
+    color: #4c9d2a !important;
+
+    font-weight: 400 !important;
+}
