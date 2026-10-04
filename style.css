@@ -5708,3 +5708,72 @@ body > footer p {
 .orcamento .rodape-orcamento p {
     font-size: 9px !important;
 }
+/* =====================================================
+   TESTE FINAL - AUMENTAR TEXTOS DO ORÇAMENTO
+   ===================================================== */
+
+.orcamento .info-reserva-item span,
+.orcamento .info-reserva-item strong {
+    font-size: 16px !important;
+}
+
+.orcamento .info-reserva-item span {
+    font-size: 11px !important;
+    font-weight: 800 !important;
+}
+
+.orcamento .info-reserva-item strong {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+}
+
+
+/* SERVIÇOS */
+
+.orcamento .servico-card .servico-conteudo strong {
+    font-size: 12px !important;
+    font-weight: 800 !important;
+}
+
+.orcamento .servico-card .servico-conteudo span {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+}
+
+.orcamento .servico-card .servico-conteudo small {
+    font-size: 10px !important;
+}
+
+
+/* INFORMAÇÕES EXTRAS */
+
+.orcamento .validade-info span {
+    font-size: 11px !important;
+    font-weight: 800 !important;
+}
+
+.orcamento .validade-info strong {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+}
+
+
+/* ENDEREÇO */
+
+.orcamento .endereco-hotel strong {
+    font-size: 18px !important;
+}
+
+.orcamento .endereco-hotel small {
+    font-size: 12px !important;
+}
+
+
+/* PONTOS DE LOCALIZAÇÃO */
+
+.orcamento .pontos-localizacao,
+.orcamento .pontos-localizacao div,
+.orcamento .pontos-localizacao span,
+.orcamento .pontos-localizacao strong {
+    font-size: 11px !important;
+}
