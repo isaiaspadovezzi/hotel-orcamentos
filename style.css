@@ -5171,3 +5171,52 @@ body > footer p {
 
     font-weight: 400 !important;
 }
+/* =========================================================
+   CARDS RESUMO DA ESTADIA — AUMENTAR LEGIBILIDADE
+   ========================================================= */
+
+.orcamento .resumo-estadia {
+    gap: 12px !important;
+}
+
+
+/* Card */
+.orcamento .resumo-estadia .resumo-card {
+    min-height: 62px !important;
+
+    padding: 10px 15px !important;
+
+    border-radius: 11px !important;
+}
+
+
+/* Título: HÓSPEDES / QUARTOS / CAFÉ DA MANHÃ */
+.orcamento .resumo-estadia .resumo-card .resumo-label {
+    font-size: 10px !important;
+
+    font-weight: 800 !important;
+
+    letter-spacing: .8px !important;
+
+    color: #777 !important;
+
+    margin-bottom: 5px !important;
+}
+
+
+/* Informação principal */
+.orcamento .resumo-estadia .resumo-card .resumo-valor {
+    font-size: 13px !important;
+
+    font-weight: 600 !important;
+
+    color: #333 !important;
+
+    line-height: 1.2 !important;
+}
+
+
+/* Ícones */
+.orcamento .resumo-estadia .resumo-card .resumo-valor:first-letter {
+    font-size: 14px !important;
+}
