@@ -5220,3 +5220,228 @@ body > footer p {
 .orcamento .resumo-estadia .resumo-card .resumo-valor:first-letter {
     font-size: 14px !important;
 }
+/* =========================================================
+   AJUSTE DE LEGIBILIDADE — TEXTOS PEQUENOS
+   ========================================================= */
+
+
+/* =========================================================
+   RESUMO DA ESTADIA
+   HÓSPEDES / QUARTOS / CAFÉ DA MANHÃ
+   ========================================================= */
+
+.orcamento .estadia-info,
+.orcamento .estadia-resumo {
+    font-size: 13px !important;
+}
+
+
+/* Títulos pequenos dos cards */
+.orcamento .estadia-info strong,
+.orcamento .estadia-resumo strong,
+.orcamento .estadia-info .label,
+.orcamento .estadia-resumo .label {
+    font-size: 10px !important;
+
+    letter-spacing: .7px !important;
+
+    font-weight: 800 !important;
+}
+
+
+/* Conteúdo */
+.orcamento .estadia-info span,
+.orcamento .estadia-resumo span {
+    font-size: 13px !important;
+
+    line-height: 1.25 !important;
+}
+
+
+/* =========================================================
+   SERVIÇOS EXTRAS
+   ========================================================= */
+
+.orcamento .servicos-box {
+    gap: 12px !important;
+}
+
+
+/* Conteúdo dos serviços */
+.orcamento .servicos-box strong {
+    font-size: 11px !important;
+
+    line-height: 1.2 !important;
+}
+
+
+/* Títulos dos serviços */
+.orcamento .servicos-box span {
+    font-size: 9px !important;
+
+    letter-spacing: .6px !important;
+}
+
+
+/* Informações secundárias */
+.orcamento .servicos-box small {
+    font-size: 8px !important;
+
+    line-height: 1.25 !important;
+}
+
+
+/* =========================================================
+   INFORMAÇÕES EXTRAS
+   ========================================================= */
+
+.orcamento .info-reserva {
+    font-size: 10px !important;
+
+    line-height: 1.4 !important;
+}
+
+
+.orcamento .info-reserva strong {
+    font-size: 9px !important;
+
+    letter-spacing: .5px !important;
+}
+
+
+.orcamento .info-reserva span,
+.orcamento .info-reserva p {
+    font-size: 10px !important;
+
+    line-height: 1.4 !important;
+}
+
+
+/* =========================================================
+   VALIDADE
+   ========================================================= */
+
+.orcamento .validade-info {
+    font-size: 10px !important;
+
+    line-height: 1.4 !important;
+}
+
+
+.orcamento .validade-info strong {
+    font-size: 9px !important;
+}
+
+
+/* =========================================================
+   VALORES
+   ========================================================= */
+
+/* Label */
+.orcamento .card-valor-orcamento span {
+    font-size: 9px !important;
+
+    letter-spacing: .6px !important;
+}
+
+
+/* Pagamento */
+.orcamento .card-valor-orcamento strong {
+    font-size: 14px !important;
+}
+
+
+/* Valor total permanece destacado */
+.orcamento .card-valor-orcamento:first-child strong {
+    font-size: 22px !important;
+}
+
+
+/* =========================================================
+   ENDEREÇO
+   ========================================================= */
+
+.orcamento .endereco-hotel span {
+    font-size: 10px !important;
+}
+
+
+.orcamento .endereco-hotel small {
+    font-size: 11px !important;
+
+    line-height: 1.3 !important;
+}
+
+
+/* =========================================================
+   PONTOS DE LOCALIZAÇÃO
+   ========================================================= */
+
+.orcamento .pontos-localizacao {
+    font-size: 9px !important;
+}
+
+
+.orcamento .pontos-localizacao div {
+    font-size: 9px !important;
+
+    line-height: 1.45 !important;
+}
+
+
+.orcamento .pontos-localizacao strong {
+    font-size: 9px !important;
+}
+
+
+/* =========================================================
+   RODAPÉ
+   ========================================================= */
+
+.orcamento .rodape-orcamento {
+    font-size: 9px !important;
+}
+
+
+.orcamento .rodape-orcamento small {
+    font-size: 9px !important;
+}
+
+
+/* =========================================================
+   COMODIDADES DO QUARTO
+   ========================================================= */
+
+.orcamento .comodidades-quarto {
+    font-size: 14px !important;
+
+    line-height: 1.45 !important;
+}
+
+
+.orcamento .comodidades-quarto li {
+    font-size: 14px !important;
+
+    line-height: 1.45 !important;
+}
+
+
+/* =========================================================
+   TEXTO AUXILIAR DA ACOMODAÇÃO
+   ========================================================= */
+
+.orcamento .acomodacao-box small {
+    font-size: 10px !important;
+
+    line-height: 1.3 !important;
+}
+
+
+/* =========================================================
+   REFORÇO GERAL DE LEGIBILIDADE
+   ========================================================= */
+
+/* Evita fontes menores que 8px no orçamento */
+.orcamento small {
+    font-size: 8px !important;
+}
