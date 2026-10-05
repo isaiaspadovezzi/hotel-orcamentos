@@ -1,0 +1,1683 @@
+/* =========================================================
+   GERADOR DE ORÇAMENTOS
+   IBIS STYLES — CURITIBA CENTRO CÍVICO
+   STYLE.CSS — REFORMULAÇÃO VISUAL COMPLETA
+   ---------------------------------------------------------
+   Objetivo:
+   - aparência corporativa/hoteleira
+   - visual limpo, sofisticado e editorial
+   - sem aparência de site de viagens
+   - manter a estrutura HTML/JS existente
+   - manter o orçamento em 1100px para geração de imagem
+   ========================================================= */
+
+/* =========================================================
+   1. TOKENS VISUAIS
+   ========================================================= */
+
+:root {
+    --verde: #4f9f2f;
+    --verde-escuro: #3f8627;
+    --verde-suave: #eef6ea;
+    --verde-linha: #d8e7d2;
+
+    --texto: #292929;
+    --texto-2: #4b4b4b;
+    --texto-3: #777777;
+    --texto-4: #969696;
+
+    --fundo: #f4f5f4;
+    --fundo-suave: #fafbfa;
+    --branco: #ffffff;
+
+    --borda: #dfe3df;
+    --borda-forte: #cfd7cd;
+
+    --raio-sm: 8px;
+    --raio-md: 12px;
+    --raio-lg: 16px;
+    --raio-xl: 20px;
+
+    --sombra-card: 0 2px 10px rgba(25, 45, 25, 0.045);
+    --sombra-orcamento: 0 10px 32px rgba(20, 35, 20, 0.08);
+
+    --fonte: Arial, Helvetica, sans-serif;
+}
+
+/* =========================================================
+   2. RESET
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--fundo);
+    color: var(--texto);
+    font-family: var(--fonte);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+img {
+    max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+/* =========================================================
+   3. SISTEMA / FORMULÁRIO
+   ========================================================= */
+
+.container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.topo {
+    background: var(--branco);
+    border-bottom: 3px solid var(--verde);
+    padding: 22px 0;
+}
+
+.topo .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.topo h1 {
+    margin: 0;
+    color: var(--verde);
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+}
+
+.topo p {
+    margin: 4px 0 0;
+    color: var(--texto-3);
+    font-size: 13px;
+}
+
+.titulo {
+    padding: 32px 0 20px;
+}
+
+.titulo h2 {
+    margin: 0 0 6px;
+    color: var(--texto);
+    font-size: 26px;
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+}
+
+.titulo p {
+    margin: 0;
+    color: var(--texto-3);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   4. CARDS DO FORMULÁRIO
+   ========================================================= */
+
+.card {
+    margin-bottom: 16px;
+    padding: 22px;
+    background: var(--branco);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio-lg);
+    box-shadow: var(--sombra-card);
+}
+
+.card h3 {
+    margin: 0 0 17px;
+    color: var(--texto);
+    font-size: 17px;
+    line-height: 1.2;
+    font-weight: 800;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.campo-grande {
+    grid-column: span 2;
+}
+
+.campo label,
+.label {
+    color: var(--texto-3);
+    font-size: 11px;
+    line-height: 1.2;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+input,
+select {
+    width: 100%;
+    height: 46px;
+    padding: 0 13px;
+    border: 1px solid var(--borda-forte);
+    border-radius: var(--raio-sm);
+    background: var(--branco);
+    color: var(--texto);
+    font-size: 14px;
+    outline: none;
+    transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--verde);
+    box-shadow: 0 0 0 3px rgba(79, 159, 47, .11);
+}
+
+input::placeholder {
+    color: #a7aaa7;
+}
+
+.linha-opcoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-top: 16px;
+}
+
+.check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--texto-2);
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.check input {
+    width: 17px;
+    height: 17px;
+    accent-color: var(--verde);
+}
+
+/* =========================================================
+   5. IMPORTAÇÃO / OCR
+   ========================================================= */
+
+.importador {
+    border-color: var(--verde-linha);
+    background: var(--branco);
+}
+
+.importador h3 {
+    color: var(--verde-escuro);
+}
+
+.importador-texto {
+    margin: -6px 0 18px;
+    color: var(--texto-3);
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.upload-area {
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 24px;
+    border: 1.5px dashed #b9d3b0;
+    border-radius: var(--raio-md);
+    background: var(--verde-suave);
+    color: var(--verde-escuro);
+    cursor: pointer;
+    transition: background .18s ease, border-color .18s ease;
+}
+
+.upload-area:hover {
+    background: #e8f2e3;
+    border-color: var(--verde);
+}
+
+.upload-area:active {
+    transform: translateY(1px);
+}
+
+.upload-icone {
+    font-size: 30px;
+    line-height: 1;
+}
+
+.upload-area strong {
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.upload-area small {
+    color: #71856b;
+    font-size: 11px;
+}
+
+.imagem-selecionada {
+    display: none;
+    margin-top: 16px;
+    padding: 9px;
+    border: 1px solid var(--borda);
+    border-radius: var(--raio-md);
+    background: var(--fundo-suave);
+    overflow: hidden;
+}
+
+.imagem-selecionada img {
+    display: block;
+    width: 100%;
+    max-height: 500px;
+    object-fit: contain;
+    border-radius: 7px;
+}
+
+.status-ocr {
+    min-height: 20px;
+    margin-top: 10px;
+    color: var(--texto-3);
+    font-size: 12px;
+    text-align: center;
+}
+
+/* =========================================================
+   6. BOTÕES
+   ========================================================= */
+
+.acoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin: 22px 0 32px;
+}
+
+.btn {
+    min-height: 45px;
+    padding: 0 20px;
+    border: 1px solid transparent;
+    border-radius: var(--raio-sm);
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background .18s ease, border-color .18s ease, transform .12s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-principal {
+    background: var(--verde);
+    color: #fff;
+}
+
+.btn-principal:hover {
+    background: var(--verde-escuro);
+}
+
+.btn-secundario {
+    background: #fff;
+    border-color: var(--borda-forte);
+    color: var(--texto-2);
+}
+
+.btn-secundario:hover {
+    background: #f7f8f7;
+}
+
+.btn-ocr {
+    width: 100%;
+    margin-top: 14px;
+}
+
+/* =========================================================
+   7. PRÉ-VISUALIZAÇÃO
+   ========================================================= */
+
+.preview-area {
+    margin: 28px 0 48px;
+}
+
+.preview-area > h2 {
+    margin: 0 0 16px;
+    color: var(--texto);
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.acoes-compartilhar {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+/* =========================================================
+   8. ORÇAMENTO GERADO — BASE
+   ========================================================= */
+
+.orcamento {
+    width: 1100px;
+    min-width: 1100px;
+    max-width: 1100px;
+    margin: 0 auto;
+    overflow: hidden;
+    background: var(--branco);
+    border: 1px solid #d9ddda;
+    border-radius: 20px;
+    box-shadow: var(--sombra-orcamento);
+    color: var(--texto);
+    font-family: var(--fonte);
+}
+
+.orcamento-conteudo {
+    padding: 34px 38px 30px;
+}
+
+/* =========================================================
+   9. CABEÇALHO DO ORÇAMENTO
+   ========================================================= */
+
+.orcamento-topo {
+    min-height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 22px 40px;
+    background: #fff;
+    border-bottom: 4px solid var(--verde);
+}
+
+.logo-hotel {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.logo-hotel img {
+    display: block;
+    width: 78px !important;
+    height: 78px !important;
+    object-fit: contain;
+}
+
+.nome-hotel {
+    padding-left: 18px;
+    border-left: 1px solid #d9d9d9;
+    color: #555;
+    font-size: 18px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+.titulo-orcamento {
+    text-align: right;
+}
+
+.titulo-orcamento h2 {
+    margin: 0;
+    color: var(--verde-escuro);
+    font-size: 22px;
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: .25px;
+    white-space: nowrap;
+}
+
+.titulo-orcamento p {
+    margin: 5px 0 0;
+    color: var(--texto-3);
+    font-size: 12px;
+}
+
+/* =========================================================
+   10. ESTADIA
+   ========================================================= */
+
+.orcamento .estadia-box {
+    margin: 0 0 24px;
+    padding: 28px 30px 26px;
+    background: #eef7e9;
+    border: 1px solid #d3e5cb;
+    border-radius: 18px;
+}
+
+.orcamento .estadia-titulo {
+    margin: 0 0 19px;
+    color: var(--verde-escuro);
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+}
+
+/* =========================================================
+   11. DATAS — CARD PRINCIPAL
+   ========================================================= */
+
+.orcamento .datas-hospedagem {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 54px minmax(0, 1fr) !important;
+    align-items: center !important;
+    width: 100%;
+    gap: 0 !important;
+}
+
+.orcamento .data-box {
+    position: relative;
+    height: 116px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 14px 20px;
+    background: #fff;
+    border: 1px solid #cfd9cb;
+    border-radius: 15px;
+    box-shadow: 0 2px 7px rgba(50, 75, 45, .055);
+}
+
+.orcamento .data-box::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 18px;
+    right: 18px;
+    height: 2px;
+    background: var(--verde);
+    border-radius: 0 0 3px 3px;
+}
+
+.orcamento .data-box > small {
+    display: none;
+}
+
+.orcamento .tipo-data {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    margin: 0 0 8px;
+    padding: 4px 9px;
+    background: #edf6e9;
+    border-radius: 5px;
+    color: var(--verde-escuro);
+    font-size: 9px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.orcamento .data-conteudo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 58px;
+}
+
+.orcamento .data-principal {
+    min-width: 195px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.orcamento .data-principal strong {
+    display: block;
+    color: #282828;
+    font-size: 27px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.45px;
+    white-space: nowrap;
+}
+
+.orcamento .data-principal .dia-semana {
+    display: block;
+    margin-top: 7px;
+    color: #747474;
+    font-size: 17px;
+    line-height: 1;
+    font-weight: 500;
+    text-align: center;
+}
+
+.orcamento .divisor-data {
+    width: 1px;
+    height: 52px;
+    margin: 0 20px;
+    background: #d3d9d1;
+    flex-shrink: 0;
+}
+
+.orcamento .horario-data {
+    min-width: 95px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    text-align: center;
+}
+
+.orcamento .horario-label {
+    display: block;
+    width: 100%;
+    margin: 0 0 4px;
+    color: #777;
+    font-size: 10px;
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: .25px;
+    text-align: center;
+}
+
+.orcamento .horario-valor {
+    display: block;
+    color: var(--verde-escuro);
+    font-size: 25px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -.3px;
+    white-space: nowrap;
+}
+
+.orcamento .seta-data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--verde);
+    font-size: 27px;
+    line-height: 1;
+    font-weight: 400;
+    text-align: center;
+}
+
+/* =========================================================
+   12. RESUMO DA ESTADIA
+   ========================================================= */
+
+.orcamento .estadia-info-grid,
+.orcamento .resumo-estadia {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.orcamento .estadia-info-card,
+.orcamento .resumo-estadia .resumo-card {
+    min-height: 62px;
+    padding: 11px 15px;
+    background: #fff;
+    border: 1px solid #dce4d9;
+    border-radius: 11px;
+}
+
+.orcamento .estadia-info-card span,
+.orcamento .resumo-estadia .resumo-label,
+.orcamento .estadia-info-card .label {
+    display: block;
+    margin-bottom: 5px;
+    color: #777;
+    font-size: 10px;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: .75px;
+}
+
+.orcamento .estadia-info-card strong,
+.orcamento .resumo-estadia .resumo-valor {
+    display: block;
+    color: #333;
+    font-size: 13px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+.orcamento .resumo-estadia .resumo-valor:first-letter {
+    font-size: 14px;
+}
+
+/* Compatibilidade com estrutura alternativa */
+.orcamento .estadia-info,
+.orcamento .estadia-resumo {
+    font-size: 13px;
+}
+
+.orcamento .estadia-info span,
+.orcamento .estadia-resumo span {
+    font-size: 13px;
+    line-height: 1.25;
+}
+
+/* =========================================================
+   13. ACOMODAÇÃO
+   ========================================================= */
+
+.orcamento .acomodacao-box {
+    display: grid;
+    grid-template-columns: 355px minmax(0, 1fr);
+    gap: 30px;
+    align-items: start;
+    margin: 0 0 20px;
+    padding: 0 0 24px;
+    border-bottom: 1px solid #e3e6e3;
+}
+
+.orcamento .foto-quarto {
+    width: 355px;
+    height: 285px;
+    overflow: hidden;
+    border-radius: 19px;
+    background: #edf0ed;
+}
+
+.orcamento .foto-quarto img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.orcamento .acomodacao-info {
+    min-width: 0;
+    padding-top: 3px;
+    color: var(--texto-2);
+    font-size: 14px;
+}
+
+.orcamento .label-verde {
+    color: #777;
+    font-size: 10px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.orcamento .acomodacao-info h3 {
+    margin: 8px 0 18px;
+    color: #282828;
+    font-size: 26px;
+    line-height: 1.16;
+    font-weight: 800;
+    letter-spacing: -.35px;
+}
+
+.orcamento .quartos-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 12px;
+    background: var(--verde-suave);
+    border-radius: 9px;
+    color: var(--verde-escuro);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.orcamento .linha-info {
+    height: 1px;
+    margin: 20px 0;
+    background: #e5e7e5;
+}
+
+.orcamento .hospedes-info span {
+    display: block;
+    margin-bottom: 7px;
+    color: #777;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .8px;
+}
+
+.orcamento .hospedes-info strong {
+    color: #292929;
+    font-size: 16px;
+}
+
+.orcamento .comodidades-quarto {
+    margin: 0;
+    padding: 0;
+    color: #414141;
+    font-size: 14px;
+    line-height: 1.48;
+}
+
+.orcamento .comodidades-quarto li {
+    font-size: 14px;
+    line-height: 1.48;
+}
+
+.orcamento .acomodacao-box small {
+    font-size: 10px;
+    line-height: 1.3;
+}
+
+/* =========================================================
+   14. CAFÉ / TARIFA — COMPATIBILIDADE
+   ========================================================= */
+
+.orcamento .cafe-box {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.orcamento .cafe-icone {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--verde-suave);
+    border-radius: 12px;
+    font-size: 24px;
+}
+
+.orcamento .cafe-box span,
+.orcamento .tarifa-info span {
+    display: block;
+    margin-bottom: 5px;
+    color: #777;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .8px;
+}
+
+.orcamento .cafe-box strong {
+    display: block;
+    color: #292929;
+    font-size: 16px;
+}
+
+.orcamento .tarifa-info {
+    padding: 18px 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.orcamento .tarifa-info strong {
+    color: #333;
+    font-size: 13px;
+}
+
+/* =========================================================
+   15. SERVIÇOS EXTRAS — ORÇAMENTO
+   ========================================================= */
+
+.orcamento .servicos-orcamento {
+    margin-top: 4px;
+    padding-top: 0;
+    border-top: 0;
+}
+
+.orcamento .servicos-titulo {
+    margin: 0 0 12px;
+    color: #777;
+    font-size: 10px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+}
+
+.orcamento .servicos-box {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+    margin-top: 8px;
+    padding: 0;
+    border: 0;
+}
+
+.orcamento .servico-box-item,
+.orcamento .servico-card {
+    min-width: 0;
+    min-height: 74px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 12px;
+    background: #fbfcfb;
+    border: 1px solid #dfe4df;
+    border-radius: 12px;
+}
+
+.orcamento .servico-icone {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--verde-suave);
+    border-radius: 9px;
+    font-size: 18px;
+}
+
+.orcamento .servico-box-item span,
+.orcamento .servico-conteudo strong {
+    display: block;
+    margin-bottom: 3px;
+    color: #707070;
+    font-size: 8.5px;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: .7px;
+    text-transform: uppercase;
+}
+
+.orcamento .servico-box-item strong,
+.orcamento .servico-conteudo span {
+    display: block;
+    color: #333;
+    font-size: 11.5px;
+    line-height: 1.18;
+    font-weight: 700;
+}
+
+.orcamento .servico-box-item small,
+.orcamento .servico-conteudo small {
+    display: block;
+    margin-top: 3px;
+    color: #888;
+    font-size: 8px;
+    line-height: 1.25;
+}
+
+.orcamento .servico-conteudo {
+    min-width: 0;
+}
+
+/* Estrutura alternativa */
+.orcamento .servicos-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+}
+
+/* =========================================================
+   16. INFORMAÇÕES EXTRAS
+   ========================================================= */
+
+.orcamento .informacoes-extras {
+    margin-top: 16px;
+    padding: 14px 17px;
+    background: #fafbfa;
+    border: 1px solid #e3e6e2;
+    border-radius: 11px;
+}
+
+.orcamento .informacoes-extras > div {
+    margin-bottom: 7px;
+}
+
+.orcamento .informacoes-extras > div:last-child {
+    margin-bottom: 0;
+}
+
+.orcamento .informacoes-extras span {
+    color: #707070;
+    font-size: 9px;
+    line-height: 1.35;
+    font-weight: 800;
+    letter-spacing: .55px;
+    text-transform: uppercase;
+}
+
+.orcamento .informacoes-extras strong {
+    color: #454545;
+    font-size: 10px;
+    line-height: 1.35;
+    font-weight: 500;
+}
+
+/* Compatibilidade */
+.orcamento .info-reserva-extra {
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+.orcamento .validade-info {
+    padding: 14px 0 4px;
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+.orcamento .validade-info span {
+    display: block;
+    margin-bottom: 4px;
+    color: #707070;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .7px;
+}
+
+.orcamento .validade-info strong {
+    display: block;
+    color: #555;
+    font-size: 10px;
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+/* =========================================================
+   17. VALORES
+   ========================================================= */
+
+.orcamento .valores-orcamento {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+    margin-top: 17px;
+}
+
+.orcamento .card-valor-orcamento {
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid #dfe4df;
+    border-radius: 13px;
+}
+
+.orcamento .card-valor-icone {
+    width: 34px;
+    min-width: 34px;
+    margin-right: 9px;
+    font-size: 18px;
+}
+
+.orcamento .card-valor-orcamento span {
+    display: block;
+    margin-bottom: 3px;
+    color: #777;
+    font-size: 9px;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: .65px;
+    text-transform: uppercase;
+}
+
+.orcamento .card-valor-orcamento strong {
+    display: block;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+.orcamento .card-valor-orcamento:first-child strong {
+    color: var(--verde-escuro);
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.orcamento .total-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    margin-top: 22px;
+    padding: 24px 26px;
+    background: #fafbfa;
+    border: 1px solid #dfe4df;
+    border-radius: 15px;
+}
+
+.orcamento .total-box span {
+    color: #777;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .7px;
+}
+
+.orcamento .total-box strong {
+    color: var(--verde-escuro);
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.orcamento .pagamento-box {
+    padding: 13px 18px;
+    background: #fff;
+    border: 1px solid #dfe4df;
+    border-radius: 11px;
+    color: #555;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   18. LOCALIZAÇÃO
+   ========================================================= */
+
+.orcamento .localizacao-hotel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    align-items: center;
+    gap: 22px;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid #e3e6e3;
+}
+
+.orcamento .endereco-hotel {
+    min-width: 0;
+    color: #555;
+    font-size: 11px;
+}
+
+.orcamento .endereco-hotel span {
+    display: block;
+    margin-bottom: 5px;
+    color: #737373;
+    font-size: 10px;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.orcamento .endereco-hotel strong {
+    display: block;
+    color: #333;
+    font-size: 17px;
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+.orcamento .endereco-hotel small {
+    display: block;
+    margin-top: 4px;
+    color: #888;
+    font-size: 11px;
+    line-height: 1.3;
+}
+
+.orcamento .mapa-hotel {
+    width: 300px;
+    height: 120px;
+    overflow: hidden;
+    border: 1px solid #d6ded3;
+    border-radius: 13px;
+    background: #f2f5f1;
+}
+
+.orcamento .mapa-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.orcamento .pontos-localizacao {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px 20px;
+    margin-top: 9px;
+    padding: 10px 0 0;
+    border-top: 1px solid #eceeec;
+    color: #777;
+    font-size: 10px;
+}
+
+.orcamento .pontos-localizacao div {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 9px;
+    line-height: 1.45;
+}
+
+.orcamento .pontos-localizacao span {
+    color: #777;
+}
+
+.orcamento .pontos-localizacao strong {
+    color: #555;
+    font-size: 9px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* =========================================================
+   19. OBSERVAÇÕES / HORÁRIOS — COMPATIBILIDADE
+   ========================================================= */
+
+.orcamento .observacoes {
+    margin-top: 18px;
+    padding: 15px 17px;
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+    border-radius: 11px;
+}
+
+.orcamento .observacoes strong {
+    color: #777;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.orcamento .observacoes p {
+    margin: 7px 0 0;
+    color: #555;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.orcamento .horarios-box {
+    margin-top: 18px;
+    padding: 17px 24px;
+    background: #fafbfa;
+    border: 1px solid #e1e5df;
+    border-radius: 14px;
+}
+
+.orcamento .horarios-titulo {
+    margin: 0 0 13px;
+    color: #777;
+    font-size: 10px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.orcamento .horarios-principais {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    align-items: center;
+    gap: 25px;
+}
+
+.orcamento .horario-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.orcamento .horario-label {
+    color: #666;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .6px;
+}
+
+.orcamento .horario-destaque {
+    margin-top: 4px;
+    color: var(--verde-escuro);
+    font-size: 25px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+.orcamento .horario-item small {
+    margin-top: 5px;
+    color: #888;
+    font-size: 9px;
+}
+
+.orcamento .horario-separador {
+    width: 1px;
+    height: 45px;
+    background: #dfe3dc;
+}
+
+.orcamento .horarios-observacao {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 5px;
+    margin-top: 13px;
+    padding-top: 10px;
+    border-top: 1px solid #e5e8e3;
+    color: #999;
+    font-size: 9px;
+    line-height: 1.35;
+    text-align: center;
+}
+
+.orcamento .horarios-observacao strong {
+    color: #888;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   20. ELEMENTOS ANTIGOS / COMPATIBILIDADE
+   ========================================================= */
+
+.orcamento .bloco {
+    padding: 17px 0;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.orcamento .bloco strong {
+    display: block;
+    margin-bottom: 7px;
+    color: #777;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.orcamento .bloco span {
+    display: block;
+    color: #292929;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.orcamento .info-reserva {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    padding: 0;
+    border: 0;
+}
+
+.orcamento .info-reserva-item {
+    min-height: 62px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 11px 15px;
+    background: #fff;
+    border: 1px solid #dfe5dc;
+    border-radius: 11px;
+}
+
+.orcamento .info-reserva-item span {
+    display: block;
+    margin-bottom: 5px;
+    color: #777;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .8px;
+}
+
+.orcamento .info-reserva-item strong {
+    display: block;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* =========================================================
+   21. RODAPÉ DO ORÇAMENTO
+   ========================================================= */
+
+.orcamento .rodape-orcamento {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin: 24px -38px -30px;
+    padding: 16px 38px;
+    background: #fafbfa;
+    border-top: 1px solid #e6e8e6;
+}
+
+.orcamento .rodape-orcamento p {
+    margin: 0;
+    color: #888;
+    font-size: 9px;
+    line-height: 1.4;
+}
+
+.orcamento .rodape-orcamento small {
+    font-size: 9px;
+}
+
+/* =========================================================
+   22. RODAPÉ DO SISTEMA
+   ========================================================= */
+
+body > footer {
+    padding: 24px;
+    background: #fff;
+    border-top: 1px solid #e3e5e3;
+    text-align: center;
+}
+
+body > footer p {
+    margin: 0;
+    color: #888;
+    font-size: 12px;
+}
+
+/* =========================================================
+   23. FORMULÁRIO — SERVIÇOS EXTRAS
+   ========================================================= */
+
+.servicos-opcoes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.servico-check {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    background: #fbfcfb;
+    border: 1px solid var(--borda);
+    border-radius: var(--raio-md);
+    cursor: pointer;
+    transition: border-color .18s ease, background .18s ease;
+}
+
+.servico-check:hover {
+    background: #f4faf1;
+    border-color: #b8d4ae;
+}
+
+.servico-check input {
+    width: 19px;
+    height: 19px;
+    accent-color: var(--verde);
+    flex-shrink: 0;
+}
+
+.servico-check strong {
+    display: block;
+    color: #333;
+    font-size: 13px;
+    line-height: 1.2;
+}
+
+.servico-check small {
+    display: block;
+    margin-top: 4px;
+    color: #777;
+    font-size: 11px;
+    line-height: 1.3;
+}
+
+/* =========================================================
+   24. RESPONSIVIDADE DO SISTEMA
+   ========================================================= */
+
+@media (max-width: 900px) {
+    .orcamento .servicos-box,
+    .orcamento .servicos-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .orcamento .valores-orcamento {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .orcamento .pontos-localizacao {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 800px) {
+    .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .campo-grande {
+        grid-column: span 2;
+    }
+
+    .orcamento .acomodacao-box {
+        grid-template-columns: 1fr;
+    }
+
+    .orcamento .foto-quarto {
+        width: 100%;
+        height: 260px;
+    }
+
+    .orcamento .localizacao-hotel {
+        grid-template-columns: 1fr;
+    }
+
+    .orcamento .mapa-hotel {
+        width: 100%;
+    }
+
+    .servicos-opcoes {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .topo .container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .topo h1 {
+        font-size: 22px;
+    }
+
+    .titulo {
+        padding: 24px 0 17px;
+    }
+
+    .titulo h2 {
+        font-size: 22px;
+    }
+
+    .card {
+        padding: 18px;
+        border-radius: 13px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .campo-grande {
+        grid-column: span 1;
+    }
+
+    .linha-opcoes {
+        flex-direction: column;
+        gap: 11px;
+    }
+
+    .acoes {
+        flex-direction: column-reverse;
+    }
+
+    .acoes .btn {
+        width: 100%;
+    }
+
+    .orcamento {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        border-radius: 14px;
+    }
+
+    .orcamento-topo {
+        min-height: auto;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px 22px;
+        gap: 14px;
+    }
+
+    .logo-hotel img {
+        width: 65px !important;
+        height: 65px !important;
+    }
+
+    .nome-hotel {
+        font-size: 16px;
+        padding-left: 15px;
+    }
+
+    .titulo-orcamento {
+        text-align: left;
+    }
+
+    .titulo-orcamento h2 {
+        font-size: 18px;
+        white-space: normal;
+    }
+
+    .orcamento-conteudo {
+        padding: 20px;
+    }
+
+    .orcamento .estadia-box {
+        padding: 20px;
+        border-radius: 15px;
+    }
+
+    .orcamento .datas-hospedagem {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .orcamento .seta-data {
+        transform: rotate(90deg);
+    }
+
+    .orcamento .data-box {
+        height: auto;
+        min-height: 116px;
+    }
+
+    .orcamento .data-principal {
+        min-width: 0;
+    }
+
+    .orcamento .data-principal strong {
+        font-size: 25px;
+    }
+
+    .orcamento .data-principal .dia-semana {
+        font-size: 16px;
+    }
+
+    .orcamento .divisor-data {
+        margin: 0 14px;
+    }
+
+    .orcamento .resumo-estadia,
+    .orcamento .estadia-info-grid,
+    .orcamento .info-reserva {
+        grid-template-columns: 1fr;
+    }
+
+    .orcamento .acomodacao-info h3 {
+        font-size: 23px;
+    }
+
+    .orcamento .servicos-box,
+    .orcamento .servicos-grid,
+    .orcamento .valores-orcamento {
+        grid-template-columns: 1fr;
+    }
+
+    .orcamento .pontos-localizacao {
+        grid-template-columns: 1fr;
+    }
+
+    .orcamento .horarios-principais {
+        gap: 14px;
+    }
+
+    .orcamento .horario-destaque {
+        font-size: 23px;
+    }
+
+    .orcamento .horarios-observacao {
+        display: block;
+    }
+
+    .orcamento .total-box {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .orcamento .rodape-orcamento {
+        flex-direction: column;
+        align-items: flex-start;
+        margin: 20px -20px -20px;
+        padding: 16px 20px;
+    }
+
+    .acoes-compartilhar {
+        flex-direction: column;
+    }
+
+    .acoes-compartilhar .btn {
+        width: 100%;
+    }
+}
