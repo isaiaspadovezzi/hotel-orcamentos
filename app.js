@@ -1712,85 +1712,61 @@ function gerarOrcamento() {
 
     let servicosHTML = "";
 
+    /*
+       SERVIÇOS EXTRAS — artes oficiais
+       Todas as artes ocupam o mesmo espaço visual no grid.
+    */
+
     if (estacionamento) {
         servicosHTML += `
-            <div class="servico-box-item">
-                <div class="servico-icone">🚗</div>
-                <div>
-                    <span>ESTACIONAMENTO</span>
-                    <strong>R$ 30,00 / diária</strong>
-                    <small>24 horas</small>
-                </div>
+            <div class="servico-imagem-item">
+                <img src="imagens/estacionamento.png" alt="Estacionamento — R$ 30,00 por diária — 24 horas">
             </div>
         `;
     }
 
     if (pet) {
         servicosHTML += `
-            <div class="servico-box-item">
-                <div class="servico-icone">🐶</div>
-                <div>
-                    <span>PET</span>
-                    <strong>R$ 78,75 / diária</strong>
-                    <small>Necessária carteira de vacinação atualizada.</small>
-                </div>
+            <div class="servico-imagem-item">
+                <img src="imagens/pet.png" alt="Pet — R$ 78,75 por diária">
             </div>
         `;
     }
 
     if (almoco) {
         servicosHTML += `
-            <div class="servico-box-item">
-                <div class="servico-icone">🍽️</div>
-                <div>
-                    <span>ALMOÇO</span>
-                    <strong>A partir de R$ 25,90</strong>
-                    <small>Seg. a sex. • 11h30 às 13h30</small>
-                </div>
+            <div class="servico-imagem-item">
+                <img src="imagens/almoco.png" alt="Almoço — a partir de R$ 25,90">
             </div>
         `;
     }
 
     if (bar) {
         servicosHTML += `
-            <div class="servico-box-item">
-                <div class="servico-icone">🍸</div>
-                <div>
-                    <span>BAR</span>
-                    <strong>Atendimento 24 horas</strong>
-                </div>
+            <div class="servico-imagem-item">
+                <img src="imagens/bar.png" alt="Bar — atendimento 24 horas">
             </div>
         `;
     }
 
     if (lavanderia) {
         servicosHTML += `
-            <div class="servico-box-item">
-                <div class="servico-icone">🧺</div>
-                <div>
-                    <span>LAVANDERIA TERCEIRIZADA</span>
-                    <strong>Serviço terceirizado</strong>
-                    <small>Consulte valores e prazo na recepção.</small>
-                </div>
+            <div class="servico-imagem-item">
+                <img src="imagens/lavanderia.png" alt="Lavanderia terceirizada">
             </div>
         `;
     }
 
     if (salaPassar) {
         servicosHTML += `
-            <div class="servico-box-item">
-                <div class="servico-icone">👔</div>
-                <div>
-                    <span>SALA DE PASSAR</span>
-                    <strong>3º andar</strong>
-                    <small>Uso do hóspede.</small>
-                </div>
+            <div class="servico-imagem-item">
+                <img src="imagens/sala-passar.png" alt="Sala de passar — 3º andar">
             </div>
         `;
     }
 
-    /* Café da manhã como serviço extra quando NÃO está incluso */
-
+    /* Café da manhã continua em card de texto quando não está incluso,
+       pois ainda não existe uma arte correspondente. */
     if (!cafe) {
         servicosHTML += `
             <div class="servico-box-item">
