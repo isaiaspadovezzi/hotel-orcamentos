@@ -1,0 +1,1217 @@
+
+/* ============================================================
+   GERADOR DE ORÇAMENTOS
+   IBIS STYLES CURITIBA CENTRO CÍVICO
+   STYLE.CSS — REFORMULAÇÃO PROFISSIONAL
+   ------------------------------------------------------------
+   Direção visual:
+   - corporativa / hoteleira
+   - editorial
+   - limpa e sofisticada
+   - sem aparência de portal de viagens
+   - estrutura HTML/JS preservada
+   ============================================================ */
+
+:root{
+    --verde:#4f9f2f;
+    --verde-escuro:#3f8426;
+    --verde-suave:#edf6e9;
+    --verde-linha:#cfe2c6;
+
+    --texto:#252525;
+    --texto-2:#4b4b4b;
+    --texto-3:#777;
+    --texto-4:#999;
+
+    --fundo:#f2f3f2;
+    --branco:#fff;
+    --linha:#dfe2df;
+    --linha-escura:#cdd2ce;
+
+    --raio:10px;
+    --raio-pequeno:6px;
+
+    --fonte:Arial, Helvetica, sans-serif;
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+
+*{box-sizing:border-box}
+
+html,body{
+    margin:0;
+    padding:0;
+    font-family:var(--fonte);
+    color:var(--texto);
+    background:var(--fundo);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+}
+
+button,input,select,textarea{font:inherit}
+img{max-width:100%}
+
+/* ============================================================
+   PLATAFORMA — CABEÇALHO
+   ============================================================ */
+
+.container{
+    width:100%;
+    max-width:1100px;
+    margin:0 auto;
+    padding:0 28px;
+}
+
+.topo{
+    background:#fff;
+    border-bottom:3px solid var(--verde);
+    padding:22px 0;
+}
+
+.topo .container{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:24px;
+}
+
+.topo h1{
+    margin:0;
+    color:var(--verde);
+    font-size:24px;
+    font-weight:800;
+    letter-spacing:.3px;
+}
+
+.topo p{
+    margin:4px 0 0;
+    color:var(--texto-3);
+    font-size:12px;
+}
+
+.titulo{
+    padding:30px 0 18px;
+}
+
+.titulo h2{
+    margin:0 0 5px;
+    font-size:25px;
+    line-height:1.15;
+}
+
+.titulo p{
+    margin:0;
+    color:var(--texto-3);
+    font-size:13px;
+}
+
+/* ============================================================
+   PLATAFORMA — CARDS / CAMPOS
+   ============================================================ */
+
+.card{
+    margin-bottom:16px;
+    padding:22px;
+    background:#fff;
+    border:1px solid var(--linha);
+    border-radius:var(--raio);
+}
+
+.card h3{
+    margin:0 0 17px;
+    font-size:16px;
+    font-weight:800;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:15px;
+}
+
+.campo{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.campo label{
+    color:var(--texto-3);
+    font-size:11px;
+    font-weight:700;
+}
+
+.campo input,
+.campo select,
+.campo textarea{
+    width:100%;
+    min-height:40px;
+    padding:9px 11px;
+    color:var(--texto);
+    background:#fff;
+    border:1px solid #d5d9d6;
+    border-radius:6px;
+    outline:none;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus{
+    border-color:var(--verde);
+    box-shadow:0 0 0 2px rgba(79,159,47,.10);
+}
+
+.campo-grande{grid-column:1/-1}
+
+.linha-opcoes{
+    margin-top:13px;
+}
+
+.check{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--texto-2);
+    font-size:12px;
+}
+
+.acoes{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin:18px 0 28px;
+}
+
+.btn{
+    min-height:40px;
+    padding:9px 17px;
+    border:1px solid transparent;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:700;
+}
+
+.btn-principal{
+    color:#fff;
+    background:var(--verde);
+}
+
+.btn-principal:hover{background:var(--verde-escuro)}
+
+.btn-secundario{
+    color:var(--texto-2);
+    background:#fff;
+    border-color:#d2d6d3;
+}
+
+.upload-area{
+    min-height:130px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:20px;
+    text-align:center;
+    background:#fafbfa;
+    border:1px dashed #cbd2cc;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.upload-icone{
+    font-size:24px;
+}
+
+.upload-area strong{
+    font-size:13px;
+}
+
+.upload-area small{
+    color:var(--texto-3);
+    font-size:11px;
+}
+
+.importador-texto{
+    margin:-6px 0 15px;
+    color:var(--texto-3);
+    font-size:12px;
+}
+
+.imagem-selecionada{
+    display:none;
+    margin-top:14px;
+}
+
+.btn-ocr{
+    width:100%;
+    margin-top:14px;
+}
+
+.status-ocr{
+    margin-top:9px;
+    color:var(--texto-3);
+    font-size:11px;
+}
+
+/* ============================================================
+   PREVIEW
+   ============================================================ */
+
+.preview-area{
+    width:100%;
+}
+
+/* ============================================================
+   ORÇAMENTO — BASE
+   ============================================================ */
+
+.orcamento{
+    width:100%;
+    max-width:1100px;
+    margin:24px auto 0;
+    overflow:hidden;
+    background:#fff;
+    border:1px solid #d8dcda;
+    border-radius:14px;
+    box-shadow:0 8px 24px rgba(24,35,25,.07);
+}
+
+/* ============================================================
+   CABEÇALHO — MAIS INSTITUCIONAL
+   ============================================================ */
+
+.orcamento-topo{
+    min-height:124px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:30px;
+    padding:25px 38px;
+    background:#fff;
+    border-bottom:3px solid var(--verde);
+}
+
+.logo-hotel{
+    display:flex;
+    align-items:center;
+    gap:17px;
+}
+
+.logo-hotel img{
+    width:72px;
+    height:72px;
+    display:block;
+    object-fit:contain;
+}
+
+.nome-hotel,
+.hotel{
+    padding-left:17px;
+    border-left:1px solid #d8d8d8;
+    color:#4e4e4e;
+    font-size:17px;
+    line-height:1.2;
+    font-weight:700;
+}
+
+.titulo-orcamento,
+.titulo-arte{
+    text-align:right;
+    color:var(--verde-escuro);
+    font-size:21px;
+    line-height:1.1;
+    font-weight:800;
+    letter-spacing:.2px;
+}
+
+.titulo-orcamento h2{
+    margin:0;
+    color:inherit;
+    font-size:inherit;
+    font-weight:inherit;
+}
+
+/* ============================================================
+   CORPO
+   ============================================================ */
+
+.orcamento-conteudo,
+.orcamento-corpo{
+    padding:34px 38px 28px;
+}
+
+/* ============================================================
+   ESTADIA
+   ============================================================ */
+
+.estadia-box,
+.bloco-estadia{
+    margin:0 0 25px;
+    padding:25px 28px 22px;
+    background:var(--verde-suave);
+    border:1px solid var(--verde-linha);
+    border-radius:12px;
+}
+
+.estadia-titulo,
+.titulo-secao{
+    margin:0 0 17px;
+    color:var(--verde-escuro);
+    font-size:11px;
+    line-height:1;
+    font-weight:800;
+    letter-spacing:1.4px;
+}
+
+/* ============================================================
+   DATAS — FOCO PRINCIPAL
+   ============================================================ */
+
+.datas-hospedagem,
+.datas{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 54px minmax(0,1fr);
+    align-items:center;
+    gap:0;
+}
+
+.data-box{
+    position:relative;
+    min-height:108px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:18px 20px;
+    background:#fff;
+    border:1px solid #cfd6ce;
+    border-radius:11px;
+}
+
+.data-box::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:18px;
+    right:18px;
+    height:3px;
+    background:var(--verde);
+    border-radius:0 0 3px 3px;
+}
+
+.data-box > small,
+.data-box > span,
+.tipo-data{
+    align-self:flex-start;
+    margin:0 0 8px;
+    padding:4px 8px;
+    color:var(--verde-escuro);
+    background:#eef7e9;
+    border-radius:4px;
+    font-size:9px;
+    line-height:1;
+    font-weight:800;
+    letter-spacing:1px;
+}
+
+.data-box strong{
+    display:block;
+    color:#242424;
+    font-size:24px;
+    line-height:1.1;
+    font-weight:800;
+    letter-spacing:-.5px;
+}
+
+.data-box .data-principal{
+    font-size:24px;
+}
+
+.data-box .data-conteudo{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+}
+
+.data-box .horario-data{
+    flex:0 0 auto;
+}
+
+.data-box .horario-label,
+.horario-label{
+    display:block;
+    margin:0 0 3px;
+    padding:0;
+    color:#777;
+    background:none;
+    border:0;
+    font-size:9px;
+    line-height:1;
+    font-weight:700;
+    letter-spacing:.8px;
+}
+
+.data-box .horario-valor,
+.horario-valor{
+    color:var(--verde);
+    font-size:23px;
+    line-height:1;
+    font-weight:800;
+}
+
+.data-box > small:last-child{
+    padding:0;
+    margin:7px 0 0;
+    color:#777;
+    background:none;
+    border-radius:0;
+    font-size:14px;
+    line-height:1.15;
+    font-weight:600;
+    letter-spacing:0;
+}
+
+.divisor-data{
+    width:1px;
+    height:45px;
+    background:#d7dbd7;
+}
+
+.seta-data,
+.seta{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--verde);
+    font-size:27px;
+    font-weight:400;
+}
+
+/* ============================================================
+   RESUMO DA ESTADIA
+   ============================================================ */
+
+.estadia-info-grid,
+.resumo-estadia{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:10px;
+    margin-top:13px;
+}
+
+.estadia-info-card,
+.resumo-estadia .resumo-card{
+    min-height:57px;
+    padding:11px 13px;
+    background:#fff;
+    border:1px solid #d9dfd8;
+    border-radius:8px;
+}
+
+.estadia-info-card span,
+.resumo-estadia .rotulo{
+    display:block;
+    margin-bottom:5px;
+    color:#7b7b7b;
+    font-size:8px;
+    line-height:1;
+    font-weight:800;
+    letter-spacing:1px;
+}
+
+.estadia-info-card strong,
+.resumo-estadia strong{
+    color:#333;
+    font-size:18px;
+    line-height:1.15;
+}
+
+/* ============================================================
+   ACOMODAÇÃO
+   ============================================================ */
+
+.acomodacao-box,
+.bloco-quarto{
+    display:grid;
+    grid-template-columns:350px minmax(0,1fr);
+    gap:28px;
+    align-items:start;
+    margin-bottom:24px;
+    padding-bottom:24px;
+    border-bottom:1px solid var(--linha);
+}
+
+.foto-quarto{
+    width:100%;
+    height:285px;
+    overflow:hidden;
+    border-radius:11px;
+    background:#eceeec;
+}
+
+.foto-quarto img{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:cover;
+}
+
+.acomodacao-info,
+.dados-quarto{
+    padding-top:4px;
+}
+
+.label-verde,
+.rotulo{
+    color:#747474;
+    font-size:9px;
+    line-height:1;
+    font-weight:800;
+    letter-spacing:1.2px;
+}
+
+.acomodacao-info h3,
+.dados-quarto .tipo{
+    margin:9px 0 15px;
+    color:#292929;
+    font-size:25px;
+    line-height:1.12;
+    font-weight:800;
+    letter-spacing:-.4px;
+}
+
+.quartos-pill,
+.quantidade-quartos{
+    display:inline-block;
+    margin-bottom:13px;
+    color:#555;
+    font-size:11px;
+    font-weight:700;
+}
+
+.linha-info,
+.info-reserva{
+    margin:12px 0;
+    padding:11px 0;
+    border-top:1px solid #eceeec;
+    border-bottom:1px solid #eceeec;
+}
+
+.hospedes-info{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+}
+
+.hospedes-info span{
+    color:#777;
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:.8px;
+}
+
+.hospedes-info strong{
+    color:#333;
+    font-size:12px;
+}
+
+/* ============================================================
+   COMODIDADES
+   ============================================================ */
+
+.comodidades-quarto{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px 20px;
+    margin-top:12px;
+}
+
+.comodidades-quarto div,
+.comodidades-quarto li{
+    color:#454545;
+    font-size:15px;
+    line-height:1.25;
+}
+
+/* ============================================================
+   CAFÉ / TARIFA
+   ============================================================ */
+
+.cafe-box{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    margin:0 0 15px;
+    padding:12px 14px;
+    background:#fafbfa;
+    border:1px solid #e2e5e2;
+    border-radius:8px;
+}
+
+.cafe-icone{
+    width:30px;
+    height:30px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#eef7e9;
+    border-radius:7px;
+}
+
+.cafe-box span,
+.tarifa-info span{
+    display:block;
+    margin-bottom:3px;
+    color:#777;
+    font-size:8px;
+    font-weight:800;
+    letter-spacing:.8px;
+}
+
+.cafe-box strong,
+.tarifa-info strong{
+    color:#333;
+    font-size:11px;
+}
+
+.tarifa-info{
+    display:none !important;
+}
+
+/* ============================================================
+   SERVIÇOS EXTRAS
+   ============================================================ */
+
+.servicos-box{
+    position:relative;
+    display:grid;
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    gap:10px;
+    margin:3px 0 17px;
+    padding-top:27px;
+}
+
+.servicos-box::before{
+    content:"SERVIÇOS EXTRAS";
+    position:absolute;
+    top:0;
+    left:0;
+    color:#747474;
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:1.2px;
+}
+
+.servico-box-item{
+    min-height:72px;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding:10px;
+    background:#fff;
+    border:1px solid #dce1dd;
+    border-radius:8px;
+}
+
+.servico-icone{
+    width:35px;
+    height:35px;
+    min-width:35px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#eef7e9;
+    border-radius:8px;
+    font-size:18px;
+}
+
+.servico-conteudo{
+    min-width:0;
+}
+
+.servico-box-item span{
+    display:block;
+    margin-bottom:3px;
+    color:#777;
+    font-size:11px;
+    line-height:1;
+    font-weight:800;
+    letter-spacing:.9px;
+}
+
+.servico-box-item strong{
+    display:block;
+    color:#333;
+    font-size:14px;
+    font-weight:800;
+    line-height:1.2;
+}
+
+.servico-box-item small{
+    display:block;
+    margin-top:3px;
+    color:#777;
+    font-size:11px;
+    line-height:1.2;
+}
+
+/* ============================================================
+   INFORMAÇÕES EXTRAS
+   ============================================================ */
+
+.informacoes-extras,
+.info-reserva{
+    position:relative;
+    margin:28px 0 0;
+    padding:43px 18px 17px;
+    background:#fafbfa;
+    border:1px solid #e0e4e1;
+    border-left:3px solid var(--verde);
+    border-radius:7px;
+}
+
+.informacoes-extras::before{
+    content:"IMPORTANTE";
+    position:absolute;
+    top:13px;
+    left:17px;
+    color:var(--verde-escuro);
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:1.1px;
+}
+
+.informacoes-extras > div,
+.info-reserva-item{
+    display:grid;
+    grid-template-columns:190px minmax(0,1fr);
+    gap:10px;
+    margin:0 0 7px;
+}
+
+.informacoes-extras > div:last-child,
+.info-reserva-item:last-child{
+    margin-bottom:0;
+}
+
+.informacoes-extras span,
+.info-reserva-item span{
+    color:#5f5f5f;
+    font-size:14px;
+    line-height:1.35;
+    font-weight:800;
+    letter-spacing:.6px;
+}
+
+.informacoes-extras strong,
+.info-reserva-item strong{
+    color:#444;
+    font-size:14px;
+    line-height:1.35;
+}
+
+/* ============================================================
+   VALORES
+   ============================================================ */
+
+.valores-orcamento,
+.total-box{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:17px;
+}
+
+.card-valor-orcamento,
+.total-box > div{
+    min-height:78px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:15px 17px;
+    background:#fff;
+    border:1px solid #d8ded9;
+    border-radius:9px;
+}
+
+.card-valor-icone{
+    font-size:18px;
+}
+
+.card-valor-orcamento span,
+.total-box span{
+    display:block;
+    margin-bottom:4px;
+    color:#747474;
+    font-size:8px;
+    line-height:1;
+    font-weight:800;
+    letter-spacing:.9px;
+}
+
+.card-valor-orcamento strong,
+.total-box strong{
+    color:var(--verde);
+    font-size:21px;
+    line-height:1;
+    font-weight:800;
+}
+
+.card-valor-orcamento:first-child strong{
+    font-size:23px;
+}
+
+.pagamento-box{
+    color:#333;
+    font-size:12px;
+    font-weight:700;
+}
+
+/* ============================================================
+   LOCALIZAÇÃO
+   ============================================================ */
+
+.localizacao-hotel{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 300px;
+    gap:24px;
+    align-items:stretch;
+    margin-top:20px;
+    padding-top:19px;
+    border-top:1px solid var(--linha);
+}
+
+.endereco-hotel{
+    padding:7px 0;
+}
+
+.endereco-hotel span{
+    display:block;
+    margin-bottom:7px;
+    color:#777;
+    font-size:9px;
+    line-height:1;
+    font-weight:800;
+    letter-spacing:1px;
+}
+
+.endereco-hotel strong{
+    display:block;
+    color:#333;
+    font-size:19px;
+    line-height:1.2;
+}
+
+.endereco-hotel small{
+    display:block;
+    margin-top:6px;
+    color:#777;
+    font-size:10px;
+}
+
+.mapa-hotel{
+    width:300px;
+    height:125px;
+    overflow:hidden;
+    background:#f0f3ef;
+    border:1px solid #d4ddd2;
+    border-radius:11px;
+}
+
+.mapa-hotel img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* ============================================================
+   PONTOS DE LOCALIZAÇÃO
+   ============================================================ */
+
+.pontos-localizacao{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:5px 22px;
+    margin-top:-7px;
+    padding:10px 0 0;
+    border-top:1px solid #eceeec;
+}
+
+.pontos-localizacao div{
+    display:grid;
+    grid-template-columns:auto minmax(12px,1fr) auto;
+    align-items:end;
+    gap:7px;
+    color:#777;
+    font-size:9px;
+    line-height:1.4;
+}
+
+.pontos-localizacao strong{
+    color:#444;
+    font-size:8px;
+    white-space:nowrap;
+}
+
+/* ============================================================
+   RODAPÉ
+   ============================================================ */
+
+.orcamento-rodape,
+.rodape-orcamento{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    min-height:42px;
+    padding:11px 38px;
+    background:#f7f8f7;
+    border-top:1px solid #e3e6e3;
+    color:#858585;
+    font-size:8px;
+}
+
+.orcamento-rodape p,
+.rodape-orcamento p{
+    margin:0;
+}
+
+/* ============================================================
+   ELEMENTOS ANTIGOS
+   ============================================================ */
+
+.orcamento .estadia-noites,
+.orcamento .tarifa-info,
+.orcamento .horarios-box{
+    display:none !important;
+}
+
+/* ============================================================
+   RESPONSIVIDADE
+   ============================================================ */
+
+@media (max-width:900px){
+    .orcamento-conteudo,
+    .orcamento-corpo{padding:28px 24px 24px}
+
+    .orcamento-topo{padding:22px 24px}
+
+    .estadia-info-grid,
+    .resumo-estadia{grid-template-columns:repeat(2,1fr)}
+
+    .acomodacao-box,
+    .bloco-quarto{grid-template-columns:300px minmax(0,1fr)}
+
+    .servicos-box{grid-template-columns:repeat(2,1fr)}
+
+    .valores-orcamento,
+    .total-box{grid-template-columns:1fr 1fr}
+
+    .localizacao-hotel{grid-template-columns:1fr}
+    .mapa-hotel{width:100%}
+    .pontos-localizacao{grid-template-columns:repeat(2,1fr)}
+}
+
+@media (max-width:650px){
+    .container{padding:0 16px}
+
+    .topo .container,
+    .orcamento-topo{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .titulo-orcamento,
+    .titulo-arte{text-align:left}
+
+    .datas-hospedagem,
+    .datas{
+        grid-template-columns:1fr;
+        gap:10px;
+    }
+
+    .seta-data,
+    .seta{
+        transform:rotate(90deg);
+        min-height:18px;
+    }
+
+    .acomodacao-box,
+    .bloco-quarto{
+        grid-template-columns:1fr;
+    }
+
+    .foto-quarto{height:230px}
+
+    .servicos-box,
+    .estadia-info-grid,
+    .resumo-estadia,
+    .valores-orcamento,
+    .total-box,
+    .pontos-localizacao{
+        grid-template-columns:1fr;
+    }
+
+    .informacoes-extras > div,
+    .info-reserva-item{
+        grid-template-columns:1fr;
+        gap:2px;
+    }
+
+    .orcamento-rodape,
+    .rodape-orcamento{
+        flex-direction:column;
+        align-items:flex-start;
+        padding:12px 24px;
+    }
+}
+
+
+/* ============================================================
+   AJUSTES SOLICITADOS — V4
+   ============================================================ */
+
+/* DATA: PRETA */
+.orcamento .data-box strong,
+.orcamento .data-principal strong{
+    color:#111 !important;
+}
+
+/* DIA DA SEMANA: MAIOR */
+.orcamento .data-box .dia-semana,
+.orcamento .dia-semana{
+    font-size:18px !important;
+    color:#7a7a7a !important;
+    font-weight:600 !important;
+    line-height:1.1 !important;
+}
+
+/* "A PARTIR DE" / "ATÉ AS": +4px, acima do horário */
+.orcamento .horario-label{
+    font-size:13px !important;
+    color:#777 !important;
+    font-weight:600 !important;
+    margin-bottom:4px !important;
+}
+
+/* HORÁRIO: SEM ÍCONE, mantendo o mesmo destaque */
+.orcamento .horario-valor{
+    font-size:23px !important;
+    color:#4f9f2f !important;
+}
+
+/* CARDS HÓSPEDES / QUARTOS / CAFÉ: +6px */
+.orcamento .estadia-info-card strong{
+    font-size:18px !important;
+}
+
+/* ACOMODAÇÃO: +4px */
+.orcamento .comodidades-quarto div,
+.orcamento .comodidades-quarto li{
+    font-size:15px !important;
+}
+
+/* SERVIÇOS: +4px e preços em negrito */
+.orcamento .servico-box-item span{
+    font-size:11px !important;
+}
+
+.orcamento .servico-box-item strong{
+    font-size:14px !important;
+    font-weight:800 !important;
+}
+
+.orcamento .servico-box-item small{
+    font-size:11px !important;
+}
+
+/* ENDEREÇO: +3px */
+.orcamento .endereco-hotel strong{
+    font-size:19px !important;
+}
+
+/* LOCALIDADES COM LINHA PONTILHADA */
+.orcamento .pontos-localizacao div{
+    display:grid !important;
+    grid-template-columns:auto minmax(12px,1fr) auto !important;
+    align-items:end !important;
+    gap:7px !important;
+}
+
+.orcamento .pontos-localizacao div::after{
+    content:"" !important;
+    display:block !important;
+    min-width:12px !important;
+    margin-bottom:3px !important;
+    border-bottom:1px dotted #b9beb9 !important;
+}
+
+.orcamento .pontos-localizacao strong{
+    font-size:9px !important;
+}
+
+/* QUADRO IMPORTANTE */
+.orcamento .informacoes-extras{
+    position:relative !important;
+    margin-top:28px !important;
+    padding:43px 18px 17px !important;
+    border-left:4px solid #4f9f2f !important;
+}
+
+.orcamento .informacoes-extras::before{
+    content:"IMPORTANTE" !important;
+    position:absolute !important;
+    top:13px !important;
+    left:17px !important;
+    color:#3f8426 !important;
+    font-size:13px !important;
+    font-weight:800 !important;
+    letter-spacing:1.1px !important;
+}
+
+.orcamento .informacoes-extras > div{
+    grid-template-columns:190px minmax(0,1fr) !important;
+}
+
+.orcamento .informacoes-extras span{
+    font-size:14px !important;
+}
+
+.orcamento .informacoes-extras strong{
+    font-size:14px !important;
+}
+
+/* VALIDADE: DESTAQUE */
+.orcamento .informacoes-extras > div:first-child strong{
+    font-weight:800 !important;
+}
+
+/* 6 SERVIÇOS EXTRAS */
+.orcamento .servicos-box{
+    grid-template-columns:repeat(6,minmax(0,1fr)) !important;
+}
+
+@media (max-width:1050px){
+    .orcamento .servicos-box{
+        grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    }
+}
+
+@media (max-width:650px){
+    .orcamento .servicos-box{
+        grid-template-columns:1fr 1fr !important;
+    }
+}
+
+/* MAPA CLICÁVEL — quando o HTML usar <a> */
+.orcamento .mapa-hotel a{
+    display:block !important;
+    width:100% !important;
+    height:100% !important;
+    text-decoration:none !important;
+}
