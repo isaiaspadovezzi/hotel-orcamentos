@@ -1737,3 +1737,74 @@ img{max-width:100%}
         grid-template-columns:1fr;
     }
 }
+
+
+/* ============================================================
+   SERVIÇOS EXTRAS — ARTES PADRONIZADAS
+   ============================================================ */
+
+.servicos-box{
+    display:grid !important;
+    grid-template-columns:repeat(6,minmax(0,1fr)) !important;
+    gap:8px !important;
+    align-items:stretch !important;
+    margin:3px 0 18px !important;
+    padding-top:27px !important;
+}
+
+.servico-imagem-item{
+    width:100% !important;
+    height:78px !important;
+    min-width:0 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    overflow:hidden !important;
+    background:transparent !important;
+    border:0 !important;
+    border-radius:0 !important;
+    padding:0 !important;
+    box-sizing:border-box !important;
+}
+
+.servico-imagem-item img{
+    display:block !important;
+    width:100% !important;
+    height:100% !important;
+    object-fit:contain !important;
+    object-position:center !important;
+    border:0 !important;
+    background:transparent !important;
+    filter:none !important;
+}
+
+.servico-imagem-item img:hover{
+    transform:translateY(-1px);
+    transition:transform .15s ease;
+}
+
+/* O card de café (quando necessário) mantém a mesma altura visual. */
+.servicos-box > .servico-box-item{
+    min-height:78px !important;
+    height:78px !important;
+    box-sizing:border-box !important;
+}
+
+@media (max-width:1050px){
+    .servicos-box{
+        grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    }
+}
+
+@media (max-width:650px){
+    .servicos-box{
+        grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+        gap:6px !important;
+    }
+
+    .servico-imagem-item,
+    .servicos-box > .servico-box-item{
+        height:72px !important;
+        min-height:72px !important;
+    }
+}
