@@ -1808,3 +1808,45 @@ img{max-width:100%}
         min-height:72px !important;
     }
 }
+
+/* =====================================================
+   SERVIÇOS EXTRAS — ARTE ÚNICA
+   ===================================================== */
+.orcamento .servicos-box{
+    display:block !important;
+    width:100%;
+    margin:0;
+    padding:0;
+    background:transparent;
+    border:0;
+    box-shadow:none;
+}
+
+.orcamento .servicos-banner-unico{
+    width:100%;
+    margin:0;
+    padding:0;
+    background:#fff;
+    overflow:hidden;
+    border-radius:10px;
+    line-height:0;
+}
+
+.orcamento .servicos-banner-unico img{
+    display:block;
+    width:100%;
+    height:auto;
+    max-width:100%;
+    margin:0;
+    object-fit:contain;
+}
+
+@media (max-width:700px){
+    .orcamento .servicos-banner-unico{
+        overflow-x:auto;
+    }
+    .orcamento .servicos-banner-unico img{
+        width:100%;
+        min-width:0;
+    }
+}
