@@ -1707,79 +1707,27 @@ function gerarOrcamento() {
 
 
     /* =====================================================
-       SERVIÇOS EXTRAS
+       SERVIÇOS EXTRAS — ARTE ÚNICA
        ===================================================== */
 
-    let servicosHTML = "";
+    const algumServicoSelecionado =
+        estacionamento || pet || almoco || bar || lavanderia || salaPassar;
 
     /*
-       SERVIÇOS EXTRAS — artes oficiais
-       Todas as artes ocupam o mesmo espaço visual no grid.
+       As seis opções de serviços extras agora são apresentadas
+       em uma única arte profissional, mantendo exatamente o mesmo
+       padrão visual e evitando seis cards independentes.
     */
-
-    if (estacionamento) {
-        servicosHTML += `
-            <div class="servico-imagem-item">
-                <img src="imagens/estacionamento.png" alt="Estacionamento — R$ 30,00 por diária — 24 horas">
+    let servicosHTML = algumServicoSelecionado
+        ? `
+            <div class="servicos-banner-unico">
+                <img
+                    src="imagens/servicos-extras.png"
+                    alt="Serviços extras: estacionamento, pet, almoço, bar, lavanderia terceirizada e sala de passar"
+                >
             </div>
-        `;
-    }
-
-    if (pet) {
-        servicosHTML += `
-            <div class="servico-imagem-item">
-                <img src="imagens/pet.png" alt="Pet — R$ 78,75 por diária">
-            </div>
-        `;
-    }
-
-    if (almoco) {
-        servicosHTML += `
-            <div class="servico-imagem-item">
-                <img src="imagens/almoco.png" alt="Almoço — a partir de R$ 25,90">
-            </div>
-        `;
-    }
-
-    if (bar) {
-        servicosHTML += `
-            <div class="servico-imagem-item">
-                <img src="imagens/bar.png" alt="Bar — atendimento 24 horas">
-            </div>
-        `;
-    }
-
-    if (lavanderia) {
-        servicosHTML += `
-            <div class="servico-imagem-item">
-                <img src="imagens/lavanderia.png" alt="Lavanderia terceirizada">
-            </div>
-        `;
-    }
-
-    if (salaPassar) {
-        servicosHTML += `
-            <div class="servico-imagem-item">
-                <img src="imagens/sala-passar.png" alt="Sala de passar — 3º andar">
-            </div>
-        `;
-    }
-
-    /* Café da manhã continua em card de texto quando não está incluso,
-       pois ainda não existe uma arte correspondente. */
-    if (!cafe) {
-        servicosHTML += `
-            <div class="servico-box-item">
-                <div class="servico-icone">☕</div>
-                <div>
-                    <span>CAFÉ DA MANHÃ</span>
-                    <strong>R$ 53,00 / pessoa</strong>
-                    <small>6h30 às 10h00 • Pago à parte</small>
-                </div>
-            </div>
-        `;
-    }
-
+          `
+        : "";
 
     /* =====================================================
        CARTÃO DE DESCONTO
