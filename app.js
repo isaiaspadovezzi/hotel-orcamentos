@@ -1604,12 +1604,6 @@ function gerarOrcamento() {
     const bar =
         !!document.getElementById("bar")?.checked;
 
-    const lavanderia =
-        !!document.getElementById("lavanderia")?.checked;
-
-    const salaPassar =
-        !!document.getElementById("salaPassar")?.checked;
-
     const associado =
         !!document.getElementById("associado")?.checked;
 
@@ -1701,33 +1695,82 @@ function gerarOrcamento() {
         "📡 TV a cabo",
         "💨 Secador de cabelo",
         "🧊 Frigobar",
-        "🖥️ Escrivaninha",
-        "📶 Wi-Fi"
+        "🖥️ Escrivaninha"
     ];
 
 
     /* =====================================================
-       SERVIÇOS EXTRAS — ARTE ÚNICA
+       SERVIÇOS EXTRAS
        ===================================================== */
 
-    const algumServicoSelecionado =
-        estacionamento || pet || almoco || bar || lavanderia || salaPassar;
+    let servicosHTML = "";
 
-    /*
-       As seis opções de serviços extras agora são apresentadas
-       em uma única arte profissional, mantendo exatamente o mesmo
-       padrão visual e evitando seis cards independentes.
-    */
-    let servicosHTML = algumServicoSelecionado
-        ? `
-            <div class="servicos-banner-unico">
-                <img
-                    src="imagens/servicos-extras.png"
-                    alt="Serviços extras: estacionamento, pet, almoço, bar, lavanderia terceirizada e sala de passar"
-                >
+    if (estacionamento) {
+        servicosHTML += `
+            <div class="servico-box-item">
+                <div class="servico-icone">🚗</div>
+                <div>
+                    <span>ESTACIONAMENTO</span>
+                    <strong>R$ 30,00 / diária</strong>
+                    <small>24 horas</small>
+                </div>
             </div>
-          `
-        : "";
+        `;
+    }
+
+    if (pet) {
+        servicosHTML += `
+            <div class="servico-box-item">
+                <div class="servico-icone">🐶</div>
+                <div>
+                    <span>PET</span>
+                    <strong>R$ 78,75 / diária</strong>
+                    <small>Necessária carteira de vacinação atualizada.</small>
+                </div>
+            </div>
+        `;
+    }
+
+    if (almoco) {
+        servicosHTML += `
+            <div class="servico-box-item">
+                <div class="servico-icone">🍽️</div>
+                <div>
+                    <span>ALMOÇO</span>
+                    <strong>A partir de R$ 25,90</strong>
+                    <small>Seg. a sex. • 11h30 às 13h30</small>
+                </div>
+            </div>
+        `;
+    }
+
+    if (bar) {
+        servicosHTML += `
+            <div class="servico-box-item">
+                <div class="servico-icone">🍸</div>
+                <div>
+                    <span>BAR</span>
+                    <strong>Atendimento 24 horas</strong>
+                </div>
+            </div>
+        `;
+    }
+
+    /* Café da manhã como serviço extra quando NÃO está incluso */
+
+    if (!cafe) {
+        servicosHTML += `
+            <div class="servico-box-item">
+                <div class="servico-icone">☕</div>
+                <div>
+                    <span>CAFÉ DA MANHÃ</span>
+                    <strong>R$ 53,00 / pessoa</strong>
+                    <small>6h30 às 10h00 • Pago à parte</small>
+                </div>
+            </div>
+        `;
+    }
+
 
     /* =====================================================
        CARTÃO DE DESCONTO
@@ -2013,43 +2056,45 @@ function gerarOrcamento() {
                 <div class="informacoes-extras">
 
                     <div>
-                        <span>VALIDADE DA COTAÇÃO</span>
+
+                        <span>
+                            EARLY CHECK-IN / LATE CHECK-OUT
+                        </span>
+
                         <strong>
-                            <b>3 HORAS.</b> Esta cotação é válida por 3 horas após o envio
-                            e está sujeita à disponibilidade. Após esse período, valores e
-                            condições poderão ser alterados.
+                            Sujeitos à disponibilidade no dia e não podem
+                            ser reservados antecipadamente. Poderá haver
+                            cobrança de taxa adicional.
                         </strong>
+
                     </div>
 
-                    <div>
-                        <span>DOCUMENTO NO CHECK-IN</span>
-                        <strong>
-                            No check-in, é obrigatório apresentar documento de identificação
-                            com foto atualizado.
-                        </strong>
-                    </div>
 
                     <div>
-                        <span>MENOR DESACOMPANHADO</span>
+
+                        <span>
+                            CANCELAMENTO
+                        </span>
+
                         <strong>
-                            Menores de idade desacompanhados dos pais devem apresentar
-                            autorização dos pais, reconhecida em cartório ou pelo GOV.
+                            Cancelamento sem custo.
                         </strong>
+
                     </div>
 
-                    <div>
-                        <span>EARLY CHECK-IN / LATE CHECK-OUT</span>
-                        <strong>
-                            Sujeitos à disponibilidade no dia e não podem ser reservados
-                            antecipadamente. Poderá haver cobrança de taxa adicional.
-                        </strong>
-                    </div>
 
                     <div>
-                        <span>CANCELAMENTO</span>
+
+                        <span>
+                            VALIDADE DA COTAÇÃO
+                        </span>
+
                         <strong>
-                            Cancelamento sem custo, <b>com aviso prévio.</b>
+                            Esta cotação é válida por 3 horas após o envio
+                            e está sujeita à disponibilidade. Após esse
+                            período, valores e condições poderão ser alterados.
                         </strong>
+
                     </div>
 
                 </div>
@@ -2111,66 +2156,17 @@ function gerarOrcamento() {
 
 
                 <!-- =====================================
-                     ENDEREÇO + MAPA
+                     LOCALIZAÇÃO — ARTE ÚNICA
                      ===================================== -->
 
-                <div class="localizacao-hotel">
+                <div class="localizacao-arte">
 
-                    <div class="endereco-hotel">
-
-                        <span>
-                            IBIS STYLES CURITIBA CENTRO CÍVICO
-                        </span>
-
-                        <strong>
-                            Rua Mateus Leme, 358
-                        </strong>
-
-                        <small>
-                            Centro Cívico • Curitiba – PR • Brasil
-                        </small>
-
-                    </div>
-
-
-                    <div class="mapa-hotel">
-                        <a
-                            href="https://www.google.com/maps/search/?api=1&query=ibis+Styles+Curitiba+Centro+C%C3%ADvico%2C+Rua+Mateus+Leme%2C+358%2C+Curitiba%2C+PR"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="Abrir ibis Styles Curitiba Centro Cívico no Google Maps"
-                        >
-                            <div class="mapa-placeholder">
-                                <span>📍</span>
-                                <strong>ibis Styles Curitiba Centro Cívico</strong>
-                                <small>Rua Mateus Leme, 358</small>
-                                <em>ABRIR NO GOOGLE MAPS →</em>
-                            </div>
-                        </a>
-                    </div>
+                    <img
+                        src="img/mapa-localizacao.png"
+                        alt="Mapa de localização do ibis Styles Curitiba Centro Cívico e pontos próximos"
+                    >
 
                 </div>
-
-
-
-                <!-- =====================================
-                     PONTOS DE LOCALIZAÇÃO
-                     ===================================== -->
-
-                <div class="pontos-localizacao">
-
-                    <div><a href="https://www.google.com/maps/search/?api=1&query=Shopping+Mueller+Curitiba" target="_blank" rel="noopener noreferrer"><span>Shopping Mueller</span><strong>40 m</strong></a></div>
-                    <div><a href="https://www.google.com/maps/search/?api=1&query=Passeio+Publico+Curitiba" target="_blank" rel="noopener noreferrer"><span>Passeio Público</span><strong>300 m</strong></a></div>
-                    <div><a href="https://www.google.com/maps/search/?api=1&query=Largo+da+Ordem+Curitiba" target="_blank" rel="noopener noreferrer"><span>Largo da Ordem</span><strong>400 m</strong></a></div>
-                    <div><a href="https://www.google.com/maps/search/?api=1&query=Estadio+Couto+Pereira+Curitiba" target="_blank" rel="noopener noreferrer"><span>Estádio Couto Pereira</span><strong>1,6 km</strong></a></div>
-                    <div><a href="https://www.google.com/maps/search/?api=1&query=Rodoviaria+de+Curitiba" target="_blank" rel="noopener noreferrer"><span>Rodoviária</span><strong>2,5 km</strong></a></div>
-                    <div><a href="https://www.google.com/maps/search/?api=1&query=Jardim+Botanico+Curitiba" target="_blank" rel="noopener noreferrer"><span>Jardim Botânico</span><strong>3,6 km</strong></a></div>
-                    <div><a href="https://www.google.com/maps/search/?api=1&query=Parque+Barigui+Curitiba" target="_blank" rel="noopener noreferrer"><span>Parque Barigui</span><strong>4 km</strong></a></div>
-                    <div><a href="https://www.google.com/maps/search/?api=1&query=Opera+de+Arame+Curitiba" target="_blank" rel="noopener noreferrer"><span>Ópera de Arame / Pedreira</span><strong>5 km</strong></a></div>
-                    <div><a href="https://www.google.com/maps/search/?api=1&query=Aeroporto+Afonso+Pena" target="_blank" rel="noopener noreferrer"><span>Aeroporto</span><strong>17 km</strong></a></div>
-
-                </div>
-
 
 
                 <!-- =====================================
@@ -2194,11 +2190,6 @@ function gerarOrcamento() {
         </div>
     `;
 
-
-    ["estacionamento", "pet", "almoco", "bar", "lavanderia", "salaPassar"].forEach(id => {
-        const campo = document.getElementById(id);
-        if (campo) campo.checked = true;
-    });
 
     const previewArea =
         document.getElementById("previewArea");
@@ -2995,46 +2986,6 @@ function baixarImagemOrcamento(blob) {
     URL.revokeObjectURL(url);
 
 }
-
-
-// ==========================================
-// NOVOS SERVIÇOS — CONTROLES DO FORMULÁRIO
-// ==========================================
-
-(function adicionarNovosServicos() {
-    const container = document.querySelector(".servicos-opcoes");
-    if (!container) return;
-
-    const novosServicos = [
-        {
-            id: "lavanderia",
-            icon: "🧺",
-            titulo: "Lavanderia terceirizada",
-            descricao: "Serviço terceirizado • Consulte valores"
-        },
-        {
-            id: "salaPassar",
-            icon: "👔",
-            titulo: "Sala de passar",
-            descricao: "3º andar • Uso do hóspede"
-        }
-    ];
-
-    novosServicos.forEach(servico => {
-        if (document.getElementById(servico.id)) return;
-
-        const label = document.createElement("label");
-        label.className = "servico-check";
-        label.innerHTML = `
-            <input type="checkbox" id="${servico.id}" checked>
-            <div>
-                <strong>${servico.icon} ${servico.titulo}</strong>
-                <small>${servico.descricao}</small>
-            </div>
-        `;
-        container.appendChild(label);
-    });
-})();
 
 
 // ==========================================
